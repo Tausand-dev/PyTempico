@@ -4,56 +4,112 @@ Created on Jan 30 2024
 @author: David Guzman @ Tausand
 Core class and methods for PyTempico library.
 
-Last edited on 2024-02-02.
+Last edited on 2024-02-03.
 """
 
 import serial
 import time
 
+
+##Global variables. 
+#Create, if they do not exist already
+if not('last_id_tempico_device' in globals()):
+    last_id_tempico_device = 0
+if not('last_id_tempico_channel' in globals()):
+    last_id_tempico_channel = 100   #begin at 100, to distinguish easily from device ids
+
+#Create lists containing reference pointers to every created device and channel
+tempico_devices_list = []
+tempico_channels_list = []
+
+
+##Classes definitions
+
 def prueba():
     return 'prueba ok'
 
-class Tempico():
+class TempicoChannel():
+    id_tempico_channel = 0
+    id_tempico_device = 0 #every channel must have an associated device
+    channel_number = 0
+    #Channel configuration parameters
+    average_cycles = 1
+    enable = True
+    mode = 1
+    number_of_stops = 1
+    start_edge = 'rise'
+    stop_edge = 'rise'
+    stop_mask = 0    
+    def __init__(self,id_device,ch_num):
+        #set Ch-ID as a consecutive number
+        global last_id_tempico_channel
+        new_id = last_id_tempico_channel + 1
+        self.id_tempico_channel = new_id
+        last_id_tempico_channel = new_id
+        #append new object's pointer to global list
+        global tempico_channels_list
+        tempico_channels_list.append(self)
+        #set channel number
+        self.channel_number = ch_num
+        #link to an existing TempicoDevice
+        self.id_tempico_device = id_device
+        
+    
+    #Method chao() for tests only. TO DO: Delete after testing.
+    def chao(self):
+        #example to access upper level class methods
+        print('chao',self.channel_number)
+        #find port of device
+        dev_id = self.id_tempico_device
+        this_port = ''
+        global tempico_devices_list
+        for d in tempico_devices_list:
+            if d.id_tempico_device == dev_id:
+                print(d) #print device object of TempicoDevice class
+                this_port = d.port
+                print(this_port)
+        
+
+
+class TempicoDevice():       
+    id_tempico_device = 0
+    device = None
+    ch1 = None
+    ch2 = None
+    ch3 = None
+    ch4 = None
+    #Communication and identification parameters        
+    idn = ""
+    port = ""    
+    serial_timeout = 1 #by default, 1 second of timeout
+    sn = "N/A" #TO DO: get serial number
+    __baudrate = 500000 #by default, 500kbaud
+    __connected = False
+    __firmware = ""    
+    #Configuration parameters
+    number_of_channels = 4 #for Tempico TP1004, 4 channels.
+    number_of_runs = 1 #by default, nruns=1.        
+    threshold = 1 #by default, thr=1.00
+    ##TO DO: add all configuration parameters
+    #Measured data parameters
+    ##TO DO: add parameters to save measured data
+    
     def __init__(self,com_port):
-        #Communication and identification parameters
-        self.device = None
-        self.idn = ""
-        self.port = com_port
-        self.serial_timeout = 1 #by default, 1 second of timeout
-        self.sn = "N/A" #TO DO: get serial number
-        self.__baudrate = 500000 #by default, 500kbaud
-        self.__connected = False
-        self.__firmware = ""
-        #Configuration parameters
-        self.last_config_read = 0
-        self.number_of_channels = 4 #for Tempico TP1004, 4 channels.
-        self.number_of_runs = 1 #by default, nruns=1.        
-        self.threshold = 1 #by default, thr=1.00
-        ##TO DO: add all configuration parameters
-        #Measured data parameters
-        ##TO DO: add parameters to save measured data
-        # #Create channels
-        self.ch1 = self.Ch(1)
-        self.ch2 = self.Ch(2)
-        self.ch3 = self.Ch(3)
-        self.ch4 = self.Ch(4)
-        
-        
-    class Ch():
-        def __init__(self,number):
-            #Channel configuration parameters
-            self.average_cycles = 1
-            self.enable = True
-            self.mode = 1
-            self.channel_number = number
-            self.number_of_stops = 1
-            self.start_edge = 'rise'
-            self.stop_edge = 'rise'
-            self.stop_mask = 0
-        
-        
-    
-    
+        #set Dev-ID as a consecutive number
+        global last_id_tempico_device
+        new_id = last_id_tempico_device + 1
+        self.id_tempico_device = new_id
+        last_id_tempico_device = new_id
+        #append new object's pointer to global list
+        global tempico_devices_list
+        tempico_devices_list.append(self)
+        #Communication and identification parameters        
+        self.port = com_port         
+        #create channels, and link to this device
+        self.ch1 = TempicoChannel(new_id,1)
+        self.ch2 = TempicoChannel(new_id,2)
+        self.ch3 = TempicoChannel(new_id,3)
+        self.ch4 = TempicoChannel(new_id,4)
     
     ##open and closing connection methods
     def open(self):

@@ -1,2 +1,4 @@
 
 *.pyc
+#Ignore the following folders
+dgtests/
