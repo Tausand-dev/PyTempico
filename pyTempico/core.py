@@ -19,8 +19,10 @@ if not('last_id_tempico_channel' in globals()):
     last_id_tempico_channel = 100   #begin at 100, to distinguish easily from device ids
 
 #Create lists containing reference pointers to every created device and channel
-tempico_devices_list = []
-tempico_channels_list = []
+if not('tempico_devices_list' in globals()):
+    tempico_devices_list = []
+if not('tempico_channels_list' in globals()):    
+    tempico_channels_list = []
 
 
 ##Classes definitions
@@ -31,6 +33,7 @@ def prueba():
 class TempicoChannel():
     id_tempico_channel = 0
     id_tempico_device = 0 #every channel must have an associated device
+    parent_tempico_device = None #pointer reference to parent object of TempicoDevice() class
     channel_number = 0
     #Channel configuration parameters
     average_cycles = 1
@@ -49,10 +52,15 @@ class TempicoChannel():
         #append new object's pointer to global list
         global tempico_channels_list
         tempico_channels_list.append(self)
+        #link to an existing TempicoDevice
+        global tempico_devices_list
+        self.id_tempico_device = id_device        
+        if tempico_devices_list[-1].id_tempico_device == id_device:
+            #Look for the last created TausandDevice. Validate if is the parent, and link.
+            self.parent_tempico_device = tempico_devices_list[-1]
         #set channel number
         self.channel_number = ch_num
-        #link to an existing TempicoDevice
-        self.id_tempico_device = id_device
+        
         
     
     #Method chao() for tests only. TO DO: Delete after testing.
@@ -62,13 +70,390 @@ class TempicoChannel():
         #find port of device
         dev_id = self.id_tempico_device
         this_port = ''
+        my_tempico_dev = None
         global tempico_devices_list
         for d in tempico_devices_list:
             if d.id_tempico_device == dev_id:
+                my_tempico_dev = d
                 print(d) #print device object of TempicoDevice class
                 this_port = d.port
                 print(this_port)
-        
+        print('using id:     ',my_tempico_dev.getIdn())
+        #other alternative, using parent_tempico_device reference
+        print('using parent: ',self.parent_tempico_device.getIdn())
+    
+    def getAverageCycles(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':ACYC?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            response = response.splitlines()
+            response = int(response[0])
+            if response > 0:
+                 #update local variable
+                 self.average_cycles = response
+        return self.average_cycles
+    
+    def setAverageCycles(self,number):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            number = int(number) #coherce to an integer number
+            if number <= 0:
+                print('Parameter out of range. Must be a positive integer.')
+            else:            
+                msg = 'CONF:CH'+str(self.channel_number)+':ACYC ' + str(number)
+                print(msg)
+                my_tempico.writeMessage(msg)
+                
+                #verify if an error message is issued by the device
+                response = my_tempico.waitAndReadMessage()
+                if response != '':
+                    #an error or warning was found
+                    #TO DO: rise exception
+                    print(response.splitlines()[0])
+                else:            
+                    #validate if message was applied
+                    new_acyc = self.getAverageCycles()
+                    if new_acyc == number:
+                        #ok
+                        pass
+                    else:
+                        #TO DO: rise exception, or retry
+                        print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+    
+    def isEnabled(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':ENAB?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            response = response.splitlines()
+            try:
+                response = bool(int(response[0])) #first convert to int, then to bool
+                #update local variable
+                self.enable = response
+            except:
+                #TO DO: rise exception, or retry
+                print('Failed')
+        return self.enable
+    
+    def disableChannel(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            msg = 'CONF:CH'+str(self.channel_number)+':ENAB 0' #0: disable
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            
+            #verify if an error message is issued by the device
+            response = my_tempico.waitAndReadMessage()
+            if response != '':
+                #an error or warning was found
+                #TO DO: rise exception
+                print(response.splitlines()[0])
+            else:            
+                #validate if message was applied
+                if self.isEnabled() == False:
+                    #ok, disabled
+                    pass
+                else:
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+    
+    def enableChannel(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            msg = 'CONF:CH'+str(self.channel_number)+':ENAB 1' #1: enable
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            
+            #verify if an error message is issued by the device
+            response = my_tempico.waitAndReadMessage()
+            if response != '':
+                #an error or warning was found
+                #TO DO: rise exception
+                print(response.splitlines()[0])
+            else:            
+                #validate if message was applied
+                if self.isEnabled() == True:
+                    #ok, enabled
+                    pass
+                else:
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+    
+    def getNumberOfStops(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':NST?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            response = response.splitlines()
+            response = int(response[0])
+            if response > 0:
+                 #update local variable
+                 self.number_of_stops = response
+        return self.number_of_stops
+    
+    def setNumberOfStops(self,number):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            number = int(number) #coherce to an integer number
+            if number <= 0:
+                print('Parameter out of range. Must be a positive integer.')
+            else:            
+                msg = 'CONF:CH'+str(self.channel_number)+':NST ' + str(number)
+                #print(msg)
+                my_tempico.writeMessage(msg)
+                
+                #verify if an error message is issued by the device
+                response = my_tempico.waitAndReadMessage()
+                if response != '':
+                    #an error or warning was found
+                    #TO DO: rise exception
+                    print(response.splitlines()[0])
+                else:            
+                    #validate if message was applied
+                    new_nst = self.getNumberOfStops()
+                    if new_nst == number:
+                        #ok
+                        pass
+                    else:
+                        #TO DO: rise exception, or retry
+                        print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+    
+    def getMode(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':MODE?'
+            print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            response = response.splitlines()
+            response = int(response[0])
+            if (response == 1) or (response == 2):
+                 #update local variable
+                 self.mode = response
+        return self.mode
+    
+    def setMode(self,number):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            number = int(number) #coherce to an integer number
+            if number <= 0:
+                print('Parameter out of range. Must be a positive integer.')
+            else:            
+                msg = 'CONF:CH'+str(self.channel_number)+':MODE ' + str(number)
+                print(msg)
+                my_tempico.writeMessage(msg)
+                
+                #verify if an error message is issued by the device
+                response = my_tempico.waitAndReadMessage()
+                if response != '':
+                    #an error or warning was found
+                    #TO DO: rise exception
+                    print(response.splitlines()[0])
+                else:            
+                    #validate if message was applied
+                    new_mode = self.getMode()
+                    if new_mode == number:
+                        #ok
+                        pass
+                    else:
+                        #TO DO: rise exception, or retry
+                        print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+            
+    def getStartEdge(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':START:EDGE?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            if response != '':
+                response = response.splitlines()
+                response = response[0]
+                if (response == "RISE") or (response == "FALL"):
+                    #ok
+                    #update local variable
+                    self.start_edge = response
+                else:
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+            else:
+                #TO DO: rise exception, or retry
+                print('Failed.')
+        return self.start_edge 
+    
+    def setStartEdge(self,edge_type):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            if (edge_type.upper() == 'RISE') or (edge_type.upper() == 'RIS') or (edge_type == 1):
+                edge_type = 'RISE'
+            elif (edge_type.upper() == 'FALL') or (edge_type.upper() == 'FAL') or (edge_type == 0):
+                edge_type = 'FALL'
+            
+            msg = 'CONF:CH'+str(self.channel_number)+':START:EDGE ' + str(edge_type)
+            print(msg)
+            my_tempico.writeMessage(msg)
+            
+            #verify if an error message is issued by the device
+            response = my_tempico.waitAndReadMessage()
+            if response != '':
+                #an error or warning was found
+                #TO DO: rise exception
+                print(response.splitlines()[0])
+            else:            
+                #validate if message was applied
+                new_edge = self.getStartEdge()
+                if new_edge == edge_type:
+                    #ok
+                    pass
+                else:
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+    
+    def getStopEdge(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':STOP:EDGe?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            if response != '':
+                response = response.splitlines()
+                response = response[0]
+                if (response == "RISE") or (response == "FALL"):
+                    #ok
+                    #update local variable
+                    self.stop_edge = response
+                else:
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+            else:
+                #TO DO: rise exception, or retry
+                print('Failed.')
+                
+        return self.stop_edge 
+    
+    def setStopEdge(self,edge_type):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            if (edge_type.upper() == 'RISE') or (edge_type.upper() == 'RIS') or (edge_type == 1):
+                edge_type = 'RISE'
+            elif (edge_type.upper() == 'FALL') or (edge_type.upper() == 'FAL') or (edge_type == 0):
+                edge_type = 'FALL'
+            
+            msg = 'CONF:CH'+str(self.channel_number)+':STOP:EDGE ' + str(edge_type)
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            
+            #verify if an error message is issued by the device
+            response = my_tempico.waitAndReadMessage()
+            if response != '':
+                #an error or warning was found
+                #TO DO: rise exception
+                print(response.splitlines()[0])
+            else:            
+                #validate if message was applied
+                new_edge = self.getStopEdge()
+                if new_edge == edge_type:
+                    #ok
+                    pass
+                else:
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
+            
+    def getStopMask(self):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'CONF:CH'+str(self.channel_number)+':STOP:MASK?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            response = response.splitlines()
+            response = int(response[0])
+            if response > 0:
+                 #update local variable
+                 self.stop_mask = response
+        return self.stop_mask
+    
+    def setStopMask(self,stop_mask_in_us):
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen() == True:
+            number = stop_mask_in_us
+            number = int(number) #coherce to an integer number
+            if number < 0:
+                print('Parameter out of range. Must be a non-negative integer.')
+            else:            
+                msg = 'CONF:CH'+str(self.channel_number)+':STOP:MASK ' + str(number)
+                #print(msg)
+                my_tempico.writeMessage(msg)
+                
+                #verify if an error message is issued by the device
+                response = my_tempico.waitAndReadMessage()
+                if response != '':
+                    #an error or warning was found
+                    #TO DO: rise exception
+                    print(response.splitlines()[0])
+                else:            
+                    #validate if message was applied
+                    new_mask = self.getStopMask()
+                    if new_mask == number:
+                        #ok
+                        pass
+                    else:
+                        #TO DO: rise exception, or retry
+                        print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            #TO DO: raise expection?
 
 
 class TempicoDevice():       
@@ -90,7 +475,6 @@ class TempicoDevice():
     number_of_channels = 4 #for Tempico TP1004, 4 channels.
     number_of_runs = 1 #by default, nruns=1.        
     threshold = 1 #by default, thr=1.00
-    ##TO DO: add all configuration parameters
     #Measured data parameters
     ##TO DO: add parameters to save measured data
     
