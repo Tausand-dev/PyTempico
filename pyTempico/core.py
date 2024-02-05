@@ -4,7 +4,7 @@ Created on Jan 30 2024
 @author: David Guzman @ Tausand
 Core class and methods for PyTempico library.
 
-Last edited on 2024-02-03.
+Last edited on 2024-02-05.
 """
 
 import serial
@@ -106,7 +106,7 @@ class TempicoChannel():
                 print('Parameter out of range. Must be a positive integer.')
             else:            
                 msg = 'CONF:CH'+str(self.channel_number)+':ACYC ' + str(number)
-                print(msg)
+                #print(msg)
                 my_tempico.writeMessage(msg)
                 
                 #verify if an error message is issued by the device
@@ -253,7 +253,7 @@ class TempicoChannel():
             #read from device and update local variable
             my_tempico.waitAndReadMessage() #to clear any previous response
             msg = 'CONF:CH'+str(self.channel_number)+':MODE?'
-            print(msg)
+            #print(msg)
             my_tempico.writeMessage(msg)
             response = my_tempico.readMessage()
             response = response.splitlines()
@@ -264,6 +264,9 @@ class TempicoChannel():
         return self.mode
     
     def setMode(self,number):
+        #Valid modes: 1|2
+        #Mode 1: Minimum start-stop time: 12ns. Maximum start-stop time: 500ns. 
+        #Mode 2: Minimum start-stop time: 125ns. Maximum start-stop time: 4ms.
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             number = int(number) #coherce to an integer number
@@ -271,7 +274,7 @@ class TempicoChannel():
                 print('Parameter out of range. Must be a positive integer.')
             else:            
                 msg = 'CONF:CH'+str(self.channel_number)+':MODE ' + str(number)
-                print(msg)
+                #print(msg)
                 my_tempico.writeMessage(msg)
                 
                 #verify if an error message is issued by the device
@@ -327,7 +330,7 @@ class TempicoChannel():
                 edge_type = 'FALL'
             
             msg = 'CONF:CH'+str(self.channel_number)+':START:EDGE ' + str(edge_type)
-            print(msg)
+            #print(msg)
             my_tempico.writeMessage(msg)
             
             #verify if an error message is issued by the device
@@ -643,8 +646,8 @@ class TempicoDevice():
             self.writeMessage('FETCH?')
             #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
-            print("Data:",data)
-            return "fetch"
+            mylist = self.convertReadDataToIntList(data)
+            return mylist
         except Exception as e: 
             print(e)
     
@@ -655,10 +658,42 @@ class TempicoDevice():
             self.writeMessage('MEAS?')
             #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
-            print("Data:",data)
-            return "measure"
+            mylist = self.convertReadDataToIntList(data)
+            return mylist
         except Exception as e: 
             print(e)   
+            
+    def convertReadDataToIntList(self,data_string):
+        #convert a read data message string to a 2D-list with integer numbers
+        #
+        #The response of Tempico FETCH?/MEAS? is in the following format:
+        #    channel,run,start_time_us,stop_ps1,...,stop_psN;channel,...,stop_psN;...\r\n
+        #where:
+        #   'run' goes from 1 to NumberOfRuns,
+        #   'N' is the NumberOfStops,
+        #   every value in the message is an integer.
+        data_list = []
+        if data_string != '':
+            d = data_string.splitlines() #split lines, to remove \r\n chars
+            d0 = d[0] #take only first line; ignore additional lines
+            d0=d0.split(';') #split data into rows
+            for row in d0:
+                if len(row) > 0:
+                    #separate cols by ',' and convert to integers
+                    int_row = [int(x) for x in row.split(',')] 
+                else:
+                    #if empty row, write empty (do not try to convert to int)
+                    int_row = []
+                #append integer row to data_list
+                data_list.append(int_row) 
+            
+            if len(d) > 1:
+                #if a second line exists, a warning/error message has arrived
+                for extraline in d[1:]: #from 2nd to end
+                    print(extraline)
+                #TO DO: rise exception
+
+        return data_list
             
     ##settings methods
     def getSettings(self):
