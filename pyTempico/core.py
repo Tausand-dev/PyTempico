@@ -1,10 +1,14 @@
 """
 Created on Jan 30 2024
 
-@author: David Guzman @ Tausand
+@author: David Guzman at Tausand Electronics
+
+- dguzman@tausand.com  
+- https://www.tausand.com
+
 Core class and methods for PyTempico library.
 
-Last edited on 2024-02-05.
+Last edited on 2024-02-06.
 """
 
 import serial
@@ -27,8 +31,16 @@ if not('tempico_channels_list' in globals()):
 
 ##Classes definitions
 
-def prueba():
-    return 'prueba ok'
+def simpletest():
+    """ simple function for tests
+        
+        Args:
+            none
+        Returns:
+            text: 'simple test ok'
+
+    """
+    return 'simple test ok'
 
 class TempicoChannel():
     id_tempico_channel = 0

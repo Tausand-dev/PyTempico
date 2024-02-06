@@ -2,3 +2,9 @@
 *.pyc
 #Ignore the following folders
 dgtests/
+
+# Sphinx documentation
+#ignore the output files during latex compilation
+docs/build/latex/*
+#but do not ignore the following files: output pdf files
+!docs/build/latex/*.pdf
