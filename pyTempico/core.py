@@ -1,14 +1,16 @@
 """
 Created on Jan 30 2024
 
-@author: David Guzman at Tausand Electronics
+| @author: David Guzman at Tausand Electronics 
+| dguzman@tausand.com 
+| https://www.tausand.com
 
-- dguzman@tausand.com  
-- https://www.tausand.com
+Core class and methods for PyTempico library. 
 
-Core class and methods for PyTempico library.
+To use with Tausand Electronics' Time-to-Digital Converters (TDCs) of the 
+family *Tausand Tempico*.
 
-Last edited on 2024-02-06.
+Last edited on 2024-02-08.
 """
 
 import serial
@@ -37,12 +39,50 @@ def simpletest():
         Args:
             none
         Returns:
-            text: 'simple test ok'
+            str: 'simple test ok'
 
     """
     return 'simple test ok'
 
 class TempicoChannel():
+    """Single channel on a Tempico Device.
+    
+    To modify or access attributes, **please use methods**. For example, to get 
+    average cycles on channel 2,
+    
+    >>> my_tempico_device_object.ch2.getAverageCycles()
+    
+    Changing attributes without using methods, do not change the actual 
+    parameters in the device.
+    
+    Accesing attributes without using methods, returns values registered in 
+    local memory that may not be updated.
+    
+    Attributes:
+        id_tempico_channel (int): Unique identifier for a TempicoChannel
+            object.
+        id_tempico_device (int): Identifier of the TausandDevice linked to this
+            TempicoChannel object.
+        average_cycles (int): Average cycles.
+        channel_number (int): Number of the channel in the device (1=A, 2=B,...).
+        enable (bool): True when the channel is enabled.
+        mode (int): Measurement mode. 1|2.
+        
+            * 1: Short measurement range. Start-stop times from 12ns to 500ns.
+            * 2: Large measurement range. Start-stop times from 125ns to 4ms.
+
+        number_of_stops (int): Number of stop pulses expected after a 
+            start pulse arrives. 1..5.
+        parent_tempico_device (TempicoDevice): Pointer reference to parent 
+            object of TempicoDevice() class.
+        start_edge (str): Edge type on the start pulse used to begin timing.
+            RISE|FALL.
+        stop_edge (str): Edge type on the stop pulses used to end timing.
+            RISE|FALL.
+        stop_mask (int): Time that stop pulses are ignored after receiving a 
+            start pulse on the TDC. Value in microseconds. 0..4000.
+    
+    """
     id_tempico_channel = 0
     id_tempico_device = 0 #every channel must have an associated device
     parent_tempico_device = None #pointer reference to parent object of TempicoDevice() class
@@ -52,8 +92,8 @@ class TempicoChannel():
     enable = True
     mode = 1
     number_of_stops = 1
-    start_edge = 'rise'
-    stop_edge = 'rise'
+    start_edge = 'RISE'
+    stop_edge = 'RISE'
     stop_mask = 0    
     def __init__(self,id_device,ch_num):
         #set Ch-ID as a consecutive number
@@ -95,6 +135,20 @@ class TempicoChannel():
         print('using parent: ',self.parent_tempico_device.getIdn())
     
     def getAverageCycles(self):
+        """Returns the average cycles of the TDC TempicoChannel.
+        
+        By default, average cycles = 1 (no multi-cycle averaging).
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            integer: Number of average cycles.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -111,6 +165,18 @@ class TempicoChannel():
         return self.average_cycles
     
     def setAverageCycles(self,number):
+        """Modifies the average cycles of the TDC TempicoChannel.
+        
+        By default, average cycles = 1 (no multi-cycle averaging).
+        
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        Args:
+            number (int): desired average cycles for the TDC.
+                Valid values are 1|2|4|8|16|32|64|128.
+    
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             number = int(number) #coherce to an integer number
@@ -142,6 +208,20 @@ class TempicoChannel():
             #TO DO: raise expection?
     
     def isEnabled(self):
+        """Returns if a TDC TempicoChannel is enabled.
+        
+        By default, channels are enabled.
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            bool: True, when TDC channel is enabled.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -161,6 +241,21 @@ class TempicoChannel():
         return self.enable
     
     def disableChannel(self):
+        """Disables a TDC TempicoChannel.
+        
+        By default, channels are enabled.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        To validate the status of the channel, method 
+        :func:`~pyTempico.core.TempicoChannel.isEnabled` 
+        may be used.
+        
+        Args:
+            (none)
+    
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             msg = 'CONF:CH'+str(self.channel_number)+':ENAB 0' #0: disable
@@ -187,6 +282,21 @@ class TempicoChannel():
             #TO DO: raise expection?
     
     def enableChannel(self):
+        """Enables a TDC TempicoChannel.
+        
+        By default, channels are enabled.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        To validate the status of the channel, method 
+        :func:`~pyTempico.core.TempicoChannel.isEnabled` 
+        may be used.
+        
+        Args:
+            (none)
+    
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             msg = 'CONF:CH'+str(self.channel_number)+':ENAB 1' #1: enable
@@ -213,6 +323,23 @@ class TempicoChannel():
             #TO DO: raise expection?
     
     def getNumberOfStops(self):
+        """Returns the expected number of stop pulses of the TDC TempicoChannel.
+        
+        By default, number of stops = 1 (single start -> single stop).
+        
+        The TDC must receive all the expected number of stops to register them 
+        as a valid measurement; otherwise, the measurements are discarded.
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            integer: Number of stops.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -229,6 +356,22 @@ class TempicoChannel():
         return self.number_of_stops
     
     def setNumberOfStops(self,number):
+        """Modifies the expected number of stop pulses of the TDC TempicoChannel.
+        
+        By default, number of stops = 1 (single start -> single stop).
+        
+        The TDC must receive all the expected number of stops to register them 
+        as a valid measurement; otherwise, the measurements are discarded. For
+        extending the valid time range, consider using measurement mode 2.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        Args:
+            number (int): desired number of stops for the TDC. 
+                Valid values are from 1 to 5.
+    
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             number = int(number) #coherce to an integer number
@@ -260,6 +403,23 @@ class TempicoChannel():
             #TO DO: raise expection?
     
     def getMode(self):
+        """Returns the measurement mode of the TDC TempicoChannel.
+        
+        By default, mode = 1.
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            integer: Mode. Possible values are,
+                
+            - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+            - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -276,9 +436,21 @@ class TempicoChannel():
         return self.mode
     
     def setMode(self,number):
-        #Valid modes: 1|2
-        #Mode 1: Minimum start-stop time: 12ns. Maximum start-stop time: 500ns. 
-        #Mode 2: Minimum start-stop time: 125ns. Maximum start-stop time: 4ms.
+        """Modifies the measurement mode of the TDC TempicoChannel.
+        
+        By default, mode = 1. Possible values are,
+            
+        - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+        - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+                
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        Args:
+            number (int): desired measurement mode for the TDC. 
+                Valid values are 1 or 2.
+        
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             number = int(number) #coherce to an integer number
@@ -310,6 +482,23 @@ class TempicoChannel():
             #TO DO: raise expection?
             
     def getStartEdge(self):
+        """Returns the edge type used on start pulses of the TDC TempicoChannel.
+        
+        By default, start edge = 'RISE'.
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            string: start edge type. Possible values are,
+                
+            - 'RISE': TDC timing starts on a rising edge of the start pulse.
+            - 'FALL': TDC timing starts on a falling edge of the start pulse.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -334,6 +523,22 @@ class TempicoChannel():
         return self.start_edge 
     
     def setStartEdge(self,edge_type):
+        """Sets the edge type used on start pulses of the TDC TempicoChannel.
+        
+        By default, start edge = 'RISE'. Possible values are,
+            
+        - 'RISE': TDC timing starts on a rising edge of the start pulse.
+        - 'FALL': TDC timing starts on a falling edge of the start pulse.
+                
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        Args:
+            edge_type (str): desired start edge type for the TDC.
+                Valid values are 'RISE', 1, 'FALL', 0.
+                
+            
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             if (edge_type.upper() == 'RISE') or (edge_type.upper() == 'RIS') or (edge_type == 1):
@@ -366,6 +571,23 @@ class TempicoChannel():
             #TO DO: raise expection?
     
     def getStopEdge(self):
+        """Returns the edge type used on stop pulses of the TDC TempicoChannel.
+        
+        By default, stop edge = 'RISE'.
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            string: stop edge type. Possible values are,
+                
+            - 'RISE': TDC timing ends on a rising edge of the stop pulse.
+            - 'FALL': TDC timing ends on a falling edge of the stop pulse.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -391,6 +613,21 @@ class TempicoChannel():
         return self.stop_edge 
     
     def setStopEdge(self,edge_type):
+        """Sets the edge type used on stop pulses of the TDC TempicoChannel.
+        
+        By default, stop edge = 'RISE'. Possible values are,
+            
+        - 'RISE': TDC timing ends on a rising edge of the stop pulse.
+        - 'FALL': TDC timing ends on a falling edge of the stop pulse.
+                
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        Args:
+            edge_type (str): desired stop edge type for the TDC.
+                Valid values are 'RISE', 1, 'FALL', 0.
+            
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             if (edge_type.upper() == 'RISE') or (edge_type.upper() == 'RIS') or (edge_type == 1):
@@ -423,6 +660,21 @@ class TempicoChannel():
             #TO DO: raise expection?
             
     def getStopMask(self):
+        """Returns the time that stop pulses are ignored after receiving a start
+        pulse on the TDC TempicoChannel. In microseconds.
+        
+        By default, stop mask = 0 (no masking).
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            integer: stop mask time, in microseconds.
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
             #read from device and update local variable
@@ -439,6 +691,19 @@ class TempicoChannel():
         return self.stop_mask
     
     def setStopMask(self,stop_mask_in_us):
+        """Modifies the time that stop pulses are ignored after receiving a 
+        start pulse on the TDC TempicoChannel.
+        
+        By default, stop mask = 0 (no masking).
+        
+        This function requires that a connection is established with the 
+        TempicoDevice of the TempicoChannel.
+        
+        Args:
+            stop_mask_in_us (int): desired stop mask for the TDC, in microseconds.
+                Valid values are from 0 to 4000.
+        
+        """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             number = stop_mask_in_us
@@ -472,6 +737,55 @@ class TempicoChannel():
 
 
 class TempicoDevice():       
+    """Tausand Tempico TDC device object.
+    
+    To create an object of the TempicoDevice class, it is required to send as
+    parameter the desired com_port. For example,
+    
+    >>> my_tempico_device_object = pyTempico.TempicoDevice('COM5')
+    
+    To modify or access attributes, **please use methods**. For example,
+    
+    >>> my_tempico_device_object.getIdn()
+    
+    To access attributes of a particular channel, use methods of the 
+    TempicoChannel class through attributes ch1, ch2, ch3, ch4 of this class.
+    For example, to get average cycles on channel 2,
+    
+    >>> my_tempico_device_object.ch2.getAverageCycles()
+    
+    Changing attributes without using methods, do not change the actual 
+    parameters in the device.
+    
+    Accesing attributes without using methods, returns values registered in 
+    local memory, that may not be updated.
+    
+    To begin a measurement and read its results, use methods 
+    :func:`~pyTempico.core.TempicoDevice.measure` and 
+    :func:`~pyTempico.core.TempicoDevice.fetch`.
+    
+    
+    
+    Attributes:
+        id_tempico_device (int): Unique identifier of the TausandDevice object.
+        ch1 (TempicoChannel): Object of the TempicoChannel class linked to 
+            TDC in channel 1 (input A).
+        ch2 (TempicoChannel): Object of the TempicoChannel class linked to 
+            TDC in channel 2 (input B).
+        ch3 (TempicoChannel): Object of the TempicoChannel class linked to 
+            TDC in channel 3 (input C).
+        ch4 (TempicoChannel): Object of the TempicoChannel class linked to 
+            TDC in channel 4 (input D).
+        device (Serial): Serial port object.
+        idn (str): Identification string.
+        number_of_channels (int): number of stop inputs of the device.
+        number_of_runs (int): Number of measurement runs of the TDCs in 
+            TempicoDevice.
+        port (str): Serial port string.
+        threshold (float): Threshold voltage on the rising edge of start and 
+            stops inputs of TDCs in the TempicoDevice.
+    
+    """
     id_tempico_device = 0
     device = None
     ch1 = None
@@ -512,6 +826,15 @@ class TempicoDevice():
     
     ##open and closing connection methods
     def open(self):
+        """Establishes (opens) a connection with a TausandDevice.
+        
+        It is mandatory to establish a connection with this method before 
+        to be able to send/to receive data to/from the device.
+        
+        Args:
+            (none)
+    
+        """
         try:
             if self.__connected == True:
                 print('Device connection was already open.')
@@ -528,9 +851,26 @@ class TempicoDevice():
             return
     
     def openTempico(self):
+        """Establishes (opens) a connection with a TausandDevice.
+        
+        Same as method :func:`~pyTempico.core.TempicoDevice.open`.
+        
+        Args:
+            (none)
+    
+        """
         self.open()
         
     def close(self):
+        """Ends (closes) a connection with a TausandDevice.
+        
+        It is recommended to close connection at the end of a routine, to free 
+        the device's port for future use.
+        
+        Args:
+            (none)
+    
+        """
         try:
             if self.__connected == True:
                 self.device.close()  # close port
@@ -543,19 +883,64 @@ class TempicoDevice():
             print(e)
             
     def closeTempico(self):
+        """Ends (closes) a connection with a TausandDevice.
+        
+        Same as method :func:`~pyTempico.core.TempicoDevice.close`.
+        
+        Args:
+            (none)
+    
+        """
+        
         self.close()
     
     def isOpen(self):
+        """Returns if a TDC TempicoDevice connection is established (open).
+                     
+        Args:
+            (none)
+    
+        Returns:
+            bool: True when TempicoDevice connection is open.
+        """
         return self.__connected
     
     ##general requests methods
     def getBaudRate(self):
+        """Returns the TempicoDevice baud rate.
+                     
+        Args:
+            (none)
+    
+        Returns:
+            int: baud rate.
+        """
         return self.__baudrate
     
     def getFirmware(self):
+        """Returns the TempicoDevice firmware version.
+                     
+        Args:
+            (none)
+    
+        Returns:
+            str: firmware version.
+        """
         return self.__firmware
     
     def getIdn(self):
+        """Returns the TempicoDevice identification string.
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the string. If not, the most recent read string 
+        is returned.
+                     
+        Args:
+            (none)
+    
+        Returns:
+            str: identification string.
+        """
         if (self.__connected == True) and (self.idn == ""):
             #try to read IDN from device
             self.readIdnFromDevice()
@@ -566,6 +951,19 @@ class TempicoDevice():
         return self.idn
     
     def readIdnFromDevice(self):
+        """Returns the TempicoDevice identification string, by requesting it to
+        the device.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice. As an alternative, method 
+        :func:`~pyTempico.core.TempicoDevice.getIdn` may be used.
+                     
+        Args:
+            (none)
+    
+        Returns:
+            str: identification string.
+        """
         #expected format for IDN string: 'Tausand,Tempico TP1004,,1.0\r\n'
         self.writeMessage('*IDN?') #request IDN
         response = self.readMessage() #get response
@@ -590,6 +988,17 @@ class TempicoDevice():
         return self.idn
     
     def reset(self):
+        """Sends a reset command to the TempicoDevice.
+        
+        Applying a reset clears all the settings of the TempicoDevice and its 
+        TempicoChannels to their default values.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+                     
+        Args:
+            (none)
+        """
         try:
             self.writeMessage('*RST')
             #TO DO: validate if device has applied the reset request; if not, 
@@ -599,7 +1008,19 @@ class TempicoDevice():
     
     ##read and write via serial port methods
     def readMessage(self):
-        ##This function reads a message from serial port. If no message is ready, it waits the port timeout, typically 1s.
+        """Reads pending messages sent by a TempicoDevice from its serial port.
+        
+        If no message is received, it waits the port timeout, typically 1s.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+                     
+        Args:
+            (none)
+            
+        Returns:
+            str: read message.
+        """
         try:
             txt = ''
             if self.__connected == True:
@@ -620,13 +1041,36 @@ class TempicoDevice():
             return ''
         
     def isPendingReadMessage(self):
+        """Determines if a pending message is available to be read in a 
+        TempicoDevice serial port.
+                     
+        Args:
+            (none)
+            
+        Returns:
+            bool: True, when a pending message is found.
+        """
         if (self.device.in_waiting > 0):
             return True
         else:
             return False
         
     def waitAndReadMessage(self,wait_time_ms=1):
-        ##This function waits the specified time, and then reads a message from serial port if any. It does not wait for a port timeout.
+        """Waits the specified time, and then reads pending messages sent by a 
+        TempicoDevice from its serial port, if any.
+        
+        If no message is received, it does not wait for a port timeout.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+                     
+        Args:
+            wait_time_ms (int, optional): Waiting time, in miliseconds.
+                Defaults to 1.
+            
+        Returns:
+            str: read message.
+        """
         time.sleep(wait_time_ms/1000) #wait 1ms for a device response, if any
         response = ''
         if self.isPendingReadMessage():
@@ -634,6 +1078,18 @@ class TempicoDevice():
         return response        
         
     def writeMessage(self,message):
+        """Writes a message to a TempicoDevice in its serial port.
+        
+        If a response is expected after writing a message, the 
+        :func:`~pyTempico.core.TempicoDevice.readMessage` 
+        method should be called afterwards to obtain the response.
+               
+        This function requires that a connection is established with the 
+        TempicoDevice.
+                     
+        Args:
+            message (str): message to be sent.
+        """
         try:
             if message.find('\n') == -1:
                 #no newline has been included in the message
@@ -654,6 +1110,35 @@ class TempicoDevice():
 
     ##measure methods
     def fetch(self):
+        """Reads the most recent measurement data set form a TempicoDevice.
+        
+        The dataset of a TempicoDevice is in the following format::
+            
+            [[ch,run,start_us,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_us' is the timestamp of start pulse, in microseconds; this value overflows (go back to zero) after 2^32-1 microseconds, about 4294 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+          
+        Every value in the dataset is an integer.
+        
+        If no measurement has been done, the device may respond with an empty 
+        dataset. To make a measmurement, method 
+        :func:`~pyTempico.core.TempicoDevice.measure` must be used.
+               
+        This function requires that a connection is established with the 
+        TempicoDevice. 
+                     
+        Args:
+            (none)
+            
+        Returns:
+            list(int): measured dataset.
+        """
         try:
             self.writeMessage('FETCH?')
             #TO DO: save measured data in local memory, and validate data
@@ -664,6 +1149,37 @@ class TempicoDevice():
             print(e)
     
     def measure(self):
+        """Begins a measurement sequence and reads its dataset from a 
+        TempicoDevice.
+        
+        The dataset of a TempicoDevice is in the following format::
+            
+            [[ch,run,start_us,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_us' is the timestamp of start pulse, in microseconds; this value overflows (go back to zero) after 2^32-1 microseconds, about 4294 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+          
+        Every value in the dataset is an integer.
+        
+        If measurement cannot be completed within timeout, the device may 
+        respond with an incomplete or empty dataset. In this case, to obtain a 
+        complete dataset, the method 
+        :func:`~pyTempico.core.TempicoDevice.fetch` may be called later.
+               
+        This function requires that a connection is established with the 
+        TempicoDevice. 
+                     
+        Args:
+            (none)
+            
+        Returns:
+            list(int): measured dataset.
+        """
         try:
             #TO DO: validate if a measurement is in progress, before 
             #requesting a new measurement
@@ -676,14 +1192,29 @@ class TempicoDevice():
             print(e)   
             
     def convertReadDataToIntList(self,data_string):
-        #convert a read data message string to a 2D-list with integer numbers
-        #
-        #The response of Tempico FETCH?/MEAS? is in the following format:
-        #    channel,run,start_time_us,stop_ps1,...,stop_psN;channel,...,stop_psN;...\r\n
-        #where:
-        #   'run' goes from 1 to NumberOfRuns,
-        #   'N' is the NumberOfStops,
-        #   every value in the message is an integer.
+        """Converts a string with a read dataset message issued by a 
+        TempicoDevice, into an integer 2D-list.
+        
+        The dataset of a TempicoDevice is in the following format::
+            
+            [[ch,run,start_us,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_us' is the timestamp of start pulse, in microseconds; this value overflows (go back to zero) after 2^32-1 microseconds, about 4294 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+          
+        Every value in the dataset is an integer.
+                     
+        Args:
+            data_string (str): dataset message to convert.
+            
+        Returns:
+            list(int): dataset message converted.
+        """
         data_list = []
         if data_string != '':
             d = data_string.splitlines() #split lines, to remove \r\n chars
@@ -709,6 +1240,22 @@ class TempicoDevice():
             
     ##settings methods
     def getSettings(self):
+        """Reads the current settings form a TempicoDevice.
+        
+        The response for settings query on a TempicoDevice is in the following 
+        format::
+            
+            CH1:ACYC 1;CH1:ENAB 1;CH1:NST 1;...;CH4:STOP:MASK 0;NRUN 1;THR 1.00
+            
+        This function requires that a connection is established with the 
+        TempicoDevice. 
+                     
+        Args:
+            (none)
+            
+        Returns:
+            str: device settings.
+        """
         try:
             self.writeMessage('CONF?')
             data = self.readMessage()
@@ -772,6 +1319,20 @@ class TempicoDevice():
             print(e)
             
     def getNumberOfRuns(self):
+        """Returns the number of measurement runs of the TDCs in TempicoDevice.
+        
+        By default, number of runs = 1 (single measurement).
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            integer: Number of number of runs.
+        """
         if self.isOpen():
             #read from device and update local variable
             self.waitAndReadMessage() #to clear any previous response
@@ -786,6 +1347,18 @@ class TempicoDevice():
         return self.number_of_runs
     
     def setNumberOfRuns(self,number):
+        """Modifies the number of measurement runs of the TDCs in TempicoDevice.
+        
+        By default, number of runs = 1 (single measurement).
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+        
+        Args:
+            number (int): desired number of runs for every TDC.
+                Valid values are from 1 to 1000.
+    
+        """
         if self.isOpen() == True:
             number = int(number) #coherce to an integer number
             if number <= 0:
@@ -816,6 +1389,33 @@ class TempicoDevice():
             #TO DO: raise expection?
             
     def getThresholdVoltage(self):
+        """Returns the threshold voltage on the rising edge of start and stops 
+        inputs of TDCs in the TempicoDevice.
+        
+        Start and stop inputs are coupled to 50 ohms.
+        
+        By default, threshold voltage = 1.00V (recommended for TTL>2.5V).
+        
+        All inputs are 5V tolerant.
+        
+        Gate input. This parameter does not have effect on the gate input. 
+        Gate input accepts 3.3V TTL and 5V TTL signals. 
+        
+        - When gate is disconnected, system is enabled. 
+        - When gate is connected to 0V, system is disabled. 
+        - When gate is connected to 3.3V/5V, system is enabled.
+        
+        
+        If the connection is established with the TempicoDevice, this function 
+        request the device for the value. If not, the most recent value is 
+        returned.
+        
+        Args:
+            (none)
+    
+        Returns:
+            float: start and stop inputs threshold voltage.
+        """
         if self.isOpen():
             #read from device and update local variable
             self.waitAndReadMessage() #to clear any previous response
@@ -830,7 +1430,34 @@ class TempicoDevice():
         return self.threshold
     
     def setThresholdVoltage(self,desired_voltage):
-        #Valid desired_voltage parameters are MINimum|MAXimum|DOWN|UP or a number from 0.90 to 1.60.
+        """Changes the threshold voltage on the rising edge of start and stops 
+        inputs of TDCs in the TempicoDevice.
+        
+        Start and stop inputs are coupled to 50 ohms.
+        
+        By default, threshold voltage = 1.00V (recommended for TTL>2.5V).
+        
+        All inputs are 5V tolerant.
+        
+        Gate input. This parameter does not have effect on the gate input. 
+        Gate input accepts 3.3V TTL and 5V TTL signals. 
+        
+        - When gate is disconnected, system is enabled. 
+        - When gate is connected to 0V, system is disabled. 
+        - When gate is connected to 3.3V/5V, system is enabled.
+        
+        To validate the actual threshold voltage applied, method 
+        :func:`~pyTempico.core.TempicoDevice.getThresholdVoltage`
+        should be called.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+        
+        Args:
+            desired_voltage (float): desired start and stop inputs threshold 
+                voltage. Valid parameters are MINimum|MAXimum|DOWN|UP or a 
+                number from 0.90 to 1.60.
+        """
         
         if self.isOpen() == True:
             #try to convert to a float
@@ -865,13 +1492,65 @@ class TempicoDevice():
             #TO DO: raise expection?
     
     def decrementThresholdVoltage(self):
+        """Reduces the threshold voltage on the rising edge of start and stops 
+        inputs of TDCs in the TempicoDevice.
+        
+        To validate the actual threshold voltage applied, method
+        :func:`~pyTempico.core.TempicoDevice.getThresholdVoltage` 
+        should be called.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+        
+        Args:
+            (none)
+        """
         self.setThresholdVoltage("DOWN")
     
     def incrementThresholdVoltage(self):
+        """Increases the threshold voltage on the rising edge of start and 
+        stops inputs of TDCs in the TempicoDevice.
+        
+        To validate the actual threshold voltage applied, method
+        :func:`~pyTempico.core.TempicoDevice.getThresholdVoltage`
+        should be called.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+        
+        Args:
+            (none)
+        """
         self.setThresholdVoltage("UP")
     
     def setThresholdVoltageToMaximum(self):
+        """Sets to the maximum valid value the threshold voltage on the 
+        rising edge of start and stops inputs of TDCs in the TempicoDevice.
+        
+        To validate the actual threshold voltage applied, method 
+        :func:`~pyTempico.core.TempicoDevice.getThresholdVoltage`
+        should be called.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+        
+        Args:
+            (none)
+        """
         self.setThresholdVoltage("MAX")
         
     def setThresholdVoltageToMinimum(self):
+        """Sets to the minimum valid value the threshold voltage on the 
+        rising edge of start and stops inputs of TDCs in the TempicoDevice.
+        
+        To validate the actual threshold voltage applied, method
+        :func:`~pyTempico.core.TempicoDevice.getThresholdVoltage`
+        should be called.
+        
+        This function requires that a connection is established with the 
+        TempicoDevice.
+        
+        Args:
+            (none)
+        """
         self.setThresholdVoltage("MIN")
