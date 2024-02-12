@@ -22,7 +22,11 @@ copyright = '2024, Tausand Electronics'
 author = 'Tausand Electronics'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0'
+# get version number from pyTempico __init__.py file
+import pyTempico as pt
+release = pt.__version__
+# if you want to fix here a version, only for documents, use next line
+# release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------

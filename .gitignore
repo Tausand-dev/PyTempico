@@ -8,3 +8,10 @@ dgtests/
 docs/build/latex/*
 #but do not ignore the following files: output pdf files
 !docs/build/latex/*.pdf
+
+# Virtual environments
+.venv/*
+
+# Distribution files, generated after command: python -m build
+dist/*
+pyTempico.egg-info/*
