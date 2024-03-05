@@ -4,23 +4,6 @@ pyTempico package
 Submodules
 ----------
 
-
-pyTempico.core module
----------------------
-
-.. automodule:: pyTempico.core
-
-TempicoDevice class
-===================
-.. autoclass:: TempicoDevice
-   :members:
-   
-TempicoChannel class
-====================
-
-.. autoclass:: TempicoChannel
-   :members:
-   
 pyTempico.PyTempicoExample module
 ---------------------------------
 
@@ -29,6 +12,13 @@ pyTempico.PyTempicoExample module
    :undoc-members:
    :show-inheritance:
 
+pyTempico.core module
+---------------------
+
+.. automodule:: pyTempico.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Module contents
 ---------------
@@ -37,4 +27,3 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
-

@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyTempico package &mdash; pyTempico 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,20 +29,114 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyTempico
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyTempico
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">pyTempico package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#tempicodevice-class">TempicoDevice class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#tempicochannel-class">TempicoChannel class</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pyTempico package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyTempico.core">pyTempico.core module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#tempicodevice-class">TempicoDevice class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyTempico.core.TempicoDevice"><code class="docutils literal notranslate"><span class="pre">TempicoDevice</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.id_tempico_device"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.id_tempico_device</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.ch1"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.ch1</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.ch2"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.ch2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.ch3"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.ch3</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.ch4"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.ch4</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.device"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.device</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.idn"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.idn</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.number_of_channels"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.number_of_channels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.number_of_runs"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.number_of_runs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.port"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.port</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.threshold"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.threshold</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.close"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.closeTempico"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.closeTempico()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.convertReadDataToIntList"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.convertReadDataToIntList()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.decrementThresholdVoltage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.decrementThresholdVoltage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.fetch"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.fetch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.getBaudRate"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.getBaudRate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.getFirmware"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.getFirmware()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.getIdn"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.getIdn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.getNumberOfRuns"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.getNumberOfRuns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.getSettings"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.getSettings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.getThresholdVoltage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.getThresholdVoltage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.incrementThresholdVoltage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.incrementThresholdVoltage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.isOpen"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.isOpen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.isPendingReadMessage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.isPendingReadMessage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.measure"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.measure()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.open"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.open()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.openTempico"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.openTempico()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.readIdnFromDevice"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.readIdnFromDevice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.readMessage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.readMessage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.reset"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.reset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.setNumberOfRuns"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.setNumberOfRuns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.setThresholdVoltage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.setThresholdVoltage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.setThresholdVoltageToMaximum"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.setThresholdVoltageToMaximum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.setThresholdVoltageToMinimum"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.setThresholdVoltageToMinimum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.waitAndReadMessage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.waitAndReadMessage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.writeMessage"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.writeMessage()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#tempicochannel-class">TempicoChannel class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyTempico.core.TempicoChannel"><code class="docutils literal notranslate"><span class="pre">TempicoChannel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.id_tempico_channel"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.id_tempico_channel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.id_tempico_device"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.id_tempico_device</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.average_cycles"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.average_cycles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.channel_number"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.channel_number</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.enable"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.enable</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.mode"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.number_of_stops"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.number_of_stops</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.parent_tempico_device"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.parent_tempico_device</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.start_edge"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.start_edge</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.stop_edge"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.stop_edge</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.stop_mask"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.stop_mask</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.disableChannel"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.disableChannel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.enableChannel"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.enableChannel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.getAverageCycles"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.getAverageCycles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.getMode"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.getMode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.getNumberOfStops"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.getNumberOfStops()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.getStartEdge"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.getStartEdge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.getStopEdge"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.getStopEdge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.getStopMask"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.getStopMask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.isEnabled"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.isEnabled()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.setAverageCycles"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.setAverageCycles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.setMode"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.setMode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.setNumberOfStops"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.setNumberOfStops()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.setStartEdge"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.setStartEdge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.setStopEdge"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.setStopEdge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoChannel.setStopMask"><code class="docutils literal notranslate"><span class="pre">TempicoChannel.setStopMask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyTempico.PyTempicoExample">pyTempico.PyTempicoExample module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.Menu"><code class="docutils literal notranslate"><span class="pre">Menu()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.create_measurement_ch2_1"><code class="docutils literal notranslate"><span class="pre">create_measurement_ch2_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.create_measurement_ch2_2"><code class="docutils literal notranslate"><span class="pre">create_measurement_ch2_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.create_void_measurement_ch2"><code class="docutils literal notranslate"><span class="pre">create_void_measurement_ch2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.device_conected"><code class="docutils literal notranslate"><span class="pre">device_conected()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.input_serial_port"><code class="docutils literal notranslate"><span class="pre">input_serial_port()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.show_menu"><code class="docutils literal notranslate"><span class="pre">show_menu()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.specs_function"><code class="docutils literal notranslate"><span class="pre">specs_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.PyTempicoExample.specs_function_ch2"><code class="docutils literal notranslate"><span class="pre">specs_function_ch2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pyTempico">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -56,8 +152,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>pyTempico package</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pyTempico package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/pyTempico.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -67,8 +163,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-pyTempico.core">
-<span id="pytempico-package"></span><h1>pyTempico package<a class="headerlink" href="#module-pyTempico.core" title="Permalink to this heading"></a></h1>
+  <section id="pytempico-package">
+<h1>pyTempico package<a class="headerlink" href="#pytempico-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pyTempico.core">
+<span id="pytempico-core-module"></span><h2>pyTempico.core module<a class="headerlink" href="#module-pyTempico.core" title="Link to this heading"></a></h2>
 <p>Created on Jan 30 2024</p>
 <div class="line-block">
 <div class="line">&#64;author: David Guzman at Tausand Electronics</div>
@@ -80,11 +181,12 @@
 family <em>Tausand Tempico</em>.</p>
 <p>Last edited on 2024-02-08.</p>
 </section>
+</section>
 <section id="tempicodevice-class">
-<h1>TempicoDevice class<a class="headerlink" href="#tempicodevice-class" title="Permalink to this heading"></a></h1>
+<h1>TempicoDevice class<a class="headerlink" href="#tempicodevice-class" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoDevice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">com_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoDevice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">com_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice" title="Link to this definition"></a></dt>
 <dd><p>Tausand Tempico TDC device object.</p>
 <p>To create an object of the TempicoDevice class, it is required to send as
 parameter the desired com_port. For example,</p>
@@ -110,7 +212,7 @@ local memory, that may not be updated.</p>
 <a class="reference internal" href="#pyTempico.core.TempicoDevice.fetch" title="pyTempico.core.TempicoDevice.fetch"><code class="xref py py-func docutils literal notranslate"><span class="pre">fetch()</span></code></a>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.id_tempico_device">
-<span class="sig-name descname"><span class="pre">id_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.id_tempico_device" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">id_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.id_tempico_device" title="Link to this definition"></a></dt>
 <dd><p>Unique identifier of the TausandDevice object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -121,7 +223,7 @@ local memory, that may not be updated.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.ch1">
-<span class="sig-name descname"><span class="pre">ch1</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch1" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ch1</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch1" title="Link to this definition"></a></dt>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 1 (input A).</p>
 <dl class="field-list simple">
@@ -133,7 +235,7 @@ TDC in channel 1 (input A).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.ch2">
-<span class="sig-name descname"><span class="pre">ch2</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch2" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ch2</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch2" title="Link to this definition"></a></dt>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 2 (input B).</p>
 <dl class="field-list simple">
@@ -145,7 +247,7 @@ TDC in channel 2 (input B).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.ch3">
-<span class="sig-name descname"><span class="pre">ch3</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch3" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ch3</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch3" title="Link to this definition"></a></dt>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 3 (input C).</p>
 <dl class="field-list simple">
@@ -157,7 +259,7 @@ TDC in channel 3 (input C).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.ch4">
-<span class="sig-name descname"><span class="pre">ch4</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch4" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ch4</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.ch4" title="Link to this definition"></a></dt>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 4 (input D).</p>
 <dl class="field-list simple">
@@ -169,7 +271,7 @@ TDC in channel 4 (input D).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.device">
-<span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.device" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.device" title="Link to this definition"></a></dt>
 <dd><p>Serial port object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -180,7 +282,7 @@ TDC in channel 4 (input D).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.idn">
-<span class="sig-name descname"><span class="pre">idn</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.idn" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">idn</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.idn" title="Link to this definition"></a></dt>
 <dd><p>Identification string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -191,7 +293,7 @@ TDC in channel 4 (input D).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.number_of_channels">
-<span class="sig-name descname"><span class="pre">number_of_channels</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.number_of_channels" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">number_of_channels</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.number_of_channels" title="Link to this definition"></a></dt>
 <dd><p>number of stop inputs of the device.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -202,7 +304,7 @@ TDC in channel 4 (input D).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.number_of_runs">
-<span class="sig-name descname"><span class="pre">number_of_runs</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.number_of_runs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">number_of_runs</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.number_of_runs" title="Link to this definition"></a></dt>
 <dd><p>Number of measurement runs of the TDCs in
 TempicoDevice.</p>
 <dl class="field-list simple">
@@ -214,7 +316,7 @@ TempicoDevice.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.port">
-<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.port" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.port" title="Link to this definition"></a></dt>
 <dd><p>Serial port string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -225,7 +327,7 @@ TempicoDevice.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.threshold">
-<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.threshold" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">threshold</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.threshold" title="Link to this definition"></a></dt>
 <dd><p>Threshold voltage on the rising edge of start and
 stops inputs of TDCs in the TempicoDevice.</p>
 <dl class="field-list simple">
@@ -237,7 +339,7 @@ stops inputs of TDCs in the TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.close" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.close" title="Link to this definition"></a></dt>
 <dd><p>Ends (closes) a connection with a TausandDevice.</p>
 <p>It is recommended to close connection at the end of a routine, to free
 the device’s port for future use.</p>
@@ -250,7 +352,7 @@ the device’s port for future use.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.closeTempico">
-<span class="sig-name descname"><span class="pre">closeTempico</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.closeTempico" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">closeTempico</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.closeTempico" title="Link to this definition"></a></dt>
 <dd><p>Ends (closes) a connection with a TausandDevice.</p>
 <p>Same as method <a class="reference internal" href="#pyTempico.core.TempicoDevice.close" title="pyTempico.core.TempicoDevice.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -262,7 +364,7 @@ the device’s port for future use.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.convertReadDataToIntList">
-<span class="sig-name descname"><span class="pre">convertReadDataToIntList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.convertReadDataToIntList" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">convertReadDataToIntList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.convertReadDataToIntList" title="Link to this definition"></a></dt>
 <dd><p>Converts a string with a read dataset message issued by a
 TempicoDevice, into an integer 2D-list.</p>
 <p>The dataset of a TempicoDevice is in the following format:</p>
@@ -293,7 +395,7 @@ TempicoDevice, into an integer 2D-list.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.decrementThresholdVoltage">
-<span class="sig-name descname"><span class="pre">decrementThresholdVoltage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.decrementThresholdVoltage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">decrementThresholdVoltage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.decrementThresholdVoltage" title="Link to this definition"></a></dt>
 <dd><p>Reduces the threshold voltage on the rising edge of start and stops
 inputs of TDCs in the TempicoDevice.</p>
 <p>To validate the actual threshold voltage applied, method
@@ -310,7 +412,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.fetch">
-<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.fetch" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.fetch" title="Link to this definition"></a></dt>
 <dd><p>Reads the most recent measurement data set form a TempicoDevice.</p>
 <p>The dataset of a TempicoDevice is in the following format:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">ch</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">start_us</span><span class="p">,</span><span class="n">stop_ps1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">stop_psN</span><span class="p">],</span><span class="o">...</span><span class="p">,[</span><span class="n">ch</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">start_time_us</span><span class="p">,</span><span class="n">stop_ps1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">stop_psN</span><span class="p">]]</span>
@@ -345,7 +447,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getBaudRate">
-<span class="sig-name descname"><span class="pre">getBaudRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getBaudRate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getBaudRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getBaudRate" title="Link to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice baud rate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -362,7 +464,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getFirmware">
-<span class="sig-name descname"><span class="pre">getFirmware</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getFirmware" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getFirmware</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getFirmware" title="Link to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice firmware version.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -379,7 +481,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getIdn">
-<span class="sig-name descname"><span class="pre">getIdn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getIdn" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getIdn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getIdn" title="Link to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice identification string.</p>
 <p>If the connection is established with the TempicoDevice, this function
 request the device for the string. If not, the most recent read string
@@ -399,7 +501,7 @@ is returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getNumberOfRuns">
-<span class="sig-name descname"><span class="pre">getNumberOfRuns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getNumberOfRuns" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getNumberOfRuns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getNumberOfRuns" title="Link to this definition"></a></dt>
 <dd><p>Returns the number of measurement runs of the TDCs in TempicoDevice.</p>
 <p>By default, number of runs = 1 (single measurement).</p>
 <p>If the connection is established with the TempicoDevice, this function
@@ -420,7 +522,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getSettings">
-<span class="sig-name descname"><span class="pre">getSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getSettings" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getSettings" title="Link to this definition"></a></dt>
 <dd><p>Reads the current settings form a TempicoDevice.</p>
 <p>The response for settings query on a TempicoDevice is in the following
 format:</p>
@@ -444,7 +546,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getThresholdVoltage">
-<span class="sig-name descname"><span class="pre">getThresholdVoltage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getThresholdVoltage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getThresholdVoltage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getThresholdVoltage" title="Link to this definition"></a></dt>
 <dd><p>Returns the threshold voltage on the rising edge of start and stops
 inputs of TDCs in the TempicoDevice.</p>
 <p>Start and stop inputs are coupled to 50 ohms.</p>
@@ -475,7 +577,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.incrementThresholdVoltage">
-<span class="sig-name descname"><span class="pre">incrementThresholdVoltage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.incrementThresholdVoltage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">incrementThresholdVoltage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.incrementThresholdVoltage" title="Link to this definition"></a></dt>
 <dd><p>Increases the threshold voltage on the rising edge of start and
 stops inputs of TDCs in the TempicoDevice.</p>
 <p>To validate the actual threshold voltage applied, method
@@ -492,7 +594,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.isOpen">
-<span class="sig-name descname"><span class="pre">isOpen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.isOpen" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">isOpen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.isOpen" title="Link to this definition"></a></dt>
 <dd><p>Returns if a TDC TempicoDevice connection is established (open).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -509,7 +611,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.isPendingReadMessage">
-<span class="sig-name descname"><span class="pre">isPendingReadMessage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.isPendingReadMessage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">isPendingReadMessage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.isPendingReadMessage" title="Link to this definition"></a></dt>
 <dd><p>Determines if a pending message is available to be read in a
 TempicoDevice serial port.</p>
 <dl class="field-list simple">
@@ -527,7 +629,7 @@ TempicoDevice serial port.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.measure">
-<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.measure" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.measure" title="Link to this definition"></a></dt>
 <dd><p>Begins a measurement sequence and reads its dataset from a
 TempicoDevice.</p>
 <p>The dataset of a TempicoDevice is in the following format:</p>
@@ -564,7 +666,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.open">
-<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.open" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.open" title="Link to this definition"></a></dt>
 <dd><p>Establishes (opens) a connection with a TausandDevice.</p>
 <p>It is mandatory to establish a connection with this method before
 to be able to send/to receive data to/from the device.</p>
@@ -577,7 +679,7 @@ to be able to send/to receive data to/from the device.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.openTempico">
-<span class="sig-name descname"><span class="pre">openTempico</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.openTempico" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">openTempico</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.openTempico" title="Link to this definition"></a></dt>
 <dd><p>Establishes (opens) a connection with a TausandDevice.</p>
 <p>Same as method <a class="reference internal" href="#pyTempico.core.TempicoDevice.open" title="pyTempico.core.TempicoDevice.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -589,7 +691,7 @@ to be able to send/to receive data to/from the device.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.readIdnFromDevice">
-<span class="sig-name descname"><span class="pre">readIdnFromDevice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.readIdnFromDevice" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">readIdnFromDevice</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.readIdnFromDevice" title="Link to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice identification string, by requesting it to
 the device.</p>
 <p>This function requires that a connection is established with the
@@ -610,7 +712,7 @@ TempicoDevice. As an alternative, method
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.readMessage">
-<span class="sig-name descname"><span class="pre">readMessage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.readMessage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">readMessage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.readMessage" title="Link to this definition"></a></dt>
 <dd><p>Reads pending messages sent by a TempicoDevice from its serial port.</p>
 <p>If no message is received, it waits the port timeout, typically 1s.</p>
 <p>This function requires that a connection is established with the
@@ -630,7 +732,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.reset" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.reset" title="Link to this definition"></a></dt>
 <dd><p>Sends a reset command to the TempicoDevice.</p>
 <p>Applying a reset clears all the settings of the TempicoDevice and its
 TempicoChannels to their default values.</p>
@@ -645,7 +747,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setNumberOfRuns">
-<span class="sig-name descname"><span class="pre">setNumberOfRuns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setNumberOfRuns" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setNumberOfRuns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setNumberOfRuns" title="Link to this definition"></a></dt>
 <dd><p>Modifies the number of measurement runs of the TDCs in TempicoDevice.</p>
 <p>By default, number of runs = 1 (single measurement).</p>
 <p>This function requires that a connection is established with the
@@ -660,7 +762,7 @@ Valid values are from 1 to 1000.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setThresholdVoltage">
-<span class="sig-name descname"><span class="pre">setThresholdVoltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_voltage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setThresholdVoltage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setThresholdVoltage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_voltage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setThresholdVoltage" title="Link to this definition"></a></dt>
 <dd><p>Changes the threshold voltage on the rising edge of start and stops
 inputs of TDCs in the TempicoDevice.</p>
 <p>Start and stop inputs are coupled to 50 ohms.</p>
@@ -689,7 +791,7 @@ number from 0.90 to 1.60.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setThresholdVoltageToMaximum">
-<span class="sig-name descname"><span class="pre">setThresholdVoltageToMaximum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setThresholdVoltageToMaximum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setThresholdVoltageToMaximum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setThresholdVoltageToMaximum" title="Link to this definition"></a></dt>
 <dd><p>Sets to the maximum valid value the threshold voltage on the
 rising edge of start and stops inputs of TDCs in the TempicoDevice.</p>
 <p>To validate the actual threshold voltage applied, method
@@ -706,7 +808,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setThresholdVoltageToMinimum">
-<span class="sig-name descname"><span class="pre">setThresholdVoltageToMinimum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setThresholdVoltageToMinimum" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setThresholdVoltageToMinimum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setThresholdVoltageToMinimum" title="Link to this definition"></a></dt>
 <dd><p>Sets to the minimum valid value the threshold voltage on the
 rising edge of start and stops inputs of TDCs in the TempicoDevice.</p>
 <p>To validate the actual threshold voltage applied, method
@@ -723,7 +825,7 @@ TempicoDevice.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.waitAndReadMessage">
-<span class="sig-name descname"><span class="pre">waitAndReadMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_time_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.waitAndReadMessage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">waitAndReadMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_time_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.waitAndReadMessage" title="Link to this definition"></a></dt>
 <dd><p>Waits the specified time, and then reads pending messages sent by a
 TempicoDevice from its serial port, if any.</p>
 <p>If no message is received, it does not wait for a port timeout.</p>
@@ -745,7 +847,7 @@ Defaults to 1.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.writeMessage">
-<span class="sig-name descname"><span class="pre">writeMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.writeMessage" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">writeMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.writeMessage" title="Link to this definition"></a></dt>
 <dd><p>Writes a message to a TempicoDevice in its serial port.</p>
 <p>If a response is expected after writing a message, the
 <a class="reference internal" href="#pyTempico.core.TempicoDevice.readMessage" title="pyTempico.core.TempicoDevice.readMessage"><code class="xref py py-func docutils literal notranslate"><span class="pre">readMessage()</span></code></a>
@@ -763,10 +865,10 @@ TempicoDevice.</p>
 
 </section>
 <section id="tempicochannel-class">
-<h1>TempicoChannel class<a class="headerlink" href="#tempicochannel-class" title="Permalink to this heading"></a></h1>
+<h1>TempicoChannel class<a class="headerlink" href="#tempicochannel-class" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel" title="Link to this definition"></a></dt>
 <dd><p>Single channel on a Tempico Device.</p>
 <p>To modify or access attributes, <strong>please use methods</strong>. For example, to get
 average cycles on channel 2,</p>
@@ -779,7 +881,7 @@ parameters in the device.</p>
 local memory that may not be updated.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.id_tempico_channel">
-<span class="sig-name descname"><span class="pre">id_tempico_channel</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.id_tempico_channel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">id_tempico_channel</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.id_tempico_channel" title="Link to this definition"></a></dt>
 <dd><p>Unique identifier for a TempicoChannel
 object.</p>
 <dl class="field-list simple">
@@ -791,7 +893,7 @@ object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.id_tempico_device">
-<span class="sig-name descname"><span class="pre">id_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.id_tempico_device" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">id_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.id_tempico_device" title="Link to this definition"></a></dt>
 <dd><p>Identifier of the TausandDevice linked to this
 TempicoChannel object.</p>
 <dl class="field-list simple">
@@ -803,7 +905,7 @@ TempicoChannel object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.average_cycles">
-<span class="sig-name descname"><span class="pre">average_cycles</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.average_cycles" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">average_cycles</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.average_cycles" title="Link to this definition"></a></dt>
 <dd><p>Average cycles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -814,7 +916,7 @@ TempicoChannel object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.channel_number">
-<span class="sig-name descname"><span class="pre">channel_number</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.channel_number" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">channel_number</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.channel_number" title="Link to this definition"></a></dt>
 <dd><p>Number of the channel in the device (1=A, 2=B,…).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -825,7 +927,7 @@ TempicoChannel object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.enable">
-<span class="sig-name descname"><span class="pre">enable</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.enable" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">enable</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.enable" title="Link to this definition"></a></dt>
 <dd><p>True when the channel is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -836,7 +938,7 @@ TempicoChannel object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.mode">
-<span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.mode" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.mode" title="Link to this definition"></a></dt>
 <dd><p>Measurement mode. 1|2.</p>
 <ul class="simple">
 <li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
@@ -851,7 +953,7 @@ TempicoChannel object.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.number_of_stops">
-<span class="sig-name descname"><span class="pre">number_of_stops</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.number_of_stops" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">number_of_stops</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.number_of_stops" title="Link to this definition"></a></dt>
 <dd><p>Number of stop pulses expected after a
 start pulse arrives. 1..5.</p>
 <dl class="field-list simple">
@@ -863,7 +965,7 @@ start pulse arrives. 1..5.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.parent_tempico_device">
-<span class="sig-name descname"><span class="pre">parent_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.parent_tempico_device" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">parent_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.parent_tempico_device" title="Link to this definition"></a></dt>
 <dd><p>Pointer reference to parent
 object of TempicoDevice() class.</p>
 <dl class="field-list simple">
@@ -875,7 +977,7 @@ object of TempicoDevice() class.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.start_edge">
-<span class="sig-name descname"><span class="pre">start_edge</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.start_edge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">start_edge</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.start_edge" title="Link to this definition"></a></dt>
 <dd><p>Edge type on the start pulse used to begin timing.
 RISE|FALL.</p>
 <dl class="field-list simple">
@@ -887,7 +989,7 @@ RISE|FALL.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.stop_edge">
-<span class="sig-name descname"><span class="pre">stop_edge</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.stop_edge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">stop_edge</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.stop_edge" title="Link to this definition"></a></dt>
 <dd><p>Edge type on the stop pulses used to end timing.
 RISE|FALL.</p>
 <dl class="field-list simple">
@@ -899,7 +1001,7 @@ RISE|FALL.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.stop_mask">
-<span class="sig-name descname"><span class="pre">stop_mask</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.stop_mask" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">stop_mask</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.stop_mask" title="Link to this definition"></a></dt>
 <dd><p>Time that stop pulses are ignored after receiving a
 start pulse on the TDC. Value in microseconds. 0..4000.</p>
 <dl class="field-list simple">
@@ -911,7 +1013,7 @@ start pulse on the TDC. Value in microseconds. 0..4000.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.disableChannel">
-<span class="sig-name descname"><span class="pre">disableChannel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.disableChannel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">disableChannel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.disableChannel" title="Link to this definition"></a></dt>
 <dd><p>Disables a TDC TempicoChannel.</p>
 <p>By default, channels are enabled.</p>
 <p>This function requires that a connection is established with the
@@ -928,7 +1030,7 @@ may be used.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.enableChannel">
-<span class="sig-name descname"><span class="pre">enableChannel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.enableChannel" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">enableChannel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.enableChannel" title="Link to this definition"></a></dt>
 <dd><p>Enables a TDC TempicoChannel.</p>
 <p>By default, channels are enabled.</p>
 <p>This function requires that a connection is established with the
@@ -945,7 +1047,7 @@ may be used.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.getAverageCycles">
-<span class="sig-name descname"><span class="pre">getAverageCycles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getAverageCycles" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getAverageCycles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getAverageCycles" title="Link to this definition"></a></dt>
 <dd><p>Returns the average cycles of the TDC TempicoChannel.</p>
 <p>By default, average cycles = 1 (no multi-cycle averaging).</p>
 <p>If the connection is established with the TempicoDevice, this function
@@ -966,7 +1068,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.getMode">
-<span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getMode" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getMode" title="Link to this definition"></a></dt>
 <dd><p>Returns the measurement mode of the TDC TempicoChannel.</p>
 <p>By default, mode = 1.</p>
 <p>If the connection is established with the TempicoDevice, this function
@@ -992,7 +1094,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.getNumberOfStops">
-<span class="sig-name descname"><span class="pre">getNumberOfStops</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getNumberOfStops" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getNumberOfStops</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getNumberOfStops" title="Link to this definition"></a></dt>
 <dd><p>Returns the expected number of stop pulses of the TDC TempicoChannel.</p>
 <p>By default, number of stops = 1 (single start -&gt; single stop).</p>
 <p>The TDC must receive all the expected number of stops to register them
@@ -1015,7 +1117,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.getStartEdge">
-<span class="sig-name descname"><span class="pre">getStartEdge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStartEdge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStartEdge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStartEdge" title="Link to this definition"></a></dt>
 <dd><p>Returns the edge type used on start pulses of the TDC TempicoChannel.</p>
 <p>By default, start edge = ‘RISE’.</p>
 <p>If the connection is established with the TempicoDevice, this function
@@ -1041,7 +1143,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.getStopEdge">
-<span class="sig-name descname"><span class="pre">getStopEdge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStopEdge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStopEdge</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStopEdge" title="Link to this definition"></a></dt>
 <dd><p>Returns the edge type used on stop pulses of the TDC TempicoChannel.</p>
 <p>By default, stop edge = ‘RISE’.</p>
 <p>If the connection is established with the TempicoDevice, this function
@@ -1067,7 +1169,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.getStopMask">
-<span class="sig-name descname"><span class="pre">getStopMask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStopMask" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getStopMask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStopMask" title="Link to this definition"></a></dt>
 <dd><p>Returns the time that stop pulses are ignored after receiving a start
 pulse on the TDC TempicoChannel. In microseconds.</p>
 <p>By default, stop mask = 0 (no masking).</p>
@@ -1089,7 +1191,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.isEnabled">
-<span class="sig-name descname"><span class="pre">isEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.isEnabled" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">isEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.isEnabled" title="Link to this definition"></a></dt>
 <dd><p>Returns if a TDC TempicoChannel is enabled.</p>
 <p>By default, channels are enabled.</p>
 <p>If the connection is established with the TempicoDevice, this function
@@ -1110,7 +1212,7 @@ returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.setAverageCycles">
-<span class="sig-name descname"><span class="pre">setAverageCycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setAverageCycles" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setAverageCycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setAverageCycles" title="Link to this definition"></a></dt>
 <dd><p>Modifies the average cycles of the TDC TempicoChannel.</p>
 <p>By default, average cycles = 1 (no multi-cycle averaging).</p>
 <p>This function requires that a connection is established with the
@@ -1125,7 +1227,7 @@ Valid values are 1|2|4|8|16|32|64|128.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.setMode">
-<span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setMode" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setMode" title="Link to this definition"></a></dt>
 <dd><p>Modifies the measurement mode of the TDC TempicoChannel.</p>
 <p>By default, mode = 1. Possible values are,</p>
 <ul class="simple">
@@ -1144,7 +1246,7 @@ Valid values are 1 or 2.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.setNumberOfStops">
-<span class="sig-name descname"><span class="pre">setNumberOfStops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setNumberOfStops" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setNumberOfStops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setNumberOfStops" title="Link to this definition"></a></dt>
 <dd><p>Modifies the expected number of stop pulses of the TDC TempicoChannel.</p>
 <p>By default, number of stops = 1 (single start -&gt; single stop).</p>
 <p>The TDC must receive all the expected number of stops to register them
@@ -1162,7 +1264,7 @@ Valid values are from 1 to 5.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.setStartEdge">
-<span class="sig-name descname"><span class="pre">setStartEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStartEdge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setStartEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStartEdge" title="Link to this definition"></a></dt>
 <dd><p>Sets the edge type used on start pulses of the TDC TempicoChannel.</p>
 <p>By default, start edge = ‘RISE’. Possible values are,</p>
 <ul class="simple">
@@ -1181,7 +1283,7 @@ Valid values are ‘RISE’, 1, ‘FALL’, 0.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.setStopEdge">
-<span class="sig-name descname"><span class="pre">setStopEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStopEdge" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setStopEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStopEdge" title="Link to this definition"></a></dt>
 <dd><p>Sets the edge type used on stop pulses of the TDC TempicoChannel.</p>
 <p>By default, stop edge = ‘RISE’. Possible values are,</p>
 <ul class="simple">
@@ -1200,7 +1302,7 @@ Valid values are ‘RISE’, 1, ‘FALL’, 0.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel.setStopMask">
-<span class="sig-name descname"><span class="pre">setStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop_mask_in_us</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStopMask" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop_mask_in_us</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStopMask" title="Link to this definition"></a></dt>
 <dd><p>Modifies the time that stop pulses are ignored after receiving a
 start pulse on the TDC TempicoChannel.</p>
 <p>By default, stop mask = 0 (no masking).</p>
@@ -1216,6 +1318,322 @@ Valid values are from 0 to 4000.</p>
 
 </dd></dl>
 
+<section id="module-pyTempico.PyTempicoExample">
+<span id="pytempico-pytempicoexample-module"></span><h2>pyTempico.PyTempicoExample module<a class="headerlink" href="#module-pyTempico.PyTempicoExample" title="Link to this heading"></a></h2>
+<p>Created on Jan 30 2024</p>
+<div class="line-block">
+<div class="line">&#64;author: David Guzman at Tausand Electronics</div>
+<div class="line"><a class="reference external" href="mailto:dguzman&#37;&#52;&#48;tausand&#46;com">dguzman<span>&#64;</span>tausand<span>&#46;</span>com</a></div>
+<div class="line"><a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></div>
+</div>
+<p>Core class and methods for PyTempico library.</p>
+<p>To use with Tausand Electronics’ Time-to-Digital Converters (TDCs) of the
+family <em>Tausand Tempico</em>.</p>
+<p>Last edited on 2024-03-05.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.Menu">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">Menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.Menu" title="Link to this definition"></a></dt>
+<dd><p>This function will show the console interface for the user in order to test the device</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.create_measurement_ch2_1">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">create_measurement_ch2_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Serial_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.create_measurement_ch2_1" title="Link to this definition"></a></dt>
+<dd><p>Function to obtain a measurement from channel 2, which is configured with the following parameters:</p>
+<p>The channel mode is set to 2.
+The number of runs is 2.
+All other settings are at their default configuration.
+The function displays the measurement in the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">ch</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">start_us</span><span class="p">,</span><span class="n">stop_ps1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">stop_psN</span><span class="p">],</span><span class="o">...</span><span class="p">,[</span><span class="n">ch</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">start_time_us</span><span class="p">,</span><span class="n">stop_ps1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">stop_psN</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>The measurement reads all channels. If you aren’t taking data on another channel, the results in the stops will be -1.
+The aim of this function is to take measurements on channel 2 with pulses at intervals of less than 4ms.
+Users can use the following Arduino code and make the necessary connections to test the device:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//Pin definitions</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pinStart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// Start pin connected to the TDC&#39;s start BNC port</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pinStop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">  </span><span class="c1">// Stop pin connected to the TDC&#39;s stop BNC port</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">startSent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="c1">// Variable to control the sending of the start pulse</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Set pins as outputs</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Ensure both pins start at LOW</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Checks if the start pulse has already been sent</span>
+
+<span class="w">  </span><span class="c1">// Starts the sequence by sending a start pulse</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// A short pulse of 10 microseconds</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span><span class="w"> </span><span class="c1">// Delays 3 microseconds</span>
+
+<span class="w">  </span><span class="c1">// Waits 1 ms before sending the stop pulse</span>
+<span class="w">  </span><span class="c1">// 1 ms delay</span>
+
+<span class="w">  </span><span class="c1">// Sends the stop pulse</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// A short pulse of 10 microseconds</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Waits some time before repeating any action in the loop</span>
+<span class="w">  </span><span class="c1">// This delay could be adjusted as needed for other operations in the loop</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span><span class="w"> </span><span class="c1">//</span>
+<span class="p">}</span>
+
+
+
+<span class="nl">Args</span><span class="p">:</span>
+<span class="w">    </span><span class="nl">str</span><span class="p">:</span><span class="w"> </span><span class="n">Serial_port</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">connected</span>
+<span class="nl">Returns</span><span class="p">:</span>
+<span class="w">    </span><span class="n">none</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.create_measurement_ch2_2">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">create_measurement_ch2_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Serial_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.create_measurement_ch2_2" title="Link to this definition"></a></dt>
+<dd><p>Function to obtain a measurement from channel 2, which is configured with the following parameters:</p>
+<p>The channel mode is set to 2.
+The number of runs is 4.
+The number of stops is 3.
+All other settings are at their default configuration.
+The function displays the measurement in the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">ch</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">start_us</span><span class="p">,</span><span class="n">stop_ps1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">stop_psN</span><span class="p">],</span><span class="o">...</span><span class="p">,[</span><span class="n">ch</span><span class="p">,</span><span class="n">run</span><span class="p">,</span><span class="n">start_time_us</span><span class="p">,</span><span class="n">stop_ps1</span><span class="p">,</span><span class="o">...</span><span class="p">,</span><span class="n">stop_psN</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>The measurement reads all channels. If you aren’t taking data on another channel, the results in the stops will be -1.
+The aim of this function is to take measurements on channel 2 with pulses at intervals of less than 4ms.
+Users can use the following Arduino code and make the necessary connections to test the device:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//Pin definitions</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pinStart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// Start pin connected to the TDC&#39;s start BNC port</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pinStop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">  </span><span class="c1">// Stop pin connected to the TDC&#39;s stop BNC port</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">startSent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="c1">// Variable to control the sending of the start pulse</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Set pins as outputs</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Ensure both pins start at LOW</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Checks if the start pulse has already been sent</span>
+
+<span class="w">  </span><span class="c1">// Starts the sequence by sending a start pulse</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// A short pulse of 10 microseconds</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span><span class="w"> </span><span class="c1">// Delays 3 microseconds</span>
+
+<span class="w">  </span><span class="c1">// Waits 1 ms before sending the stop pulse</span>
+<span class="w">  </span><span class="c1">// 1 ms delay</span>
+
+<span class="w">  </span><span class="c1">// Sends the stop pulse</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// A short pulse of 10 microseconds</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Waits some time before repeating any action in the loop</span>
+<span class="w">  </span><span class="c1">// This delay could be adjusted as needed for other operations in the loop</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span><span class="w"> </span><span class="c1">//</span>
+<span class="p">}</span>
+
+
+
+<span class="nl">Args</span><span class="p">:</span>
+<span class="w">    </span><span class="nl">str</span><span class="p">:</span><span class="w"> </span><span class="n">Serial_port</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">connected</span>
+<span class="nl">Returns</span><span class="p">:</span>
+<span class="w">    </span><span class="n">none</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.create_void_measurement_ch2">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">create_void_measurement_ch2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Serial_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.create_void_measurement_ch2" title="Link to this definition"></a></dt>
+<dd><dl>
+<dt>Function to obtain a measurement but with the channel 2 disable</dt><dd><p>The user will see the next information:</p>
+<blockquote>
+<div><p>[[ch,run,start_us,stop_ps1,…,stop_psN],…,[ch,run,start_time_us,stop_ps1,…,stop_psN]]</p>
+</div></blockquote>
+</dd>
+</dl>
+<p>The measurement reads all channels. If you aren’t taking data on another channel, the results in the stops will be -1.
+The aim of this function is to take measurements on channel 2 with pulses at intervals of less than 4ms and
+distinguish the values of the channel 2 against the values of the others channels.
+Users can use the following Arduino code and make the necessary connections to test the device:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//Pin definitions</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pinStart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// Start pin connected to the TDC&#39;s start BNC port</span>
+<span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pinStop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">  </span><span class="c1">// Stop pin connected to the TDC&#39;s stop BNC port</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">startSent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="c1">// Variable to control the sending of the start pulse</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Set pins as outputs</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Ensure both pins start at LOW</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Checks if the start pulse has already been sent</span>
+
+<span class="w">  </span><span class="c1">// Starts the sequence by sending a start pulse</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// A short pulse of 10 microseconds</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStart</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span><span class="w"> </span><span class="c1">// Delays 3 microseconds</span>
+
+<span class="w">  </span><span class="c1">// Waits 1 ms before sending the stop pulse</span>
+<span class="w">  </span><span class="c1">// 1 ms delay</span>
+
+<span class="w">  </span><span class="c1">// Sends the stop pulse</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// A short pulse of 10 microseconds</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pinStop</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Waits some time before repeating any action in the loop</span>
+<span class="w">  </span><span class="c1">// This delay could be adjusted as needed for other operations in the loop</span>
+<span class="w">  </span><span class="n">delayMicroseconds</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span><span class="w"> </span><span class="c1">//</span>
+<span class="p">}</span>
+
+
+
+<span class="nl">Args</span><span class="p">:</span>
+<span class="w">    </span><span class="nl">str</span><span class="p">:</span><span class="w"> </span><span class="n">Serial_port</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">device</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">connected</span>
+<span class="nl">Returns</span><span class="p">:</span>
+<span class="w">    </span><span class="n">none</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.device_conected">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">device_conected</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Serial_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.device_conected" title="Link to this definition"></a></dt>
+<dd><p>Function to verify if the serial port is connected to the device.
+The user enters the serial port in string format, for example: COM1, COM2.
+If the user enters a port that is not connected or a port that does not exist, the function will return False.
+Otherwise the function will return True.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Args:</dt><dd><p>str: Serial_port</p>
+</dd>
+<dt>Returns:</dt><dd><p>bool: True or false depending if the device is conected or not to the serial port</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.input_serial_port">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">input_serial_port</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.input_serial_port" title="Link to this definition"></a></dt>
+<dd><p>This function will display a message asking the user to specify the serial port to which the device is connected.
+:param none:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.show_menu">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">show_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.show_menu" title="Link to this definition"></a></dt>
+<dd><p>Functions to show the menu with the options to test the device
+This menu will be able when the user enters a valid serial port
+The options are :</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Example of Information about the device and settings</p></li>
+<li><p>Example of Information about Ch2 and settings</p></li>
+<li><p>Example of measurement 1</p></li>
+<li><p>Example of measurement 2</p></li>
+<li><p>Example of void measurement</p></li>
+<li><p>Exit</p></li>
+</ol>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>none</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.specs_function">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">specs_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Serial_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.specs_function" title="Link to this definition"></a></dt>
+<dd><p>Function to display information about the device; in this instance, it is not necessary to obtain a measurement from the device. The information that will be displayed includes:</p>
+<p>The ID of the object (do not confuse with the device ID; this is only a number to identify the instance),
+The connection status of the device,
+The baud rate of the serial port,
+The number of channels in the device,
+The number of runs configured,
+The serial port being used,
+The threshold voltage configured,
+The firmware version,
+The identification of the device,
+The settings for each channel,
+A boolean value indicating whether there is a message in the device or not.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Args:</dt><dd><p>str: Serial_port where the device is connected</p>
+</dd>
+<dt>Returns:</dt><dd><p>none</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyTempico.PyTempicoExample.specs_function_ch2">
+<span class="sig-prename descclassname"><span class="pre">pyTempico.PyTempicoExample.</span></span><span class="sig-name descname"><span class="pre">specs_function_ch2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Serial_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.PyTempicoExample.specs_function_ch2" title="Link to this definition"></a></dt>
+<dd><p>Function to display information about channel 2 of the device; in this instance, obtaining a measurement from the channel is not necessary. The information that will be displayed includes:</p>
+<p>The ID of the channel,
+The ID of the Tempico device that owns the channel,
+The number of the channel, where 1 represents A, 2 represents B, 3 represents C, and 4 represents D,
+A boolean that indicates if the channel is enabled or not (if the channel is not enabled, it is not possible to get measurements),
+The mode of the channel (Note that there are only 2 modes, and the mode indicates the time measurement range),
+The number of stops configured,
+The start edge (Note that there are only 2 values: RISE or FALL),
+The stop edge (Note that there are only 2 values: RISE or FALL),
+The stop mask configured,
+The average cycles to get a measurement.
+:param str: Serial_port where the device is connected</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pyTempico">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyTempico" title="Link to this heading"></a></h2>
+</section>
 </section>
 
 
