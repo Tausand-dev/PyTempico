@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 project = 'pyTempico'
 copyright = '2024, Tausand Electronics'
 author = 'Tausand Electronics'
+language = 'en'
 
 # The full version, including alpha/beta/rc tags
 # get version number from pyTempico __init__.py file
