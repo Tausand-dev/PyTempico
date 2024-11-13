@@ -926,6 +926,13 @@ class TempicoDevice():
         Returns:
             str: firmware version.
         """
+        if (self.__connected == True) and (self.__firmware == ""):
+            #try to read IDN (and firmware) from device
+            self.readIdnFromDevice()
+        elif (self.__connected == False) and (self.__firmware == ""):
+            print("Device connection not opened. First open a connection.")
+            print("Unable to get Firmware.")
+            #TO DO: raise expection?
         return self.__firmware
     
     def getIdn(self):

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>pyTempico package &mdash; pyTempico 1.0.0 documentation</title>
@@ -14,11 +14,11 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
     <link rel="prev" title="Welcome to pyTempico’s documentation!" href="index.html" /> 
 </head>
 
@@ -41,6 +41,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">pyTempico package</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#tempicodevice-class">TempicoDevice class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#tempicochannel-class">TempicoChannel class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
         </div>
@@ -68,7 +69,7 @@
            <div itemprop="articleBody">
              
   <section id="module-pyTempico.core">
-<span id="pytempico-package"></span><h1>pyTempico package<a class="headerlink" href="#module-pyTempico.core" title="Permalink to this heading"></a></h1>
+<span id="pytempico-package"></span><h1>pyTempico package<a class="headerlink" href="#module-pyTempico.core" title="Permalink to this headline"></a></h1>
 <p>Created on Jan 30 2024</p>
 <div class="line-block">
 <div class="line">&#64;author: David Guzman at Tausand Electronics</div>
@@ -81,10 +82,10 @@ family <em>Tausand Tempico</em>.</p>
 <p>Last edited on 2024-02-08.</p>
 </section>
 <section id="tempicodevice-class">
-<h1>TempicoDevice class<a class="headerlink" href="#tempicodevice-class" title="Permalink to this heading"></a></h1>
+<h1>TempicoDevice class<a class="headerlink" href="#tempicodevice-class" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoDevice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">com_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoDevice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">com_port</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice" title="Permalink to this definition"></a></dt>
 <dd><p>Tausand Tempico TDC device object.</p>
 <p>To create an object of the TempicoDevice class, it is required to send as
 parameter the desired com_port. For example,</p>
@@ -113,7 +114,7 @@ local memory, that may not be updated.</p>
 <span class="sig-name descname"><span class="pre">id_tempico_device</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.id_tempico_device" title="Permalink to this definition"></a></dt>
 <dd><p>Unique identifier of the TausandDevice object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -125,7 +126,7 @@ local memory, that may not be updated.</p>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 1 (input A).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel">TempicoChannel</a></p>
 </dd>
 </dl>
@@ -137,7 +138,7 @@ TDC in channel 1 (input A).</p>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 2 (input B).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel">TempicoChannel</a></p>
 </dd>
 </dl>
@@ -149,7 +150,7 @@ TDC in channel 2 (input B).</p>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 3 (input C).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel">TempicoChannel</a></p>
 </dd>
 </dl>
@@ -161,7 +162,7 @@ TDC in channel 3 (input C).</p>
 <dd><p>Object of the TempicoChannel class linked to
 TDC in channel 4 (input D).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel">TempicoChannel</a></p>
 </dd>
 </dl>
@@ -172,7 +173,7 @@ TDC in channel 4 (input D).</p>
 <span class="sig-name descname"><span class="pre">device</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.device" title="Permalink to this definition"></a></dt>
 <dd><p>Serial port object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Serial</p>
 </dd>
 </dl>
@@ -183,7 +184,7 @@ TDC in channel 4 (input D).</p>
 <span class="sig-name descname"><span class="pre">idn</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.idn" title="Permalink to this definition"></a></dt>
 <dd><p>Identification string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -194,7 +195,7 @@ TDC in channel 4 (input D).</p>
 <span class="sig-name descname"><span class="pre">number_of_channels</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.number_of_channels" title="Permalink to this definition"></a></dt>
 <dd><p>number of stop inputs of the device.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -206,7 +207,7 @@ TDC in channel 4 (input D).</p>
 <dd><p>Number of measurement runs of the TDCs in
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -217,7 +218,7 @@ TempicoDevice.</p>
 <span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevice.port" title="Permalink to this definition"></a></dt>
 <dd><p>Serial port string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -229,7 +230,7 @@ TempicoDevice.</p>
 <dd><p>Threshold voltage on the rising edge of start and
 stops inputs of TDCs in the TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -242,7 +243,7 @@ stops inputs of TDCs in the TempicoDevice.</p>
 <p>It is recommended to close connection at the end of a routine, to free
 the device’s port for future use.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -254,7 +255,7 @@ the device’s port for future use.</p>
 <dd><p>Ends (closes) a connection with a TausandDevice.</p>
 <p>Same as method <a class="reference internal" href="#pyTempico.core.TempicoDevice.close" title="pyTempico.core.TempicoDevice.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -279,13 +280,13 @@ TempicoDevice, into an integer 2D-list.</p>
 </ul>
 <p>Every value in the dataset is an integer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>data_string</strong> (<em>str</em>) – dataset message to convert.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>dataset message converted.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list(int)</p>
 </dd>
 </dl>
@@ -302,7 +303,7 @@ should be called.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -331,13 +332,13 @@ dataset. To make a measmurement, method
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>measured dataset.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list(int)</p>
 </dd>
 </dl>
@@ -348,13 +349,13 @@ TempicoDevice.</p>
 <span class="sig-name descname"><span class="pre">getBaudRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getBaudRate" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice baud rate.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>baud rate.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -365,13 +366,13 @@ TempicoDevice.</p>
 <span class="sig-name descname"><span class="pre">getFirmware</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getFirmware" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice firmware version.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>firmware version.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -385,13 +386,13 @@ TempicoDevice.</p>
 request the device for the string. If not, the most recent read string
 is returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>identification string.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -406,13 +407,13 @@ is returned.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Number of number of runs.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>integer</p>
 </dd>
 </dl>
@@ -430,13 +431,13 @@ format:</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>device settings.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -461,13 +462,13 @@ Gate input accepts 3.3V TTL and 5V TTL signals.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>start and stop inputs threshold voltage.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -484,7 +485,7 @@ should be called.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -495,13 +496,13 @@ TempicoDevice.</p>
 <span class="sig-name descname"><span class="pre">isOpen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.isOpen" title="Permalink to this definition"></a></dt>
 <dd><p>Returns if a TDC TempicoDevice connection is established (open).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True when TempicoDevice connection is open.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -513,13 +514,13 @@ TempicoDevice.</p>
 <dd><p>Determines if a pending message is available to be read in a
 TempicoDevice serial port.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True, when a pending message is found.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -550,13 +551,13 @@ complete dataset, the method
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>measured dataset.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list(int)</p>
 </dd>
 </dl>
@@ -569,7 +570,7 @@ TempicoDevice.</p>
 <p>It is mandatory to establish a connection with this method before
 to be able to send/to receive data to/from the device.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -581,7 +582,7 @@ to be able to send/to receive data to/from the device.</p>
 <dd><p>Establishes (opens) a connection with a TausandDevice.</p>
 <p>Same as method <a class="reference internal" href="#pyTempico.core.TempicoDevice.open" title="pyTempico.core.TempicoDevice.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -596,13 +597,13 @@ the device.</p>
 TempicoDevice. As an alternative, method
 <a class="reference internal" href="#pyTempico.core.TempicoDevice.getIdn" title="pyTempico.core.TempicoDevice.getIdn"><code class="xref py py-func docutils literal notranslate"><span class="pre">getIdn()</span></code></a> may be used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>identification string.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -616,13 +617,13 @@ TempicoDevice. As an alternative, method
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>read message.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -637,7 +638,7 @@ TempicoChannels to their default values.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -651,7 +652,7 @@ TempicoDevice.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>number</strong> (<em>int</em>) – desired number of runs for every TDC.
 Valid values are from 1 to 1000.</p>
 </dd>
@@ -679,7 +680,7 @@ should be called.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>desired_voltage</strong> (<em>float</em>) – desired start and stop inputs threshold
 voltage. Valid parameters are MINimum|MAXimum|DOWN|UP or a
 number from 0.90 to 1.60.</p>
@@ -698,7 +699,7 @@ should be called.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -715,7 +716,7 @@ should be called.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -730,14 +731,14 @@ TempicoDevice from its serial port, if any.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>wait_time_ms</strong> (<em>int</em><em>, </em><em>optional</em>) – Waiting time, in miliseconds.
 Defaults to 1.</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>read message.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -753,7 +754,7 @@ method should be called afterwards to obtain the response.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – message to be sent.</p>
 </dd>
 </dl>
@@ -763,10 +764,10 @@ TempicoDevice.</p>
 
 </section>
 <section id="tempicochannel-class">
-<h1>TempicoChannel class<a class="headerlink" href="#tempicochannel-class" title="Permalink to this heading"></a></h1>
+<h1>TempicoChannel class<a class="headerlink" href="#tempicochannel-class" title="Permalink to this headline"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel" title="Permalink to this definition"></a></dt>
 <dd><p>Single channel on a Tempico Device.</p>
 <p>To modify or access attributes, <strong>please use methods</strong>. For example, to get
 average cycles on channel 2,</p>
@@ -783,7 +784,7 @@ local memory that may not be updated.</p>
 <dd><p>Unique identifier for a TempicoChannel
 object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -795,7 +796,7 @@ object.</p>
 <dd><p>Identifier of the TausandDevice linked to this
 TempicoChannel object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -806,7 +807,7 @@ TempicoChannel object.</p>
 <span class="sig-name descname"><span class="pre">average_cycles</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.average_cycles" title="Permalink to this definition"></a></dt>
 <dd><p>Average cycles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -817,7 +818,7 @@ TempicoChannel object.</p>
 <span class="sig-name descname"><span class="pre">channel_number</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.channel_number" title="Permalink to this definition"></a></dt>
 <dd><p>Number of the channel in the device (1=A, 2=B,…).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -828,7 +829,7 @@ TempicoChannel object.</p>
 <span class="sig-name descname"><span class="pre">enable</span></span><a class="headerlink" href="#pyTempico.core.TempicoChannel.enable" title="Permalink to this definition"></a></dt>
 <dd><p>True when the channel is enabled.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -843,7 +844,7 @@ TempicoChannel object.</p>
 <li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
 </ul>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -855,7 +856,7 @@ TempicoChannel object.</p>
 <dd><p>Number of stop pulses expected after a
 start pulse arrives. 1..5.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -867,7 +868,7 @@ start pulse arrives. 1..5.</p>
 <dd><p>Pointer reference to parent
 object of TempicoDevice() class.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice">TempicoDevice</a></p>
 </dd>
 </dl>
@@ -879,7 +880,7 @@ object of TempicoDevice() class.</p>
 <dd><p>Edge type on the start pulse used to begin timing.
 RISE|FALL.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -891,7 +892,7 @@ RISE|FALL.</p>
 <dd><p>Edge type on the stop pulses used to end timing.
 RISE|FALL.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -903,7 +904,7 @@ RISE|FALL.</p>
 <dd><p>Time that stop pulses are ignored after receiving a
 start pulse on the TDC. Value in microseconds. 0..4000.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -920,7 +921,7 @@ TempicoDevice of the TempicoChannel.</p>
 <a class="reference internal" href="#pyTempico.core.TempicoChannel.isEnabled" title="pyTempico.core.TempicoChannel.isEnabled"><code class="xref py py-func docutils literal notranslate"><span class="pre">isEnabled()</span></code></a>
 may be used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -937,7 +938,7 @@ TempicoDevice of the TempicoChannel.</p>
 <a class="reference internal" href="#pyTempico.core.TempicoChannel.isEnabled" title="pyTempico.core.TempicoChannel.isEnabled"><code class="xref py py-func docutils literal notranslate"><span class="pre">isEnabled()</span></code></a>
 may be used.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
 </dl>
@@ -952,13 +953,13 @@ may be used.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Number of average cycles.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>integer</p>
 </dd>
 </dl>
@@ -973,10 +974,10 @@ returned.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Mode. Possible values are,</p>
 <ul class="simple">
 <li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
@@ -984,7 +985,7 @@ returned.</p>
 </ul>
 </p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>integer</p>
 </dd>
 </dl>
@@ -1001,13 +1002,13 @@ as a valid measurement; otherwise, the measurements are discarded.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Number of stops.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>integer</p>
 </dd>
 </dl>
@@ -1022,10 +1023,10 @@ returned.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>start edge type. Possible values are,</p>
 <ul class="simple">
 <li><p>’RISE’: TDC timing starts on a rising edge of the start pulse.</p></li>
@@ -1033,7 +1034,7 @@ returned.</p>
 </ul>
 </p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>string</p>
 </dd>
 </dl>
@@ -1048,10 +1049,10 @@ returned.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>stop edge type. Possible values are,</p>
 <ul class="simple">
 <li><p>’RISE’: TDC timing ends on a rising edge of the stop pulse.</p></li>
@@ -1059,7 +1060,7 @@ returned.</p>
 </ul>
 </p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>string</p>
 </dd>
 </dl>
@@ -1075,13 +1076,13 @@ pulse on the TDC TempicoChannel. In microseconds.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>stop mask time, in microseconds.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>integer</p>
 </dd>
 </dl>
@@ -1096,13 +1097,13 @@ returned.</p>
 request the device for the value. If not, the most recent value is
 returned.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Returns</dt>
 <dd class="field-even"><p>True, when TDC channel is enabled.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -1116,7 +1117,7 @@ returned.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice of the TempicoChannel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>number</strong> (<em>int</em>) – desired average cycles for the TDC.
 Valid values are 1|2|4|8|16|32|64|128.</p>
 </dd>
@@ -1135,7 +1136,7 @@ Valid values are 1|2|4|8|16|32|64|128.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice of the TempicoChannel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>number</strong> (<em>int</em>) – desired measurement mode for the TDC.
 Valid values are 1 or 2.</p>
 </dd>
@@ -1153,7 +1154,7 @@ extending the valid time range, consider using measurement mode 2.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice of the TempicoChannel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>number</strong> (<em>int</em>) – desired number of stops for the TDC.
 Valid values are from 1 to 5.</p>
 </dd>
@@ -1172,7 +1173,7 @@ Valid values are from 1 to 5.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice of the TempicoChannel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>edge_type</strong> (<em>str</em>) – desired start edge type for the TDC.
 Valid values are ‘RISE’, 1, ‘FALL’, 0.</p>
 </dd>
@@ -1191,7 +1192,7 @@ Valid values are ‘RISE’, 1, ‘FALL’, 0.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice of the TempicoChannel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>edge_type</strong> (<em>str</em>) – desired stop edge type for the TDC.
 Valid values are ‘RISE’, 1, ‘FALL’, 0.</p>
 </dd>
@@ -1207,7 +1208,7 @@ start pulse on the TDC TempicoChannel.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice of the TempicoChannel.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>stop_mask_in_us</strong> (<em>int</em>) – desired stop mask for the TDC, in microseconds.
 Valid values are from 0 to 4000.</p>
 </dd>
@@ -1223,6 +1224,7 @@ Valid values are from 0 to 4000.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to pyTempico’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

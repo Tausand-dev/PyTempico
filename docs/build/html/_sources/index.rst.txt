@@ -21,6 +21,7 @@ Contents
    :maxdepth: 4
    
    pyTempico
+   examples
 
 Indices and tables
 ==================
