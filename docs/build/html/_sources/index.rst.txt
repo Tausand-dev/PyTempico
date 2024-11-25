@@ -13,6 +13,8 @@ Welcome to pyTempico's documentation!
 
 pyTempico was built to simplify the usage of Tausand_ Tempico family of time-to-digital converters (TDCs), providing a library aimed to interface these devices using Python coding.
 
+A good way to start learning how to use PyTempico library is to follow and to execute the examples included in this document.
+
 .. _Tausand: https://www.tausand.com/
 
 Contents

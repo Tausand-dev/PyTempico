@@ -12,7 +12,7 @@ Last edited on 2024-01-24.
 import serial
 
 #Define local constants
-MYPORT = 'COM15' #change this to the corresponding port
+MYPORT = '/dev/ttyACM0' #change this to the corresponding port
 MYBAUDRATE = 500000 #in bauds, do not change
 
 ###Function definitions

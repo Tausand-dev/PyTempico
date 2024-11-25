@@ -1393,7 +1393,7 @@ class TempicoDevice():
         else:
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
-            #TO DO: raise expection?
+            #TO DO: raise exception?
             
     def getThresholdVoltage(self):
         """Returns the threshold voltage on the rising edge of start and stops 
