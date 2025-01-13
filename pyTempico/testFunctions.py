@@ -10,7 +10,7 @@ from core import TempicoDevice as TempDev
 # tempicoDevice.abortMeasure()
 # print(tempicoDevice.fetch())
 # tempicoDevice.close()
-
+#change
 #Test for selfTest
 # tempicoDevice = TempDev('COM12')
 # tempicoDevice.openTempico()
