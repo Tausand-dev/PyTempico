@@ -12,7 +12,12 @@ from core import TempicoDevice as TempDev
 # tempicoDevice.close()
 
 #Test for selfTest
+# tempicoDevice = TempDev('COM12')
+# tempicoDevice.openTempico()
+# tempicoDevice.selfTest()
+# tempicoDevice.close()
+
+#Test tempico devices
 tempicoDevice = TempDev('COM12')
-tempicoDevice.openTempico()
-tempicoDevice.selfTest()
-tempicoDevice.close()
+portsFound=tempicoDevice.findDevices()
+print(portsFound)
