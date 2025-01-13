@@ -837,20 +837,24 @@ class TempicoDevice():
             (none)
     
         """
-        try:
-            if self.__connected == True:
-                print('Device connection was already open.')
-                print('Open request ignored.')
-                #TO DO: raise exception/warning?
-            else:
-                desired_port = self.port
-                self.device = serial.Serial(port = desired_port, baudrate=self.getBaudRate(), timeout=self.serial_timeout) # open serial port
-                self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
-        except Exception as e:
-            print('verify the device in port',desired_port
-                  ,'is connected, is turned on, and is not being used by other software.')
-            raise e
-            return
+        tempicoDevices=self.findDevices()
+        if self.port in tempicoDevices:
+            try:
+                if self.__connected == True:
+                    print('Device connection was already open.')
+                    print('Open request ignored.')
+                    #TO DO: raise exception/warning?
+                else:
+                    desired_port = self.port
+                    self.device = serial.Serial(port = desired_port, baudrate=self.getBaudRate(), timeout=self.serial_timeout) # open serial port
+                    self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
+            except Exception as e:
+                print('verify the device in port',desired_port
+                    ,'is connected, is turned on, and is not being used by other software.')
+                raise e
+                return
+        else:
+            print("The port has not a tempico device connected")
     
     def openTempico(self):
         """Establishes (opens) a connection with a TausandDevice.

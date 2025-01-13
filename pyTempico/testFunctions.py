@@ -18,6 +18,11 @@ from core import TempicoDevice as TempDev
 # tempicoDevice.close()
 
 #Test tempico devices
-tempicoDevice = TempDev('COM12')
-portsFound=tempicoDevice.findDevices()
-print(portsFound)
+# tempicoDevice = TempDev('COM12')
+# portsFound=tempicoDevice.findDevices()
+# print(portsFound)
+
+#Test new open function
+tempicoDevice = TempDev('COM42')
+tempicoDevice.openTempico()
+tempicoDevice.close()
