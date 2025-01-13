@@ -917,6 +917,7 @@ class TempicoDevice():
         """
         return self.__baudrate
     
+    
     def getFirmware(self):
         """Returns the TempicoDevice firmware version.
                      
@@ -1046,6 +1047,26 @@ class TempicoDevice():
         except Exception as e:
             print(e)
             return ''
+    
+    def abortMeasure(self):
+        """
+        Cancels an ongoing measurement on the TempicoDevice.
+
+        This function sends a cancel command to the TempicoDevice to stop any 
+        measurement currently in progress. It ensures that all measurement processes 
+        are halted and the device is ready for a new operation or safely turned off.
+
+        This function requires that a connection is established with the 
+        TempicoDevice.
+
+        Args:
+            (none)
+        """
+        try:
+            self.writeMessage('ABORt')
+        except Exception as e: 
+            print(e)
+        
         
     def isPendingReadMessage(self):
         """Determines if a pending message is available to be read in a 
