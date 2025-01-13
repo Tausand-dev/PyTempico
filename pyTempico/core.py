@@ -1128,6 +1128,20 @@ class TempicoDevice():
         return tuple
     
     def findDevices(self):
+        """
+        Finds and verifies whether a device with the given VID and PID is a Tempico device.
+
+        This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
+        and attempts to open the device using these values. It then checks if the manufacturer and product 
+        strings match the expected values for a Tempico device.
+
+        :param vid_s: The Vendor ID (VID) of the device in string format.
+        :type vid_s: str
+        :param pid_s: The Product ID (PID) of the device in string format.
+        :type pid_s: str
+        :returns: `True` if the device is a Tempico, `False` otherwise.
+        :rtype: bool
+        """
         ports = []
         portsFound = serial.tools.list_ports.comports()
         if not portsFound:
