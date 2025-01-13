@@ -1066,6 +1066,38 @@ class TempicoDevice():
             self.writeMessage('ABORt')
         except Exception as e: 
             print(e)
+    
+    def selfTest(self):
+        """
+        Performs a self-test on the TempicoDevice hardware.
+
+        This function initiates a self-diagnostic test on the TempicoDevice to verify 
+        its hardware integrity. If the self-test is successful, it prints the message 
+        "Self test passed. Device is working properly." If the self-test fails, 
+        it prints the message "Self test failed. Device may have a problem.", 
+        indicating a potential issue with the hardware that may require further investigation 
+        or support.
+
+        This function requires that a connection is established with the 
+        TempicoDevice.
+
+        Args:
+            (none)
+
+        Returns:
+            None
+        """
+        try:
+            self.writeMessage('*TST?')
+            data = self.readMessage()
+            data=data.replace("\n","")
+            data=data.replace("\r","")  
+            if data == '0':
+                print('Self test passed. Device is working properly.')
+            else:
+                print('Self test failed. Device may have a problem.')  
+        except Exception as e: 
+            print(e)
         
         
     def isPendingReadMessage(self):
