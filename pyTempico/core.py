@@ -1054,7 +1054,7 @@ class TempicoDevice():
             print(e)
             return ''
     
-    def abortMeasure(self):
+    def abort(self):
         """
         Cancels an ongoing measurement on the TempicoDevice.
 
