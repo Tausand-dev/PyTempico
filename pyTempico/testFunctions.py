@@ -11,6 +11,7 @@ from core import TempicoDevice as TempDev
 # print(tempicoDevice.fetch())
 # tempicoDevice.close()
 #change
+#change2
 #Test for selfTest
 # tempicoDevice = TempDev('COM12')
 # tempicoDevice.openTempico()
