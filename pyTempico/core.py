@@ -1096,12 +1096,13 @@ class TempicoDevice():
         try:
             self.writeMessage('*TST?')
             data = self.readMessage()
+            dataPure=data
             data=data.replace("\n","")
             data=data.replace("\r","")  
             if data == '0':
                 print('Self test passed. Device is working properly.')
             else:
-                print('Self test failed. Device may have a problem.')  
+                print(dataPure)  
         except Exception as e: 
             print(e)
             
