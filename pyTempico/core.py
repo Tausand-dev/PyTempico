@@ -46,6 +46,118 @@ def simpletest():
     """
     return 'simple test ok'
 
+def getVidPid(vid_pid_information):
+    """
+    Extracts the Vendor ID (VID) and Product ID (PID) from a string and returns them as a tuple.
+
+    This function processes a string that contains the VID and PID information in the format 
+    'VID:PID=xxxx:yyyy'. It splits the string and retrieves the VID and PID values, returning 
+    them as a tuple of strings.
+
+    :param vid_pid_information: A string containing the VID and PID information.
+    :type vid_pid_information: str
+    :returns: A tuple containing the VID and PID as strings (vid, pid).
+    :rtype: tuple
+    """
+    without_spaces = vid_pid_information.split(' ')
+    tuple = ()
+    key_word = 'VID:PID'
+    for i in without_spaces:
+        if key_word in i:
+            vid_pid_value = i.split('=')
+            numbers_value = vid_pid_value[1].split(":")
+            vid = numbers_value[0]
+            pid = numbers_value[1]
+            tuple = (vid, pid)
+    return tuple
+    
+def findDevices():
+    """
+    Finds and verifies whether a device with the given VID and PID is a Tempico device.
+
+    This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
+    and attempts to open the device using these values. It then checks if the manufacturer and product 
+    strings match the expected values for a Tempico device.
+
+    :param vid_s: The Vendor ID (VID) of the device in string format.
+    :type vid_s: str
+    :param pid_s: The Product ID (PID) of the device in string format.
+    :type pid_s: str
+    :returns: `True` if the device is a Tempico, `False` otherwise.
+    :rtype: bool
+    """
+    ports = []
+    portsFound = serial.tools.list_ports.comports()
+    if not portsFound:
+        print("No serial ports found.")
+    else:
+        bluetoothWord = "Bluetooth"
+        for port in portsFound:
+            if bluetoothWord not in port.description:
+                vidPidString = port.hwid
+                valuesPacket = getVidPid(vidPidString)
+                if len(valuesPacket) == 2:
+                    value = verifyPyTempico(valuesPacket)
+                    if value == True:
+                        ports.append(port.name)
+            if "Tempico" in port.description:
+                ports.append(port.device)
+    return ports
+
+
+def verifyPyTempico(tuple_vid_pid):
+    """
+    Verifies whether the connected device is a Tempico device.
+
+    This function checks if the device’s Vendor ID (VID) and Product ID (PID) match the values 
+    corresponding to a Tempico device. It returns `True` if the device is identified as a Tempico, 
+    and `False` otherwise.
+
+    :param tuple_vid_pid: A tuple containing the VID and PID of the device.
+    :type tuple_vid_pid: tuple
+    :returns: `True` if the device is a Tempico, `False` otherwise.
+    :rtype: bool
+    """
+    vid = tuple_vid_pid[0]
+    pid = tuple_vid_pid[1]
+    if vid == "04D8" and pid == "00DD":
+        value = tryOpenDevices(vid, pid)
+    else:
+        value = tryOpenDevices(vid, pid)
+    return value
+
+def tryOpenDevices(vid_s, pid_s):
+    """
+    Finds and verifies whether a device with the given VID and PID is a Tempico device.
+
+    This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
+    and attempts to open the device using these values. It then checks if the manufacturer and product 
+    strings match the expected values for a Tempico device.
+
+    :param vid_s: The Vendor ID (VID) of the device in string format.
+    :type vid_s: str
+    :param pid_s: The Product ID (PID) of the device in string format.
+    :type pid_s: str
+    :returns: `True` if the device is a Tempico, `False` otherwise.
+    :rtype: bool
+    """
+    vid = int(vid_s, 16)
+    pid = int(pid_s, 16)
+
+    try:
+        h = hid.device()
+        h.open(vid, pid)
+        Manufacturer = h.get_manufacturer_string()
+        Product = h.get_product_string()
+        if Manufacturer == "Tausand electronics" and "Tempico" in Product:
+            h.close()
+            return True
+        else:
+            h.close()
+            return False
+    except:
+        return False
+
 class TempicoChannel():
     """Single channel on a Tempico Device.
     
@@ -837,7 +949,7 @@ class TempicoDevice():
             (none)
     
         """
-        tempicoDevices=self.findDevices()
+        tempicoDevices=findDevices()
         if self.port in tempicoDevices:
             try:
                 if self.__connected == True:
@@ -1106,118 +1218,6 @@ class TempicoDevice():
         except Exception as e: 
             print(e)
             
-    
-    def getVidPid(self, vid_pid_information):
-        """
-        Extracts the Vendor ID (VID) and Product ID (PID) from a string and returns them as a tuple.
-
-        This function processes a string that contains the VID and PID information in the format 
-        'VID:PID=xxxx:yyyy'. It splits the string and retrieves the VID and PID values, returning 
-        them as a tuple of strings.
-
-        :param vid_pid_information: A string containing the VID and PID information.
-        :type vid_pid_information: str
-        :returns: A tuple containing the VID and PID as strings (vid, pid).
-        :rtype: tuple
-        """
-        without_spaces = vid_pid_information.split(' ')
-        tuple = ()
-        key_word = 'VID:PID'
-        for i in without_spaces:
-            if key_word in i:
-                vid_pid_value = i.split('=')
-                numbers_value = vid_pid_value[1].split(":")
-                vid = numbers_value[0]
-                pid = numbers_value[1]
-                tuple = (vid, pid)
-        return tuple
-    
-    def findDevices(self):
-        """
-        Finds and verifies whether a device with the given VID and PID is a Tempico device.
-
-        This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
-        and attempts to open the device using these values. It then checks if the manufacturer and product 
-        strings match the expected values for a Tempico device.
-
-        :param vid_s: The Vendor ID (VID) of the device in string format.
-        :type vid_s: str
-        :param pid_s: The Product ID (PID) of the device in string format.
-        :type pid_s: str
-        :returns: `True` if the device is a Tempico, `False` otherwise.
-        :rtype: bool
-        """
-        ports = []
-        portsFound = serial.tools.list_ports.comports()
-        if not portsFound:
-            print("No serial ports found.")
-        else:
-            bluetoothWord = "Bluetooth"
-            for port in portsFound:
-                if bluetoothWord not in port.description:
-                    vidPidString = port.hwid
-                    valuesPacket = self.getVidPid(vidPidString)
-                    if len(valuesPacket) == 2:
-                        value = self.verifyPyTempico(valuesPacket)
-                        if value == True:
-                            ports.append(port.name)
-                if "Tempico" in port.description:
-                    ports.append(port.device)
-        return ports
-    
-    
-    def verifyPyTempico(self, tuple_vid_pid):
-        """
-        Verifies whether the connected device is a Tempico device.
-
-        This function checks if the device’s Vendor ID (VID) and Product ID (PID) match the values 
-        corresponding to a Tempico device. It returns `True` if the device is identified as a Tempico, 
-        and `False` otherwise.
-
-        :param tuple_vid_pid: A tuple containing the VID and PID of the device.
-        :type tuple_vid_pid: tuple
-        :returns: `True` if the device is a Tempico, `False` otherwise.
-        :rtype: bool
-        """
-        vid = tuple_vid_pid[0]
-        pid = tuple_vid_pid[1]
-        if vid == "04D8" and pid == "00DD":
-            value = self.tryOpenDevices(vid, pid)
-        else:
-            value = self.tryOpenDevices(vid, pid)
-        return value
-    
-    def tryOpenDevices(self, vid_s, pid_s):
-        """
-        Finds and verifies whether a device with the given VID and PID is a Tempico device.
-
-        This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
-        and attempts to open the device using these values. It then checks if the manufacturer and product 
-        strings match the expected values for a Tempico device.
-
-        :param vid_s: The Vendor ID (VID) of the device in string format.
-        :type vid_s: str
-        :param pid_s: The Product ID (PID) of the device in string format.
-        :type pid_s: str
-        :returns: `True` if the device is a Tempico, `False` otherwise.
-        :rtype: bool
-        """
-        vid = int(vid_s, 16)
-        pid = int(pid_s, 16)
-
-        try:
-            h = hid.device()
-            h.open(vid, pid)
-            Manufacturer = h.get_manufacturer_string()
-            Product = h.get_product_string()
-            if Manufacturer == "Tausand electronics" and "Tempico" in Product:
-                h.close()
-                return True
-            else:
-                h.close()
-                return False
-        except:
-            return False
         
         
     def isPendingReadMessage(self):
