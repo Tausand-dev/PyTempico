@@ -44,6 +44,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">pyTempico package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#tempicodevicessearch-class">TempicoDevicesSearch class</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyTempico.core.TempicoDevicesSearch"><code class="docutils literal notranslate"><span class="pre">TempicoDevicesSearch</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevicesSearch.findDevices"><code class="docutils literal notranslate"><span class="pre">TempicoDevicesSearch.findDevices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevicesSearch.getVidPid"><code class="docutils literal notranslate"><span class="pre">TempicoDevicesSearch.getVidPid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevicesSearch.tryOpenDevices"><code class="docutils literal notranslate"><span class="pre">TempicoDevicesSearch.tryOpenDevices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevicesSearch.verifyPyTempico"><code class="docutils literal notranslate"><span class="pre">TempicoDevicesSearch.verifyPyTempico()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="#tempicodevice-class">TempicoDevice class</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pyTempico.core.TempicoDevice"><code class="docutils literal notranslate"><span class="pre">TempicoDevice</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pyTempico.core.TempicoDevice.id_tempico_device"><code class="docutils literal notranslate"><span class="pre">TempicoDevice.id_tempico_device</span></code></a></li>
@@ -160,6 +170,102 @@
 <p>To use with Tausand Electronics’ Time-to-Digital Converters (TDCs) of the
 family <em>Tausand Tempico</em>.</p>
 <p>Last edited on 2024-02-08.</p>
+</section>
+<section id="tempicodevicessearch-class">
+<h1>TempicoDevicesSearch class<a class="headerlink" href="#tempicodevicessearch-class" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevicesSearch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyTempico.core.</span></span><span class="sig-name descname"><span class="pre">TempicoDevicesSearch</span></span><a class="headerlink" href="#pyTempico.core.TempicoDevicesSearch" title="Permalink to this definition"></a></dt>
+<dd><p>A class for discovering Tempico devices.</p>
+<p>This class provides methods to search for Tempico devices in a network or connected system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevicesSearch.findDevices">
+<span class="sig-name descname"><span class="pre">findDevices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevicesSearch.findDevices" title="Permalink to this definition"></a></dt>
+<dd><p>Finds and verifies whether a device with the given VID and PID is a Tempico device.</p>
+<p>This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers,
+and attempts to open the device using these values. It then checks if the manufacturer and product
+strings match the expected values for a Tempico device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vid_s</strong> (<em>str</em>) – The Vendor ID (VID) of the device in string format.</p></li>
+<li><p><strong>pid_s</strong> (<em>str</em>) – The Product ID (PID) of the device in string format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>True</cite> if the device is a Tempico, <cite>False</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevicesSearch.getVidPid">
+<span class="sig-name descname"><span class="pre">getVidPid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vid_pid_information</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevicesSearch.getVidPid" title="Permalink to this definition"></a></dt>
+<dd><p>Extracts the Vendor ID (VID) and Product ID (PID) from a string and returns them as a tuple.</p>
+<p>This function processes a string that contains the VID and PID information in the format
+‘VID:PID=xxxx:yyyy’. It splits the string and retrieves the VID and PID values, returning
+them as a tuple of strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vid_pid_information</strong> (<em>str</em>) – A string containing the VID and PID information.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the VID and PID as strings (vid, pid).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevicesSearch.tryOpenDevices">
+<span class="sig-name descname"><span class="pre">tryOpenDevices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vid_s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid_s</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevicesSearch.tryOpenDevices" title="Permalink to this definition"></a></dt>
+<dd><p>Finds and verifies whether a device with the given VID and PID is a Tempico device.</p>
+<p>This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers,
+and attempts to open the device using these values. It then checks if the manufacturer and product
+strings match the expected values for a Tempico device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vid_s</strong> (<em>str</em>) – The Vendor ID (VID) of the device in string format.</p></li>
+<li><p><strong>pid_s</strong> (<em>str</em>) – The Product ID (PID) of the device in string format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>True</cite> if the device is a Tempico, <cite>False</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevicesSearch.verifyPyTempico">
+<span class="sig-name descname"><span class="pre">verifyPyTempico</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tuple_vid_pid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevicesSearch.verifyPyTempico" title="Permalink to this definition"></a></dt>
+<dd><p>Verifies whether the connected device is a Tempico device.</p>
+<p>This function checks if the device’s Vendor ID (VID) and Product ID (PID) match the values
+corresponding to a Tempico device. It returns <cite>True</cite> if the device is identified as a Tempico,
+and <cite>False</cite> otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tuple_vid_pid</strong> (<em>tuple</em>) – A tuple containing the VID and PID of the device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><cite>True</cite> if the device is a Tempico, <cite>False</cite> otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="tempicodevice-class">
 <h1>TempicoDevice class<a class="headerlink" href="#tempicodevice-class" title="Permalink to this heading"></a></h1>
