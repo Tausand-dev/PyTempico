@@ -4,9 +4,9 @@ from core import findDevices
 
 #Test for abort measure
 
-tempicoDevice = TempDev('COM12')
-tempicoDevice.openTempico()
-tempicoDevice.close()
+# tempicoDevice = TempDev('COM12')
+# tempicoDevice.openTempico()
+# tempicoDevice.close()
 # valueIdn=tempicoDevice.getIdn()
 # tempicoDevice.measure()
 # #tempicoDevice.abort()
@@ -30,5 +30,5 @@ tempicoDevice.close()
 # tempicoDevice.openTempico()
 # tempicoDevice.close()
 
-# devices=findDevices()
-# print(devices)
+devices=findDevices()
+print(devices)
