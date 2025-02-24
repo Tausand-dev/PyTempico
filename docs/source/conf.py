@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 # -- Project information -----------------------------------------------------
 
 project = 'pyTempico'
-copyright = '2024, Tausand Electronics'
+copyright = '2025, Tausand Electronics'
 author = 'Tausand Electronics'
 language = 'en'
 

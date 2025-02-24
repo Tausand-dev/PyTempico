@@ -10,11 +10,13 @@ Core class and methods for PyTempico library.
 To use with Tausand Electronics' Time-to-Digital Converters (TDCs) of the 
 family *Tausand Tempico*.
 
-Last edited on 2024-02-08.
+Last edited on 2025-01-02.
 """
 
 import serial
 import time
+import hid
+import serial.tools.list_ports
 
 
 ##Global variables. 
@@ -43,6 +45,130 @@ def simpletest():
 
     """
     return 'simple test ok'
+
+
+
+class TempicoDevicesSearch():
+    """
+    A class for discovering Tempico devices.
+
+    This class provides methods to search for Tempico devices in a network or connected system.
+    """
+    def __init__(self):
+        pass
+    
+    def getVidPid(self,vid_pid_information):
+        """
+        Extracts the Vendor ID (VID) and Product ID (PID) from a string and returns them as a tuple.
+
+        This function processes a string that contains the VID and PID information in the format 
+        'VID:PID=xxxx:yyyy'. It splits the string and retrieves the VID and PID values, returning 
+        them as a tuple of strings.
+
+        :param vid_pid_information: A string containing the VID and PID information.
+        :type vid_pid_information: str
+        :returns: A tuple containing the VID and PID as strings (vid, pid).
+        :rtype: tuple
+        """
+        without_spaces = vid_pid_information.split(' ')
+        tuple = ()
+        key_word = 'VID:PID'
+        for i in without_spaces:
+            if key_word in i:
+                vid_pid_value = i.split('=')
+                numbers_value = vid_pid_value[1].split(":")
+                vid = numbers_value[0]
+                pid = numbers_value[1]
+                tuple = (vid, pid)
+        return tuple
+    
+    def findDevices(self):
+        """
+        Finds and verifies whether a device with the given VID and PID is a Tempico device.
+
+        This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
+        and attempts to open the device using these values. It then checks if the manufacturer and product 
+        strings match the expected values for a Tempico device.
+
+        :param vid_s: The Vendor ID (VID) of the device in string format.
+        :type vid_s: str
+        :param pid_s: The Product ID (PID) of the device in string format.
+        :type pid_s: str
+        :returns: `True` if the device is a Tempico, `False` otherwise.
+        :rtype: bool
+        """
+        ports = []
+        portsFound = serial.tools.list_ports.comports()
+        if not portsFound:
+            print("No serial ports found.")
+        else:
+            bluetoothWord = "Bluetooth"
+            for port in portsFound:
+                if bluetoothWord not in port.description:
+                    vidPidString = port.hwid
+                    valuesPacket = self.getVidPid(vidPidString)
+                    if len(valuesPacket) == 2:
+                        value = self.verifyPyTempico(valuesPacket)
+                        if value == True:
+                            ports.append(port.name)
+                if "Tempico" in port.description:
+                    ports.append(port.device)
+        return ports
+
+
+    def verifyPyTempico(self,tuple_vid_pid):
+        """
+        Verifies whether the connected device is a Tempico device.
+
+        This function checks if the device’s Vendor ID (VID) and Product ID (PID) match the values 
+        corresponding to a Tempico device. It returns `True` if the device is identified as a Tempico, 
+        and `False` otherwise.
+
+        :param tuple_vid_pid: A tuple containing the VID and PID of the device.
+        :type tuple_vid_pid: tuple
+        :returns: `True` if the device is a Tempico, `False` otherwise.
+        :rtype: bool
+        """
+        vid = tuple_vid_pid[0]
+        pid = tuple_vid_pid[1]
+        if vid == "04D8" and pid == "00DD":
+            value = self.tryOpenDevices(vid, pid)
+        else:
+            value = self.tryOpenDevices(vid, pid)
+        return value
+
+    def tryOpenDevices(self,vid_s, pid_s):
+        """
+        Finds and verifies whether a device with the given VID and PID is a Tempico device.
+
+        This function takes the Vendor ID (VID) and Product ID (PID) as inputs, converts them to integers, 
+        and attempts to open the device using these values. It then checks if the manufacturer and product 
+        strings match the expected values for a Tempico device.
+
+        :param vid_s: The Vendor ID (VID) of the device in string format.
+        :type vid_s: str
+        :param pid_s: The Product ID (PID) of the device in string format.
+        :type pid_s: str
+        :returns: `True` if the device is a Tempico, `False` otherwise.
+        :rtype: bool
+        """
+        vid = int(vid_s, 16)
+        pid = int(pid_s, 16)
+
+        try:
+            h = hid.device()
+            h.open(vid, pid)
+            Manufacturer = h.get_manufacturer_string()
+            Product = h.get_product_string()
+            if Manufacturer == "Tausand electronics" and "Tempico" in Product:
+                h.close()
+                return True
+            else:
+                h.close()
+                return False
+        except:
+            return False
+
 
 class TempicoChannel():
     """Single channel on a Tempico Device.
@@ -823,6 +949,7 @@ class TempicoDevice():
         self.ch2 = TempicoChannel(new_id,2)
         self.ch3 = TempicoChannel(new_id,3)
         self.ch4 = TempicoChannel(new_id,4)
+        self.TempicoDevices=TempicoDevicesSearch()
     
     ##open and closing connection methods
     def open(self):
@@ -835,20 +962,24 @@ class TempicoDevice():
             (none)
     
         """
-        try:
-            if self.__connected == True:
-                print('Device connection was already open.')
-                print('Open request ignored.')
-                #TO DO: raise exception/warning?
-            else:
-                desired_port = self.port
-                self.device = serial.Serial(port = desired_port, baudrate=self.getBaudRate(), timeout=self.serial_timeout) # open serial port
-                self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
-        except Exception as e:
-            print('verify the device in port',desired_port
-                  ,'is connected, is turned on, and is not being used by other software.')
-            raise e
-            return
+        tempicoDevices=self.TempicoDevices.findDevices()
+        if self.port in tempicoDevices:
+            try:
+                if self.__connected == True:
+                    print('Device connection was already open.')
+                    print('Open request ignored.')
+                    #TO DO: raise exception/warning?
+                else:
+                    desired_port = self.port
+                    self.device = serial.Serial(port = desired_port, baudrate=self.getBaudRate(), timeout=self.serial_timeout) # open serial port
+                    self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
+            except Exception as e:
+                print('verify the device in port',desired_port
+                    ,'is connected, is turned on, and is not being used by other software.')
+                raise e
+                return
+        else:
+            print("The port has not a tempico device connected")
     
     def openTempico(self):
         """Establishes (opens) a connection with a TausandDevice.
@@ -916,6 +1047,7 @@ class TempicoDevice():
             int: baud rate.
         """
         return self.__baudrate
+    
     
     def getFirmware(self):
         """Returns the TempicoDevice firmware version.
@@ -1046,6 +1178,60 @@ class TempicoDevice():
         except Exception as e:
             print(e)
             return ''
+    
+    def abort(self):
+        """
+        Cancels an ongoing measurement on the TempicoDevice.
+
+        This function sends a cancel command to the TempicoDevice to stop any 
+        measurement currently in progress. It ensures that all measurement processes 
+        are halted and the device is ready for a new operation or safely turned off.
+
+        This function requires that a connection is established with the 
+        TempicoDevice.
+
+        Args:
+            (none)
+        """
+        try:
+            self.writeMessage('ABORt')
+        except Exception as e: 
+            print(e)
+    
+    def selfTest(self):
+        """
+        Performs a self-test on the TempicoDevice hardware.
+
+        This function initiates a self-diagnostic test on the TempicoDevice to verify 
+        its hardware integrity. If the self-test is successful, it prints the message 
+        "Self test passed. Device is working properly." If the self-test fails, 
+        it prints the message "Self test failed. Device may have a problem.", 
+        indicating a potential issue with the hardware that may require further investigation 
+        or support.
+
+        This function requires that a connection is established with the 
+        TempicoDevice.
+
+        Args:
+            (none)
+
+        Returns:
+            None
+        """
+        try:
+            self.writeMessage('*TST?')
+            data = self.readMessage()
+            dataPure=data
+            data=data.replace("\n","")
+            data=data.replace("\r","")  
+            if data == '0':
+                print('Self test passed. Device is working properly.')
+            else:
+                print(dataPure)  
+        except Exception as e: 
+            print(e)
+            
+        
         
     def isPendingReadMessage(self):
         """Determines if a pending message is available to be read in a 

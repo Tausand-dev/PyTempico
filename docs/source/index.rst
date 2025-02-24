@@ -8,19 +8,15 @@
    :alt: Tausand logo
    :align: center
 
+
 Welcome to pyTempico's documentation!
-=====================================
+======================================
 
-pyTempico was built to simplify the usage of Tausand_ Tempico family of time-to-digital converters (TDCs), providing a library aimed to interface these devices using Python coding.
+PyTempico is a Python library developed by Tausand Electronics, with Joan Amaya and David Guzman as the lead developers. It enables seamless interaction with Tempico TP1004 devices, facilitating data communication and control. The library relies on key modules such as hid and pyserial for efficient device connectivity. For more information, visit tausand.com.
 
-A good way to start learning how to use PyTempico library is to follow and to execute the examples included in this document.
-
-.. _Tausand: https://www.tausand.com/
-
-Contents
------------------------------------------
 .. toctree::
    :maxdepth: 4
+   :caption: Contents:
    
    pyTempico
    examples
