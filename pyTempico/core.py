@@ -1336,7 +1336,9 @@ class TempicoDevice():
             self.writeMessage('FETCH?')
             #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
-            mylist = self.convertReadDataToIntList(data)
+            #mylist = self.convertReadDataToIntList(data)
+            #mylist = self.convertReadDataToFloatList(data)
+            mylist = self.convertReadDataToNumberList(data)
             return mylist
         except Exception as e: 
             print(e)
@@ -1379,10 +1381,111 @@ class TempicoDevice():
             self.writeMessage('MEAS?')
             #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
-            mylist = self.convertReadDataToIntList(data)
+            #mylist = self.convertReadDataToIntList(data)
+            #mylist = self.convertReadDataToFloatList(data)
+            mylist = self.convertReadDataToNumberList(data)
             return mylist
         except Exception as e: 
             print(e)   
+            
+    def convertReadDataToNumberList(self,data_string):
+        """Converts a string with a read dataset message issued by a 
+        TempicoDevice, into an number of number 2D-list (integer or float).
+        
+        The dataset of a TempicoDevice is in the following format::
+            
+            [[ch,run,start_us,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' (int) indicates the TDC channel,
+        - 'run' (int) goes from 1 to NumberOfRuns,
+        - 'start_us' (float) is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds
+        - 'stop_ps1' (int) is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' (int) is the NumberOfStops.
+          
+        Every value in the dataset is either an integer or a float.
+                     
+        Args:
+            data_string (str): dataset message to convert.
+            
+        Returns:
+            list(number): dataset message converted.
+        """
+        data_list = []
+        if data_string != '':
+            d = data_string.splitlines() #split lines, to remove \r\n chars
+            d0 = d[0] #take only first line; ignore additional lines
+            d0=d0.split(';') #split data into rows
+            for row in d0:
+                if len(row) > 0:
+                    float_row = []
+                    #separate cols by ',' and convert to integers
+                    for x in row.split(','):
+                        try:
+                            float_row.append(int(x))
+                        except: #if not an integer, save as float
+                            float_row.append(float(x))                    
+                else:
+                    #if empty row, write empty (do not try to convert to int)
+                    float_row = []
+                #append integer row to data_list
+                data_list.append(float_row) 
+            
+            if len(d) > 1:
+                #if a second line exists, a warning/error message has arrived
+                for extraline in d[1:]: #from 2nd to end
+                    print(extraline)
+                #TO DO: rise exception        
+
+        return data_list
+    
+    def convertReadDataToFloatList(self,data_string):
+        """Converts a string with a read dataset message issued by a 
+        TempicoDevice, into an float 2D-list.
+        
+        The dataset of a TempicoDevice is in the following format::
+            
+            [[ch,run,start_us,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_us' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+          
+        Every value in the dataset is converted to a float.
+                     
+        Args:
+            data_string (str): dataset message to convert.
+            
+        Returns:
+            list(float): dataset message converted.
+        """
+        data_list = []
+        if data_string != '':
+            d = data_string.splitlines() #split lines, to remove \r\n chars
+            d0 = d[0] #take only first line; ignore additional lines
+            d0=d0.split(';') #split data into rows
+            for row in d0:
+                if len(row) > 0:
+                    #separate cols by ',' and convert to integers
+                    float_row = [float(x) for x in row.split(',')] 
+                else:
+                    #if empty row, write empty (do not try to convert to int)
+                    float_row = []
+                #append integer row to data_list
+                data_list.append(float_row) 
+            
+            if len(d) > 1:
+                #if a second line exists, a warning/error message has arrived
+                for extraline in d[1:]: #from 2nd to end
+                    print(extraline)
+                #TO DO: rise exception
+
+        return data_list
             
     def convertReadDataToIntList(self,data_string):
         """Converts a string with a read dataset message issued by a 
@@ -1396,11 +1499,11 @@ class TempicoDevice():
         
         - 'ch' indicates the TDC channel,
         - 'run' goes from 1 to NumberOfRuns,
-        - 'start_us' is the timestamp of start pulse, in microseconds; this value overflows (go back to zero) after 2^32-1 microseconds, about 4294 seconds,
+        - 'start_us' is the timestamp of start pulse, in microseconds; this value overflows (go back to zero) after 2^32-1 seconds
         - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
         - 'N' is the NumberOfStops.
           
-        Every value in the dataset is an integer.
+        Every value in the dataset is converted to an integer.
                      
         Args:
             data_string (str): dataset message to convert.
