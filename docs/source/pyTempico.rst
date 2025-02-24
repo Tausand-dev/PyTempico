@@ -4,7 +4,7 @@ pyTempico package
 .. automodule:: pyTempico.core
 
 TempicoDevicesSearch class
-===================
+==========================
 .. autoclass:: TempicoDevicesSearch
    :members:
 
