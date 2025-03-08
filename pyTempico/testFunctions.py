@@ -26,11 +26,14 @@ from core import TempicoDevice
 # print(portsFound)
 
 #Test new open function
-tempicoDevice = TempicoDevicesSearch()
-values=tempicoDevice.findDevices()
-print(values)
-tempicoDeviceNew = TempicoDevice(values[0])
-tempicoDeviceNew.open()
+#look up for connected Tempico devices, and connect to it
+portsFound = TempicoDevicesSearch().findDevices()
+print(portsFound)
+if portsFound:
+    #connect to the first found device
+    tempicoDevice = TempicoDevice(portsFound[0]) 
+    tempicoDevice.open()
+    tempicoDevice.close()
 
 
 # DevTemp=TempDevs()
