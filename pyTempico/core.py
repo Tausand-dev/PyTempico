@@ -9,8 +9,6 @@ Core class and methods for PyTempico library.
 
 To use with Tausand Electronics' Time-to-Digital Converters (TDCs) of the 
 family *Tausand Tempico*.
-
-Last edited on 2025-01-02.
 """
 
 import serial
