@@ -1,6 +1,6 @@
 import serial
-from core import TempicoDevice as TempDev
-from core import TempicoDevices as TempDevs
+from core import TempicoDevicesSearch
+from core import TempicoDevice
 
 #Test for abort measure
 
@@ -26,9 +26,12 @@ from core import TempicoDevices as TempDevs
 # print(portsFound)
 
 #Test new open function
-tempicoDevice = TempDev('COM12')
-tempicoDevice.openTempico()
-tempicoDevice.close()
+tempicoDevice = TempicoDevicesSearch()
+values=tempicoDevice.findDevices()
+print(values)
+tempicoDeviceNew = TempicoDevice(values[0])
+tempicoDeviceNew.open()
+
 
 # DevTemp=TempDevs()
 # devices=DevTemp.findDevices()

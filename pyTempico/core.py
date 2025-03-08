@@ -17,6 +17,7 @@ import serial
 import time
 import hid
 import serial.tools.list_ports
+import os
 
 
 ##Global variables. 
@@ -109,9 +110,11 @@ class TempicoDevicesSearch():
                     valuesPacket = self.getVidPid(vidPidString)
                     if len(valuesPacket) == 2:
                         value = self.verifyPyTempico(valuesPacket)
-                        if value == True:
+                        if value == True and os.name!="posix":
                             ports.append(port.name)
-                if "Tempico" in port.description:
+                if "Tempico" in port.description and os.name!= "posix":
+                    ports.append(port.device)
+                elif "Tempico" in port.description and os.name== "posix":
                     ports.append(port.device)
         return ports
 
