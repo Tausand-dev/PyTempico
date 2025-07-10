@@ -16,6 +16,7 @@ import time
 import hid
 import serial.tools.list_ports
 import os
+from datetime import datetime
 
 
 ##Global variables. 
@@ -1725,6 +1726,7 @@ class TempicoDevice():
                 #update local variable
                 self.threshold = response
         return self.threshold
+
     
     def setThresholdVoltage(self,desired_voltage):
         """Changes the threshold voltage on the rising edge of start and stops 
@@ -1851,3 +1853,92 @@ class TempicoDevice():
             (none)
         """
         self.setThresholdVoltage("MIN")
+    
+    def getDate(self):
+        """
+        Returns the number of microseconds since the Tempico device was powered on, 
+        based on its internal clock. If the device has been synchronized, the 
+        microseconds count corresponds to the system time of the host PC.
+
+        This function sends the `DTIMe?` command to the device, reads the response,
+        and parses it into an integer representing the elapsed time in microseconds.
+        If the device does not respond correctly, the function returns -1.
+
+        The timestamp resolution is in microseconds (µs), and the count starts from 
+        power-up. Synchronization with the PC time must be previously configured 
+        on the device, otherwise the value is relative to the device's uptime.
+
+        Note:
+            This function requires an active connection with the TempicoDevice.
+
+        Args:
+            (none)
+
+        Returns:
+            int: Elapsed time in microseconds since the device was powered on 
+                or synchronized with the PC clock. Returns -1 if no valid 
+                response is received.
+        """
+        self.writeMessage('DTIMe?')
+        response = self.readMessage()
+        response = response.splitlines()
+        time_response=-1
+        if len(response)>0:
+            response_first_line= response[0]
+            try:
+                if response_first_line!="":
+                    time_response= int(response_first_line.replace(".",""))
+                else:
+                    print("Device does not respond correctly to DTIMe? request")
+            except:
+                print("Device does not respond correctly to DTIMe? request")
+        return time_response
+                
+                    
+                
+            
+    def setDate(self):
+        """
+        Synchronizes the Tempico device's internal clock with the current 
+        system time in microseconds.
+
+        This function sends a `DTIMe <timestamp>` command to the device, where 
+        `<timestamp>` is the current time retrieved from the host PC in 
+        Unix format with microsecond precision. After writing the command, the 
+        device is expected to respond with a confirmation. If no response is 
+        received, the function performs a validation by comparing the new 
+        device timestamp against the local timestamp.
+
+        Notes:
+            - An active connection with the TempicoDevice is required.
+            - If the synchronization fails, a message will be printed.
+            - The device must support microsecond-precision synchronization 
+            via the `DTIMe` command.
+
+        Args:
+            (none)
+
+        Returns:
+            None
+        """
+        my_tempico = self
+        if my_tempico.isOpen():
+            my_tempico.waitAndReadMessage()
+            currentDate= datetime.now().timestamp()
+            msg= f"DTIMe {currentDate}"
+            my_tempico.writeMessage(msg)
+            response=my_tempico.waitAndReadMessage()
+            if response !='':
+               print(response.splitlines()[0]) 
+            else:
+                new_date = self.getDate()
+                if new_date>= currentDate:
+                    pass
+                else:
+                    print('Failed.')            
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+        
+    
+    

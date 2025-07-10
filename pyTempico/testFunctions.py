@@ -1,7 +1,7 @@
 import serial
 from core import TempicoDevicesSearch
 from core import TempicoDevice
-
+from datetime import datetime
 #Test for abort measure
 
 # tempicoDevice = TempDev('COM12')
@@ -27,15 +27,24 @@ from core import TempicoDevice
 
 #Test new open function
 #look up for connected Tempico devices, and connect to it
-portsFound = TempicoDevicesSearch().findDevices()
-print(portsFound)
-if portsFound:
-    #connect to the first found device
-    tempicoDevice = TempicoDevice(portsFound[0]) 
-    tempicoDevice.open()
-    tempicoDevice.close()
+# portsFound = TempicoDevicesSearch().findDevices()
+# print(portsFound)
+# if portsFound:
+#     #connect to the first found device
+#     tempicoDevice = TempicoDevice(portsFound[0]) 
+#     tempicoDevice.open()
+#     tempicoDevice.close()
 
 
 # DevTemp=TempDevs()
 # devices=DevTemp.findDevices()
 # print(devices)
+
+tempDevice= TempicoDevice("COM5")
+tempDevice.open()
+dateMicroSeconds=tempDevice.getDate()
+print(dateMicroSeconds)
+tempDevice.setDate()
+dateMicroSeconds=tempDevice.getDate()
+print(dateMicroSeconds)
+

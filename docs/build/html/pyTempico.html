@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyTempico package &mdash; pyTempico 1.1.1 documentation</title>
+  <title>pyTempico package &mdash; pyTempico 1.2.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -507,6 +507,40 @@ TempicoDevice.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getDate">
+<span class="sig-name descname"><span class="pre">getDate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getDate" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the number of microseconds since the Tempico device was powered on,
+based on its internal clock. If the device has been synchronized, the
+microseconds count corresponds to the system time of the host PC.</p>
+<p>This function sends the <cite>DTIMe?</cite> command to the device, reads the response,
+and parses it into an integer representing the elapsed time in microseconds.
+If the device does not respond correctly, the function returns -1.</p>
+<p>The timestamp resolution is in microseconds (µs), and the count starts from
+power-up. Synchronization with the PC time must be previously configured
+on the device, otherwise the value is relative to the device’s uptime.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function requires an active connection with the TempicoDevice.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Elapsed time in microseconds since the device was powered on</dt><dd><p>or synchronized with the PC clock. Returns -1 if no valid
+response is received.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getFirmware">
 <span class="sig-name descname"><span class="pre">getFirmware</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getFirmware" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice firmware version.</p>
@@ -801,6 +835,34 @@ indicating a potential issue with the hardware that may require further investig
 or support.</p>
 <p>This function requires that a connection is established with the
 TempicoDevice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setDate">
+<span class="sig-name descname"><span class="pre">setDate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setDate" title="Permalink to this definition"></a></dt>
+<dd><p>Synchronizes the Tempico device’s internal clock with the current
+system time in microseconds.</p>
+<p>This function sends a <cite>DTIMe &lt;timestamp&gt;</cite> command to the device, where
+<cite>&lt;timestamp&gt;</cite> is the current time retrieved from the host PC in
+Unix format with microsecond precision. After writing the command, the
+device is expected to respond with a confirmation. If no response is
+received, the function performs a validation by comparing the new
+device timestamp against the local timestamp.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>An active connection with the TempicoDevice is required.</p></li>
+<li><p>If the synchronization fails, a message will be printed.</p></li>
+<li><p>The device must support microsecond-precision synchronization</p></li>
+</ul>
+<p>via the <cite>DTIMe</cite> command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
