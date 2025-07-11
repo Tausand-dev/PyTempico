@@ -40,11 +40,24 @@ from datetime import datetime
 # devices=DevTemp.findDevices()
 # print(devices)
 
+# tempDevice= TempicoDevice("COM5")
+# tempDevice.open()
+# print("Old time")
+# print(tempDevice.getDateTime(True))
+# currentDate= datetime.now().timestamp()
+
+# tempDevice.setDateTime(1677854900.0)
+# print("New time")
+# print(tempDevice.getDateTime(True))
+# print("Maximun time")
+# print(tempDevice.getMaximumDatetime(True))
+# print("Minimum time")
+# print(tempDevice.getMinimumDatetime(True))
+
+
+
 tempDevice= TempicoDevice("COM5")
 tempDevice.open()
-dateMicroSeconds=tempDevice.getDate()
-print(dateMicroSeconds)
-tempDevice.setDate()
-dateMicroSeconds=tempDevice.getDate()
-print(dateMicroSeconds)
+print("Last sync")
+print(tempDevice.getLastSync())
 

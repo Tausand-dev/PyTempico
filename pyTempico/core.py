@@ -1854,18 +1854,18 @@ class TempicoDevice():
         """
         self.setThresholdVoltage("MIN")
     
-    def getDate(self):
+    def getDateTime(self,dateFormat=False):
         """
-        Returns the number of microseconds since the Tempico device was powered on, 
+        Returns the number of seconds since the Tempico device was powered on, 
         based on its internal clock. If the device has been synchronized, the 
-        microseconds count corresponds to the system time of the host PC.
+        seconds count corresponds to the system time of the host PC.
 
         This function sends the `DTIMe?` command to the device, reads the response,
-        and parses it into an integer representing the elapsed time in microseconds.
+        and parses it into a float representing the elapsed time in seconds.
         If the device does not respond correctly, the function returns -1.
 
         The timestamp resolution is in microseconds (µs), and the count starts from 
-        power-up. Synchronization with the PC time must be previously configured 
+        power-up by default. Synchronization with the PC time must be previously configured 
         on the device, otherwise the value is relative to the device's uptime.
 
         Note:
@@ -1875,7 +1875,7 @@ class TempicoDevice():
             (none)
 
         Returns:
-            int: Elapsed time in microseconds since the device was powered on 
+            float: Elapsed time in seconds since the device was powered on 
                 or synchronized with the PC clock. Returns -1 if no valid 
                 response is received.
         """
@@ -1887,17 +1887,21 @@ class TempicoDevice():
             response_first_line= response[0]
             try:
                 if response_first_line!="":
-                    time_response= int(response_first_line.replace(".",""))
+                    time_response= float(response_first_line)
+                    if dateFormat:
+                        time_response = datetime.fromtimestamp(time_response)
                 else:
                     print("Device does not respond correctly to DTIMe? request")
             except:
                 print("Device does not respond correctly to DTIMe? request")
+            
+            
         return time_response
                 
                     
                 
-            
-    def setDate(self):
+    #TO DO: Optional parameter for the user timestamp      
+    def setDateTime(self, timestampDate=None):
         """
         Synchronizes the Tempico device's internal clock with the current 
         system time in microseconds.
@@ -1924,14 +1928,24 @@ class TempicoDevice():
         my_tempico = self
         if my_tempico.isOpen():
             my_tempico.waitAndReadMessage()
-            currentDate= datetime.now().timestamp()
+            if timestampDate==None:
+                currentDate= datetime.now().timestamp()
+            else:
+                maximumTime=self.getMaximumDatetime()
+                minimumTime=self.getMinimumDatetime()
+                if timestampDate>=minimumTime and timestampDate<=maximumTime:
+                    currentDate= timestampDate
+                else:
+                    print(f"Time stamp out of range valid values need to be between {minimumTime} and {maximumTime}")
+                    return
+            
             msg= f"DTIMe {currentDate}"
             my_tempico.writeMessage(msg)
             response=my_tempico.waitAndReadMessage()
             if response !='':
                print(response.splitlines()[0]) 
             else:
-                new_date = self.getDate()
+                new_date = self.getDateTime()
                 if new_date>= currentDate:
                     pass
                 else:
@@ -1939,6 +1953,161 @@ class TempicoDevice():
         else:
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
+    
+    
+    def getMaximumDatetime(self,dateFormat=False):
+        if self.isOpen():
+            self.waitAndReadMessage()
+            msg="DTIMe:MAXimum?"
+            self.writeMessage(msg)
+            response= self.readMessage()
+            response= response.splitlines()
+            time_maximum = -1
+            if len(response)>0:
+                response_first_line = response[0]
+                try:
+                    if response_first_line!="":
+                        time_maximum= float(response_first_line)
+                        if dateFormat:
+                            time_maximum = datetime.fromtimestamp(time_maximum)
+                    else:
+                        print("Device does not respond correctly to DTIMe:MAXimum? request")
+                except:
+                    print("Device does not respond correctly to DTIMe:MAXimum? request")
+            else:
+                print("Device does not respond correctly to DTIMe:MAXimum? request")
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+                
+        return time_maximum
+    
+    
+    #Change not implemented yet in tempico firmware
+    def setMaximumDatetime(self, maximumDate):
+        if self.isOpen():
+            self.waitAndReadMessage()
+            msg=f"DTIMe:MAXimum {maximumDate}"
+            self.writeMessage(msg)
+            response = self.waitAndReadMessage()
+            if response !='':
+               print(response.splitlines()[0]) 
+            else:
+                new_maximum_time = self.getMaximumDatetime()
+                if new_maximum_time== maximumDate:
+                    pass
+                else:
+                    print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+            
+
+    def getMinimumDatetime(self, dateFormat=False):
+        if self.isOpen():
+            self.waitAndReadMessage()
+            msg="DTIMe:MINimum?"
+            self.writeMessage(msg)
+            response= self.readMessage()
+            response= response.splitlines()
+            time_minimum = -1
+            if len(response)>0:
+                response_first_line = response[0]
+                try:
+                    if response_first_line!="":
+                        time_minimum= float(response_first_line)
+                        if dateFormat:
+                            time_minimum = datetime.fromtimestamp(time_minimum)      
+                    else:
+                        print("Device does not respond correctly to DTIMe:MINimum? request")
+                except:
+                    print("Device does not respond correctly to DTIMe:MINimum? request")
+            else:
+                print("Device does not respond correctly to DTIMe:MINimum? request")
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+                
+        return time_minimum
+    
+    
+    def setMinimumDatetime(self, minimumDate):
+        if self.isOpen():
+            self.waitAndReadMessage()
+            msg=f"DTIMe:MINimum {minimumDate}"
+            self.writeMessage(msg)
+            response = self.waitAndReadMessage()
+            if response !='':
+               print(response.splitlines()[0]) 
+            else:
+                new_minimum_time = self.getMinimumDatetime()
+                if new_minimum_time== minimumDate:
+                    pass
+                else:
+                    print('Failed.')
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+    
+
+    def getLastStart(self, dateFormat=False):
+        if self.isOpen():
+            self.waitAndReadMessage()
+            msg="DTIMe:LSTart?"
+            self.writeMessage(msg)
+            response= self.readMessage()
+            response= response.splitlines()
+            time_last_start = -1
+            if len(response)>0:
+                response_first_line = response[0]
+                try:
+                    if response_first_line!="":
+                        time_last_start= float(response_first_line)
+                        if time_last_start==0:
+                            time_last_start=-1
+                        if dateFormat and time_last_start!=-1:
+                            time_last_start = datetime.fromtimestamp(time_last_start)
+                    else:
+                        print("Device does not respond correctly to DTIMe:LSTart? request")
+                except:
+                    print("Device does not respond correctly to DTIMe:LSTart? request")
+            else:
+                print("Device does not respond correctly to DTIMe:LSTart? request")
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")
+                
+        return time_last_start
         
+        
+    def getLastSync(self, dateFormat=False):
+        if self.isOpen():
+            self.waitAndReadMessage()
+            msg="DTIMe:LSYNc?"
+            self.writeMessage(msg)
+            response= self.readMessage()
+            response= response.splitlines()
+            time_last_sync = -1
+            if len(response)>0:
+                response_first_line = response[0]
+                try:
+                    if response_first_line!="":
+                        time_last_sync= float(response_first_line)
+                        if time_last_sync==0:
+                            time_last_sync=-1
+                        if dateFormat and time_last_sync!=-1:
+                            time_last_sync = datetime.fromtimestamp(time_last_sync)
+                    else:
+                        print("Device does not respond correctly to DTIMe:LSYNc? request")
+                except:
+                    print("Device does not respond correctly to DTIMe:LSYNc? request")
+            else:
+                print("Device does not respond correctly to DTIMe:LSYNc? request")
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to set.")         
+        return time_last_sync
+    
+    
     
     
