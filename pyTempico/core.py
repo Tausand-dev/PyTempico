@@ -2108,6 +2108,117 @@ class TempicoDevice():
             print("Unable to set.")         
         return time_last_sync
     
+    #Functions come from tempico device
+    # The channels could be A or 1, B or 2, C or 3, D or 4
+
+    # This function will be use in order to reuse the code
+    def returnChannelSelected(self, channel):
+        if channel==1 or channel=="A":
+            channelSelected=self.ch1
+        elif channel==2 or channel=="B":
+            channelSelected=self.ch2
+        elif channel==3 or channel=="C":
+            channelSelected=self.ch3
+        elif channel==4 or channel=="D":
+            channelSelected=self.ch4
+        else:
+            print("Invalid channel")
+            return -1
+        return channelSelected
+
+    #Getters tempico device
+    def getAverageCycles(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        averageCycles=-1
+        if channelSelected!=-1:
+            averageCycles=channelSelected.getAverageCycles()
+        return averageCycles
     
     
+    def getNumberOfStops(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        numberOfStops=-1
+        if channelSelected!=-1:
+            numberOfStops=channelSelected.getNumberOfStops()
+        return numberOfStops
+    
+    
+    def getMode(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        mode=-1
+        if channelSelected!=-1:
+            mode=channelSelected.getMode()
+        return mode
+    
+    def getStartEdge(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        startEdge=-1
+        if channelSelected!=-1:
+            startEdge=channelSelected.getStartEdge()
+        return startEdge
+    
+    def getStopEdge(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        stopEdge=-1
+        if channelSelected!=-1:
+            stopEdge=channelSelected.getStopEdge()
+        return stopEdge
+    
+    def getStopMask(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        stopMask=-1
+        if channelSelected!=-1:
+            stopMask=channelSelected.getStopMask()
+        return stopMask
+
+    #Setters
+    
+    def setAverageCycles(self,channel,averageCycles):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.setAverageCycles(averageCycles)
+        
+    def setNumberOfStops(self,channel,numberOfStops):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.setNumberOfStops(numberOfStops)
+    
+    def setMode(self,channel,mode):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.setMode(mode)
+    
+    def setStartEdge(self,channel,startEdge):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.setStartEdge(startEdge)
+    
+    def setStopEdge(self,channel,stopEdge):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.setStopEdge(stopEdge)
+    
+    def setStopMask(self,channel,stopMask):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.setStopMask(stopMask)
+    
+    #Other functions
+    def isEnabled(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        enable=-1
+        if channelSelected!=-1:
+            enable=channelSelected.isEnabled()
+        return enable
+    
+    def enableChannel(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.enableChannel()
+    
+    def disableChannel(self,channel):
+        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        if channelSelected!=-1:
+            channelSelected.disableChannel()
+        
     
