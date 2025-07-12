@@ -152,3 +152,4 @@ from datetime import datetime
 # print(tempDevice.isEnabled(3))
 # print("Enable channel D")
 # print(tempDevice.isEnabled(4))
+# print(tempDevice.getSerial())

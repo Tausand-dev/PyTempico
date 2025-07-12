@@ -1879,21 +1879,25 @@ class TempicoDevice():
                 or synchronized with the PC clock. Returns -1 if no valid 
                 response is received.
         """
-        self.writeMessage('DTIMe?')
-        response = self.readMessage()
-        response = response.splitlines()
         time_response=-1
-        if len(response)>0:
-            response_first_line= response[0]
-            try:
-                if response_first_line!="":
-                    time_response= float(response_first_line)
-                    if dateFormat:
-                        time_response = datetime.fromtimestamp(time_response)
-                else:
+        if self.isOpen():
+            self.writeMessage('DTIMe?')
+            response = self.readMessage()
+            response = response.splitlines()
+            if len(response)>0:
+                response_first_line= response[0]
+                try:
+                    if response_first_line!="":
+                        time_response= float(response_first_line)
+                        if dateFormat:
+                            time_response = datetime.fromtimestamp(time_response)
+                    else:
+                        print("Device does not respond correctly to DTIMe? request")
+                except:
                     print("Device does not respond correctly to DTIMe? request")
-            except:
-                print("Device does not respond correctly to DTIMe? request")
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to get.")
             
             
         return time_response
@@ -1956,13 +1960,13 @@ class TempicoDevice():
     
     
     def getMaximumDatetime(self,dateFormat=False):
+        time_maximum = -1
         if self.isOpen():
             self.waitAndReadMessage()
             msg="DTIMe:MAXimum?"
             self.writeMessage(msg)
             response= self.readMessage()
             response= response.splitlines()
-            time_maximum = -1
             if len(response)>0:
                 response_first_line = response[0]
                 try:
@@ -1978,7 +1982,7 @@ class TempicoDevice():
                 print("Device does not respond correctly to DTIMe:MAXimum? request")
         else:
             print("Device connection not opened. First open a connection.")
-            print("Unable to set.")
+            print("Unable to get.")
                 
         return time_maximum
     
@@ -2004,13 +2008,13 @@ class TempicoDevice():
             
 
     def getMinimumDatetime(self, dateFormat=False):
+        time_minimum = -1
         if self.isOpen():
             self.waitAndReadMessage()
             msg="DTIMe:MINimum?"
             self.writeMessage(msg)
             response= self.readMessage()
             response= response.splitlines()
-            time_minimum = -1
             if len(response)>0:
                 response_first_line = response[0]
                 try:
@@ -2026,7 +2030,7 @@ class TempicoDevice():
                 print("Device does not respond correctly to DTIMe:MINimum? request")
         else:
             print("Device connection not opened. First open a connection.")
-            print("Unable to set.")
+            print("Unable to get.")
                 
         return time_minimum
     
@@ -2051,13 +2055,13 @@ class TempicoDevice():
     
 
     def getLastStart(self, dateFormat=False):
+        time_last_start = -1
         if self.isOpen():
             self.waitAndReadMessage()
             msg="DTIMe:LSTart?"
             self.writeMessage(msg)
             response= self.readMessage()
             response= response.splitlines()
-            time_last_start = -1
             if len(response)>0:
                 response_first_line = response[0]
                 try:
@@ -2075,19 +2079,19 @@ class TempicoDevice():
                 print("Device does not respond correctly to DTIMe:LSTart? request")
         else:
             print("Device connection not opened. First open a connection.")
-            print("Unable to set.")
+            print("Unable to get.")
                 
         return time_last_start
         
         
     def getLastSync(self, dateFormat=False):
+        time_last_sync = -1
         if self.isOpen():
             self.waitAndReadMessage()
             msg="DTIMe:LSYNc?"
             self.writeMessage(msg)
             response= self.readMessage()
             response= response.splitlines()
-            time_last_sync = -1
             if len(response)>0:
                 response_first_line = response[0]
                 try:
@@ -2105,7 +2109,7 @@ class TempicoDevice():
                 print("Device does not respond correctly to DTIMe:LSYNc? request")
         else:
             print("Device connection not opened. First open a connection.")
-            print("Unable to set.")         
+            print("Unable to get.")         
         return time_last_sync
     
     #Functions come from tempico device
@@ -2128,7 +2132,7 @@ class TempicoDevice():
 
     #Getters tempico device
     def getAverageCycles(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         averageCycles=-1
         if channelSelected!=-1:
             averageCycles=channelSelected.getAverageCycles()
@@ -2136,7 +2140,7 @@ class TempicoDevice():
     
     
     def getNumberOfStops(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         numberOfStops=-1
         if channelSelected!=-1:
             numberOfStops=channelSelected.getNumberOfStops()
@@ -2144,28 +2148,28 @@ class TempicoDevice():
     
     
     def getMode(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         mode=-1
         if channelSelected!=-1:
             mode=channelSelected.getMode()
         return mode
     
     def getStartEdge(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         startEdge=-1
         if channelSelected!=-1:
             startEdge=channelSelected.getStartEdge()
         return startEdge
     
     def getStopEdge(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         stopEdge=-1
         if channelSelected!=-1:
             stopEdge=channelSelected.getStopEdge()
         return stopEdge
     
     def getStopMask(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         stopMask=-1
         if channelSelected!=-1:
             stopMask=channelSelected.getStopMask()
@@ -2174,51 +2178,67 @@ class TempicoDevice():
     #Setters
     
     def setAverageCycles(self,channel,averageCycles):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setAverageCycles(averageCycles)
         
     def setNumberOfStops(self,channel,numberOfStops):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setNumberOfStops(numberOfStops)
     
     def setMode(self,channel,mode):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setMode(mode)
     
     def setStartEdge(self,channel,startEdge):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setStartEdge(startEdge)
     
     def setStopEdge(self,channel,stopEdge):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setStopEdge(stopEdge)
     
     def setStopMask(self,channel,stopMask):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setStopMask(stopMask)
     
     #Other functions
     def isEnabled(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         enable=-1
         if channelSelected!=-1:
             enable=channelSelected.isEnabled()
         return enable
     
     def enableChannel(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.enableChannel()
     
     def disableChannel(self,channel):
-        channelSelected: TempicoChannel=self.returnChannelSelected(channel)
+        channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.disableChannel()
+    
+    
+    def getSerial(self):
+        completeSerial=""
+        if self.isOpen():
+            puerto_actual = self.device.port
+            for port in serial.tools.list_ports.comports():
+                if port.device == puerto_actual:
+                    completeSerial=port.serial_number     
+                    break
+            else:
+                completeSerial=""
+            return completeSerial
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to get.")
         
     
