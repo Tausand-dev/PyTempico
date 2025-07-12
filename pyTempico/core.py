@@ -1960,6 +1960,24 @@ class TempicoDevice():
     
     
     def getMaximumDatetime(self,dateFormat=False):
+        """Returns the maximum datetime value allowed by the TempicoDevice.
+
+        If the connection is established with the TempicoDevice, this function 
+        requests the device for the maximum allowed date using the 
+        'DTIMe:MAXimum?' command. If not, the value -1 is returned.
+        
+        The returned value corresponds to the latest timestamp that can be set 
+        on the device without causing an error. If `dateFormat` is set to True, 
+        the value is returned as a datetime object instead of a float.
+
+        Args:
+            dateFormat (bool, optional): If True, the value is returned as a 
+            datetime object. Default is False.
+
+        Returns:
+            float or datetime: Maximum allowed datetime, either as a float (Unix 
+            timestamp) or as a datetime object if dateFormat is True.
+        """
         time_maximum = -1
         if self.isOpen():
             self.waitAndReadMessage()
@@ -1989,6 +2007,23 @@ class TempicoDevice():
     
     #Change not implemented yet in tempico firmware
     def setMaximumDatetime(self, maximumDate):
+        """Sets the maximum datetime value allowed by the TempicoDevice.
+
+        If the connection is established with the TempicoDevice, this function 
+        sends the 'DTIMe:MAXimum <timestamp>' command to update the maximum 
+        allowed timestamp. If the device accepts the value, it should return 
+        a confirmation response. If no response is received, the value is 
+        validated by re-reading it from the device.
+
+        Note:
+            This feature may not yet be implemented in the Tempico firmware.
+
+        Args:
+            maximumDate (float): New maximum timestamp to configure on the device.
+
+        Returns:
+            None
+        """
         if self.isOpen():
             self.waitAndReadMessage()
             msg=f"DTIMe:MAXimum {maximumDate}"
@@ -2008,6 +2043,24 @@ class TempicoDevice():
             
 
     def getMinimumDatetime(self, dateFormat=False):
+        """Returns the minimum datetime value allowed by the TempicoDevice.
+
+        If the connection is established with the TempicoDevice, this function 
+        requests the device for the minimum allowed date using the 
+        'DTIMe:MINimum?' command. If not, the value -1 is returned.
+
+        The returned value corresponds to the earliest timestamp that can be set 
+        on the device without causing an error. If `dateFormat` is set to True, 
+        the value is returned as a datetime object instead of a float.
+
+        Args:
+            dateFormat (bool, optional): If True, the value is returned as a 
+            datetime object. Default is False.
+
+        Returns:
+            float or datetime: Minimum allowed datetime, either as a float (Unix 
+            timestamp) or as a datetime object if dateFormat is True.
+        """
         time_minimum = -1
         if self.isOpen():
             self.waitAndReadMessage()
@@ -2036,6 +2089,20 @@ class TempicoDevice():
     
     
     def setMinimumDatetime(self, minimumDate):
+        """Sets the minimum datetime value allowed by the TempicoDevice.
+
+        If the connection is established with the TempicoDevice, this function 
+        sends the 'DTIMe:MINimum <timestamp>' command to update the minimum 
+        allowed timestamp. If the device accepts the value, it should return 
+        a confirmation response. If no response is received, the value is 
+        validated by re-reading it from the device.
+
+        Args:
+            minimumDate (float): New minimum timestamp to configure on the device.
+
+        Returns:
+            None
+        """
         if self.isOpen():
             self.waitAndReadMessage()
             msg=f"DTIMe:MINimum {minimumDate}"
@@ -2055,6 +2122,26 @@ class TempicoDevice():
     
 
     def getLastStart(self, dateFormat=False):
+        """Returns the datetime of the last start event registered by the TempicoDevice.
+
+        If the connection is established with the TempicoDevice, this function 
+        requests the device for the last start timestamp using the 
+        'DTIMe:LSTart?' command. If not, the value -1 is returned.
+
+        The returned value corresponds to the timestamp of the most recent start 
+        event. If no start has occurred yet, the device returns 0, which is 
+        internally converted to -1. If `dateFormat` is set to True, the value is 
+        returned as a datetime object instead of a float.
+
+        Args:
+            dateFormat (bool, optional): If True, the value is returned as a 
+            datetime object. Default is False.
+
+        Returns:
+            float or datetime: Timestamp of the last start event, either as a float 
+            (Unix timestamp) or as a datetime object if dateFormat is True. 
+            Returns -1 if no start has occurred or if the value could not be retrieved.
+        """
         time_last_start = -1
         if self.isOpen():
             self.waitAndReadMessage()
@@ -2085,6 +2172,27 @@ class TempicoDevice():
         
         
     def getLastSync(self, dateFormat=False):
+        """Returns the datetime of the last synchronization performed on the TempicoDevice.
+
+        If the connection is established with the TempicoDevice, this function 
+        requests the device for the last synchronization timestamp using the 
+        'DTIMe:LSYNc?' command. If not, the value -1 is returned.
+
+        The returned value corresponds to the timestamp of the most recent 
+        synchronization with the host system. If no synchronization has occurred yet, 
+        the device returns 0, which is internally converted to -1. If `dateFormat` is 
+        set to True, the value is returned as a datetime object instead of a float.
+
+        Args:
+            dateFormat (bool, optional): If True, the value is returned as a 
+            datetime object. Default is False.
+
+        Returns:
+            float or datetime: Timestamp of the last synchronization event, either 
+            as a float (Unix timestamp) or as a datetime object if dateFormat is True. 
+            Returns -1 if no synchronization has occurred or if the value could not 
+            be retrieved.
+        """
         time_last_sync = -1
         if self.isOpen():
             self.waitAndReadMessage()
@@ -2117,6 +2225,25 @@ class TempicoDevice():
 
     # This function will be use in order to reuse the code
     def returnChannelSelected(self, channel):
+        """Returns the TempicoChannel object corresponding to the specified channel.
+
+        This function allows selecting a channel by its number (1–4) or label 
+        ('A'–'D'). If the input is valid, it returns the corresponding 
+        TempicoChannel instance. If the input is invalid, an error message 
+        is printed and -1 is returned.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+            
+            - 1 or 'A'
+            - 2 or 'B'
+            - 3 or 'C'
+            - 4 or 'D'
+
+        Returns:
+            TempicoChannel or int: The corresponding TempicoChannel object if the 
+            input is valid, or -1 if the channel is invalid.
+        """
         if channel==1 or channel=="A":
             channelSelected=self.ch1
         elif channel==2 or channel=="B":
@@ -2132,6 +2259,29 @@ class TempicoDevice():
 
     #Getters tempico device
     def getAverageCycles(self,channel):
+        """Returns the average cycles of the specified TempicoChannel.
+
+        By default, average cycles = 1 (no multi-cycle averaging).
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        average cycles value. If the connection is not open, or the channel is 
+        invalid, the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            integer: Number of average cycles, or -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         averageCycles=-1
         if channelSelected!=-1:
@@ -2140,6 +2290,32 @@ class TempicoDevice():
     
     
     def getNumberOfStops(self,channel):
+        """Returns the expected number of stop pulses for the specified TempicoChannel.
+
+        By default, number of stops = 1 (single start → single stop).
+
+        The TDC must receive all the expected number of stops to register them 
+        as a valid measurement; otherwise, the measurements are discarded.
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        number of stops. If the connection is not open, or the channel is invalid, 
+        the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            integer: Number of stops, or -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         numberOfStops=-1
         if channelSelected!=-1:
@@ -2148,6 +2324,34 @@ class TempicoDevice():
     
     
     def getMode(self,channel):
+        """Returns the measurement mode of the specified TempicoChannel.
+
+        By default, mode = 1.
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        current measurement mode. If the connection is not open, or the channel 
+        is invalid, the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            integer: Mode. Possible values are:
+                
+            - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+            - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+            
+            Returns -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         mode=-1
         if channelSelected!=-1:
@@ -2155,6 +2359,34 @@ class TempicoDevice():
         return mode
     
     def getStartEdge(self,channel):
+        """Returns the edge type used on start pulses of the specified TempicoChannel.
+
+        By default, start edge = 'RISE'.
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        configured start edge type. If the connection is not open, or the channel 
+        is invalid, the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            string or int: Start edge type. Possible values are:
+            
+            - 'RISE': TDC timing starts on a rising edge of the start pulse.
+            - 'FALL': TDC timing starts on a falling edge of the start pulse.
+            
+            Returns -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         startEdge=-1
         if channelSelected!=-1:
@@ -2162,6 +2394,34 @@ class TempicoDevice():
         return startEdge
     
     def getStopEdge(self,channel):
+        """Returns the edge type used on stop pulses of the specified TempicoChannel.
+
+        By default, stop edge = 'RISE'.
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        configured stop edge type. If the connection is not open, or the channel 
+        is invalid, the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            string or int: Stop edge type. Possible values are:
+            
+            - 'RISE': TDC timing ends on a rising edge of the stop pulse.
+            - 'FALL': TDC timing ends on a falling edge of the stop pulse.
+            
+            Returns -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         stopEdge=-1
         if channelSelected!=-1:
@@ -2169,6 +2429,32 @@ class TempicoDevice():
         return stopEdge
     
     def getStopMask(self,channel):
+        """Returns the stop mask time (in microseconds) of the specified TempicoChannel.
+
+        By default, stop mask = 0 (no masking).
+
+        The stop mask defines the period after receiving a start pulse during which 
+        stop pulses are ignored. This helps eliminate unwanted noise or early pulses.
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        current stop mask time. If the connection is not open, or the channel is 
+        invalid, the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            integer: Stop mask time in microseconds, or -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         stopMask=-1
         if channelSelected!=-1:
@@ -2178,37 +2464,210 @@ class TempicoDevice():
     #Setters
     
     def setAverageCycles(self,channel,averageCycles):
+        """Modifies the average cycles of the specified TempicoChannel.
+
+        By default, average cycles = 1 (no multi-cycle averaging).
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the configuration to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+            averageCycles (int): Desired average cycles for the TDC.
+                Valid values are: 1, 2, 4, 8, 16, 32, 64, 128.
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setAverageCycles(averageCycles)
         
     def setNumberOfStops(self,channel,numberOfStops):
+        """Modifies the expected number of stop pulses of the specified TempicoChannel.
+
+        By default, number of stops = 1 (single start → single stop).
+
+        The TDC must receive all the expected number of stops to register them 
+        as a valid measurement; otherwise, the measurements are discarded. For 
+        extending the valid time range, consider using measurement mode 2.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the configuration to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+            numberOfStops (int): Desired number of stops for the TDC.
+                Valid values are from 1 to 5.
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setNumberOfStops(numberOfStops)
     
     def setMode(self,channel,mode):
+        """Modifies the measurement mode of the specified TempicoChannel.
+
+        By default, mode = 1. Possible values are:
+
+            - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+            - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the configuration to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+            mode (int): Desired measurement mode for the TDC.
+                Valid values are 1 or 2.
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setMode(mode)
     
     def setStartEdge(self,channel,startEdge):
+        """Sets the edge type used on start pulses of the specified TempicoChannel.
+
+        By default, start edge = 'RISE'. Possible values are:
+
+            - 'RISE': TDC timing starts on a rising edge of the start pulse.
+            - 'FALL': TDC timing starts on a falling edge of the start pulse.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the configuration to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+            startEdge (str or int): Desired start edge type for the TDC.
+                Accepted values are 'RISE', 1, 'RIS' or 'FALL', 0, 'FAL'.
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setStartEdge(startEdge)
     
     def setStopEdge(self,channel,stopEdge):
+        """Sets the edge type used on stop pulses of the specified TempicoChannel.
+
+        By default, stop edge = 'RISE'. Possible values are:
+
+            - 'RISE': TDC timing ends on a rising edge of the stop pulse.
+            - 'FALL': TDC timing ends on a falling edge of the stop pulse.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the configuration to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+            stopEdge (str or int): Desired stop edge type for the TDC.
+                Accepted values are 'RISE', 1, 'RIS' or 'FALL', 0, 'FAL'.
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setStopEdge(stopEdge)
     
     def setStopMask(self,channel,stopMask):
+        """Modifies the stop mask time of the specified TempicoChannel.
+
+        By default, stop mask = 0 (no masking).
+
+        The stop mask defines the period (in microseconds) after receiving a start 
+        pulse during which stop pulses are ignored. This can help suppress 
+        unwanted noise or early signals.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the configuration to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+            stopMask (int): Desired stop mask time in microseconds.
+                Valid values are from 0 to 4000.
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.setStopMask(stopMask)
     
     #Other functions
     def isEnabled(self,channel):
+        """Returns whether the specified TempicoChannel is enabled.
+
+        By default, channels are enabled.
+
+        If the connection is established with the TempicoDevice, this function 
+        delegates the query to the selected channel object and retrieves its 
+        current enable status. If the connection is not open, or the channel is 
+        invalid, the function returns -1.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and query the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+
+        Returns:
+            bool or int: True if the channel is enabled, False if disabled, or 
+            -1 if the channel is invalid.
+        """
         channelSelected=self.returnChannelSelected(channel)
         enable=-1
         if channelSelected!=-1:
@@ -2216,17 +2675,78 @@ class TempicoDevice():
         return enable
     
     def enableChannel(self,channel):
+        """Enables the specified TempicoChannel.
+
+        By default, channels are enabled.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the enabling operation to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        To validate the status of the channel, method 
+        :func:`~pyTempico.core.TempicoChannel.isEnabled` may be used.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.enableChannel()
     
     def disableChannel(self,channel):
+        """Disables the specified TempicoChannel.
+
+        By default, channels are enabled.
+
+        This function requires that a connection is established with the 
+        TempicoDevice, and delegates the disabling operation to the selected 
+        TempicoChannel. If the channel is invalid, the function does nothing.
+
+        To validate the status of the channel, method 
+        :func:`~pyTempico.core.TempicoChannel.isEnabled` may be used.
+
+        This version belongs to the TempicoDevice class and requires specifying 
+        the channel number or label ('A'–'D') to access and configure the 
+        corresponding TempicoChannel.
+
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+                - 1 or 'A'
+                - 2 or 'B'
+                - 3 or 'C'
+                - 4 or 'D'
+        """
         channelSelected=self.returnChannelSelected(channel)
         if channelSelected!=-1:
             channelSelected.disableChannel()
     
     
     def getSerial(self):
+        """Returns the serial number of the connected TempicoDevice.
+
+        This function searches for the serial number associated with the current 
+        COM port used by the device. If the connection is established, it queries 
+        the list of available serial ports to match the active one and extract 
+        its serial number.
+
+        If the connection is not open, a message is printed and an empty string 
+        is returned.
+
+        Args:
+            (none)
+
+        Returns:
+            string: Serial number of the device, or empty string if not found 
+            or if the connection is not open.
+        """
         completeSerial=""
         if self.isOpen():
             puerto_actual = self.device.port
