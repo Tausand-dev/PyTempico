@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""modeTwoMultiStopExample
+"""numberOfStopsMeasureExample
 
-    Created on Tue May  7 11:42 2024
+    Created on Tue Jul  14 16:42 2025
 
     Example script for measuring with a Tausand Tempico device using Mode 2 
     (125 ns – 4 ms range) on Channel 1, with multiple stops per measurement.

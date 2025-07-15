@@ -40,9 +40,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="pyTempico.html">pyTempico package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#modetwomeasureexample-py">modeTwoMeasureExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#readsettingsexample-py">readSettingsExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#singlemeasureexample-py">singleMeasureExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.readSettingsExample">readSettingsExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.writeSettings">writeSettings.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.dateTimeExample">dateTimeExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.singleMeasureExample">singleMeasureExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.modeTwoMeasureExample">modeTwoMeasureExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.numberOfRunsMeasureExample">numberOfRunsMeasureExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-examples.numberOfStopsMeasureExample">numberOfStopsMeasureExample.py</a></li>
 </ul>
 </li>
 </ul>
@@ -73,178 +77,162 @@
              
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h1>
-<section id="modetwomeasureexample-py">
-<h2>modeTwoMeasureExample.py<a class="headerlink" href="#modetwomeasureexample-py" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;modeTwoMeasureExample</span>
-
-<span class="sd">    Created on Tue May  7 11:42 2024</span>
-<span class="sd">    </span>
-<span class="sd">    Connects to a Tausand Tempico device, changes settings to measure only in</span>
-<span class="sd">    channel 1 in mode 2 (125ns-4ms mode). Then, starts a measurement and reads </span>
-<span class="sd">    the results.</span>
-<span class="sd">    </span>
-<span class="sd">    Instructions: </span>
-<span class="sd">        * before running this example, pyTempico package must be installed.</span>
-<span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
-<span class="sd">        * connect signals to your Tempico Device. If no signals are measured, </span>
-<span class="sd">        this example will return an empty data array.</span>
-<span class="sd">        * run.</span>
-<span class="sd">    </span>
-<span class="sd">    | @author: David Guzman at Tausand Electronics </span>
-<span class="sd">    | dguzman@tausand.com </span>
-<span class="sd">    | https://www.tausand.com</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">pyTempico</span>
-
-<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM16&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
-
-<span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;opening connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>             <span class="c1">#open connection with device</span>
-<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">reseting device. This clears previous measurements, and changes settings to default values.&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-<span class="c1">#Enable channel 1, disable channels 2-4</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">disabling channels 2-4.&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">enableChannel</span><span class="p">()</span>   <span class="c1">#optional, since enabled by default</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">()</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">()</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">changing measurement mode in channel 1 to mode 2&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setMode</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    <span class="c1">#default mode is 1, changing to mode 2</span>
-<span class="c1">#verify</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my_device.ch1.getMode():&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getMode</span><span class="p">())</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sending a measure request to device&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;measured data, in ps:&#39;</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fetch:&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">fetch</span><span class="p">())</span> <span class="c1">#fetch most recent data</span>
-
-<span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>            <span class="c1">#close connection with device</span>
-<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
-</pre></div>
+<section id="module-examples.readSettingsExample">
+<span id="readsettingsexample-py"></span><h2>readSettingsExample.py<a class="headerlink" href="#module-examples.readSettingsExample" title="Permalink to this headline"></a></h2>
+<p>readSettingsExample</p>
+<p>Created on Tue May  7 09:49 2024</p>
+<p>Connects to a Tausand Tempico device and reads its settings.</p>
+<dl class="simple">
+<dt>Instructions:</dt><dd><ul class="simple">
+<li><p>before running this example, pyTempico package must be installed.</p></li>
+<li><p>change ‘my_port’ to your corresponding port.</p></li>
+<li><p>run.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line">&#64;author: David Guzman at Tausand Electronics</div>
+<div class="line"><a class="reference external" href="mailto:dguzman&#37;&#52;&#48;tausand&#46;com">dguzman<span>&#64;</span>tausand<span>&#46;</span>com</a></div>
+<div class="line"><a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></div>
 </div>
 </section>
-<section id="readsettingsexample-py">
-<h2>readSettingsExample.py<a class="headerlink" href="#readsettingsexample-py" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;readSettingsExample</span>
-
-<span class="sd">    Created on Tue May  7 09:49 2024</span>
-<span class="sd">    </span>
-<span class="sd">    Connects to a Tausand Tempico device and reads its settings.</span>
-<span class="sd">    </span>
-<span class="sd">    Instructions: </span>
-<span class="sd">        * before running this example, pyTempico package must be installed.</span>
-<span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
-<span class="sd">        * run.</span>
-<span class="sd">    </span>
-<span class="sd">    | @author: David Guzman at Tausand Electronics </span>
-<span class="sd">    | dguzman@tausand.com </span>
-<span class="sd">    | https://www.tausand.com</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">pyTempico</span>
-
-<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM17&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
-
-<span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;opening connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>             <span class="c1">#open connection with device</span>
-<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">1) reading general getSettings&#39;</span><span class="p">)</span>
-<span class="n">my_settings</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getSettings</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;settings:&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">my_settings</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">2) reading specific settings&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NumberOfRuns:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getNumberOfRuns</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ThresholdVoltage:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getThresholdVoltage</span><span class="p">())</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">reading channel specific settings&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch2 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch3 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch4 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 Mode:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getMode</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 NumberOfStops:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getNumberOfStops</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 isEnabled:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">())</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">closing connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>            <span class="c1">#close connection with device</span>
-<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
-</pre></div>
+<section id="module-examples.writeSettings">
+<span id="writesettings-py"></span><h2>writeSettings.py<a class="headerlink" href="#module-examples.writeSettings" title="Permalink to this headline"></a></h2>
+<p>writeSettings</p>
+<p>Created on Tue Jul  14 16:42 2025</p>
+<p>This example connects to a Tausand Tempico device and demonstrates how to
+read and modify its basic settings, including average cycles, number of stops,
+and stop mask — both using direct channel access and the main device interface.</p>
+<dl class="simple">
+<dt>Instructions:</dt><dd><ul class="simple">
+<li><p>Make sure the pyTempico package is installed.</p></li>
+<li><p>Replace ‘COM5’ with the appropriate serial port for your Tempico device.</p></li>
+<li><p>Run the script.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author: Joan Amaya, Tausand Electronics
+Email: <a class="reference external" href="mailto:jamaya&#37;&#52;&#48;tausand&#46;com">jamaya<span>&#64;</span>tausand<span>&#46;</span>com</a>
+Website: <a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></p>
+</section>
+<section id="module-examples.dateTimeExample">
+<span id="datetimeexample-py"></span><h2>dateTimeExample.py<a class="headerlink" href="#module-examples.dateTimeExample" title="Permalink to this headline"></a></h2>
+<p>dateTimeExample</p>
+<p>This script demonstrates how to connect to a Tausand Tempico device and
+perform several operations related to time management and measurement flow.</p>
+<p>Steps:
+- Open connection to the device.
+- Reset and configure channels.
+- Read and synchronize time.
+- Modify allowed datetime range.
+- Perform a measurement.</p>
+<p>You do <strong>not</strong> need a connected signal to run this example.</p>
+<p>Instructions:
+1. Ensure <cite>pyTempico</cite> is installed.
+2. Replace <cite>‘COM5’</cite> with your Tempico port.
+3. Run the script.</p>
+<p>Author: Joan Amaya, Tausand Electronics</p>
+</section>
+<section id="module-examples.singleMeasureExample">
+<span id="singlemeasureexample-py"></span><h2>singleMeasureExample.py<a class="headerlink" href="#module-examples.singleMeasureExample" title="Permalink to this headline"></a></h2>
+<p>singleMeasureExample</p>
+<p>Created on Tue May  7 09:23 2024</p>
+<p>Connects to a Tausand Tempico device, starts a measurement and reads the
+results.</p>
+<dl>
+<dt>Instructions:</dt><dd><ul class="simple">
+<li><p>before running this example, pyTempico package must be installed.</p></li>
+<li><p>change ‘my_port’ to your corresponding port.</p></li>
+<li><p>connect signals to your Tempico Device. If no signals are measured,</p></li>
+</ul>
+<p>this example will return an empty data array.
+* run.</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line">&#64;author: David Guzman at Tausand Electronics</div>
+<div class="line"><a class="reference external" href="mailto:dguzman&#37;&#52;&#48;tausand&#46;com">dguzman<span>&#64;</span>tausand<span>&#46;</span>com</a></div>
+<div class="line"><a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></div>
 </div>
 </section>
-<section id="singlemeasureexample-py">
-<h2>singleMeasureExample.py<a class="headerlink" href="#singlemeasureexample-py" title="Permalink to this headline"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;singleMeasureExample</span>
-
-<span class="sd">    Created on Tue May  7 09:23 2024</span>
-<span class="sd">    </span>
-<span class="sd">    Connects to a Tausand Tempico device, starts a measurement and reads the </span>
-<span class="sd">    results.</span>
-<span class="sd">    </span>
-<span class="sd">    Instructions: </span>
-<span class="sd">        * before running this example, pyTempico package must be installed.</span>
-<span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
-<span class="sd">        * connect signals to your Tempico Device. If no signals are measured, </span>
-<span class="sd">        this example will return an empty data array.</span>
-<span class="sd">        * run.</span>
-<span class="sd">    </span>
-<span class="sd">    | @author: David Guzman at Tausand Electronics </span>
-<span class="sd">    | dguzman@tausand.com </span>
-<span class="sd">    | https://www.tausand.com</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">pyTempico</span>
-
-<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM16&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
-
-<span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;opening connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>             <span class="c1">#open connection with device</span>
-<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sending a measure request to device&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;measured data, in ps:&#39;</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-
-<span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>            <span class="c1">#close connection with device</span>
-<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
-</pre></div>
+<section id="module-examples.modeTwoMeasureExample">
+<span id="modetwomeasureexample-py"></span><h2>modeTwoMeasureExample.py<a class="headerlink" href="#module-examples.modeTwoMeasureExample" title="Permalink to this headline"></a></h2>
+<p>modeTwoMeasureExample</p>
+<p>Created on Tue May  7 11:42 2024</p>
+<p>Connects to a Tausand Tempico device, changes settings to measure only in
+channel 1 in mode 2 (125ns-4ms mode). Then, starts a measurement and reads
+the results.</p>
+<dl>
+<dt>Instructions:</dt><dd><ul class="simple">
+<li><p>before running this example, pyTempico package must be installed.</p></li>
+<li><p>change ‘my_port’ to your corresponding port.</p></li>
+<li><p>connect signals to your Tempico Device. If no signals are measured,</p></li>
+</ul>
+<p>this example will return an empty data array.
+* run.</p>
+</dd>
+</dl>
+<div class="line-block">
+<div class="line">&#64;author: David Guzman at Tausand Electronics</div>
+<div class="line"><a class="reference external" href="mailto:dguzman&#37;&#52;&#48;tausand&#46;com">dguzman<span>&#64;</span>tausand<span>&#46;</span>com</a></div>
+<div class="line"><a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></div>
 </div>
+</section>
+<section id="module-examples.numberOfRunsMeasureExample">
+<span id="numberofrunsmeasureexample-py"></span><h2>numberOfRunsMeasureExample.py<a class="headerlink" href="#module-examples.numberOfRunsMeasureExample" title="Permalink to this headline"></a></h2>
+<p>numberOfRunsMeasureExample</p>
+<p>Created on Tue Jul  14 16:42 2025</p>
+<p>Example script for measuring with a Tausand Tempico device using Mode 2
+(125 ns – 4 ms range) on Channel 1.</p>
+<p>This example connects to the Tempico device, configures it to only enable
+Channel 1, sets the measurement mode to Mode 2, and adjusts the number of
+runs (measurements) to 1000. It then starts a single measurement operation
+and reads the resulting data.</p>
+<p>The key feature demonstrated here is the use of <cite>setNumberOfRuns(1000)</cite>,
+which tells the device to internally perform 1000 measurements in response
+to a single call to <cite>measure()</cite>. This is ideal for bulk acquisition workflows
+where multiple time intervals are collected automatically.</p>
+<dl class="simple">
+<dt>Instructions:</dt><dd><ul class="simple">
+<li><p>Make sure the <cite>pyTempico</cite> package is installed.</p></li>
+<li><p>Replace <cite>‘COM5’</cite> with the serial port corresponding to your device.</p></li>
+<li><p>Connect appropriate start/stop signals to the Tempico device.</p></li>
+<li><p>Run the script. If no signals are present, the measurement will return
+an empty array.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author: Joan Amaya, Tausand Electronics
+Email: <a class="reference external" href="mailto:jamaya&#37;&#52;&#48;tausand&#46;com">jamaya<span>&#64;</span>tausand<span>&#46;</span>com</a>
+Website: <a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></p>
+</section>
+<section id="module-examples.numberOfStopsMeasureExample">
+<span id="numberofstopsmeasureexample-py"></span><h2>numberOfStopsMeasureExample.py<a class="headerlink" href="#module-examples.numberOfStopsMeasureExample" title="Permalink to this headline"></a></h2>
+<p>numberOfStopsMeasureExample</p>
+<p>Created on Tue Jul  14 16:42 2025</p>
+<p>Example script for measuring with a Tausand Tempico device using Mode 2
+(125 ns – 4 ms range) on Channel 1, with multiple stops per measurement.</p>
+<p>This example connects to the Tempico device, enables only Channel 1, sets
+the measurement mode to Mode 2, and changes the number of stops to 5. It
+then starts a measurement and prints the result.</p>
+<p>The key feature demonstrated here is the use of <cite>setNumberOfStops(5)</cite>,
+which configures the device to collect <strong>5 stop events</strong> after a single
+start signal during each measurement cycle. This is useful for analyzing
+multiple photon arrivals or signal repetitions after a common trigger.</p>
+<dl class="simple">
+<dt>Instructions:</dt><dd><ul class="simple">
+<li><p>Make sure the <cite>pyTempico</cite> package is installed.</p></li>
+<li><p>Replace <cite>‘COM5’</cite> with the serial port corresponding to your device.</p></li>
+<li><p>Connect a periodic signal to the <strong>start input</strong>, and the signal to
+be measured to the stop input of Channel 1.</p></li>
+<li><p>Run the script. If no signals are received, the measurement will
+return an empty array.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Author: Joan Amaya, Tausand Electronics
+Email: <a class="reference external" href="mailto:jamaya&#37;&#52;&#48;tausand&#46;com">jamaya<span>&#64;</span>tausand<span>&#46;</span>com</a>
+Website: <a class="reference external" href="https://www.tausand.com">https://www.tausand.com</a></p>
 </section>
 </section>
 

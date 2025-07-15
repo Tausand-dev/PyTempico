@@ -1,31 +1,25 @@
 # -*- coding: utf-8 -*-
-"""modeTwoMultiStopExample
+"""
+dateTimeExample
 
-    Created on Tue May  7 11:42 2024
+This script demonstrates how to connect to a Tausand Tempico device and
+perform several operations related to time management and measurement flow.
 
-    Example script for measuring with a Tausand Tempico device using Mode 2 
-    (125 ns – 4 ms range) on Channel 1, with multiple stops per measurement.
+Steps:
+- Open connection to the device.
+- Reset and configure channels.
+- Read and synchronize time.
+- Modify allowed datetime range.
+- Perform a measurement.
 
-    This example connects to the Tempico device, enables only Channel 1, sets 
-    the measurement mode to Mode 2, and changes the number of stops to 5. It 
-    then starts a measurement and prints the result.
+You do **not** need a connected signal to run this example.
 
-    The key feature demonstrated here is the use of `setNumberOfStops(5)`, 
-    which configures the device to collect **5 stop events** after a single 
-    start signal during each measurement cycle. This is useful for analyzing 
-    multiple photon arrivals or signal repetitions after a common trigger.
+Instructions:
+1. Ensure `pyTempico` is installed.
+2. Replace `'COM5'` with your Tempico port.
+3. Run the script.
 
-    Instructions:
-        - Make sure the `pyTempico` package is installed.
-        - Replace `'COM5'` with the serial port corresponding to your device.
-        - Connect a periodic signal to the **start input**, and the signal to 
-          be measured to the stop input of Channel 1.
-        - Run the script. If no signals are received, the measurement will 
-          return an empty array.
-
-    Author: Joan Amaya, Tausand Electronics
-    Email: jamaya@tausand.com
-    Website: https://www.tausand.com
+Author: Joan Amaya, Tausand Electronics
 """
 import pyTempico
 
