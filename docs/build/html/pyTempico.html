@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyTempico package &mdash; pyTempico 1.1.1 documentation</title>
+  <title>pyTempico package &mdash; pyTempico 1.2.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -455,6 +455,54 @@ TempicoDevice.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.disableChannel">
+<span class="sig-name descname"><span class="pre">disableChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.disableChannel" title="Permalink to this definition"></a></dt>
+<dd><p>Disables the specified TempicoChannel.</p>
+<p>By default, channels are enabled.</p>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the disabling operation to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>To validate the status of the channel, method
+<a class="reference internal" href="#pyTempico.core.TempicoChannel.isEnabled" title="pyTempico.core.TempicoChannel.isEnabled"><code class="xref py py-func docutils literal notranslate"><span class="pre">isEnabled()</span></code></a> may be used.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.enableChannel">
+<span class="sig-name descname"><span class="pre">enableChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.enableChannel" title="Permalink to this definition"></a></dt>
+<dd><p>Enables the specified TempicoChannel.</p>
+<p>By default, channels are enabled.</p>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the enabling operation to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>To validate the status of the channel, method
+<a class="reference internal" href="#pyTempico.core.TempicoChannel.isEnabled" title="pyTempico.core.TempicoChannel.isEnabled"><code class="xref py py-func docutils literal notranslate"><span class="pre">isEnabled()</span></code></a> may be used.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.fetch">
 <span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.fetch" title="Permalink to this definition"></a></dt>
 <dd><p>Reads the most recent measurement data set form a TempicoDevice.</p>
@@ -490,6 +538,35 @@ TempicoDevice.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getAverageCycles">
+<span class="sig-name descname"><span class="pre">getAverageCycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getAverageCycles" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the average cycles of the specified TempicoChannel.</p>
+<p>By default, average cycles = 1 (no multi-cycle averaging).</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+average cycles value. If the connection is not open, or the channel is
+invalid, the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of average cycles, or -1 if the channel is invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getBaudRate">
 <span class="sig-name descname"><span class="pre">getBaudRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getBaudRate" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the TempicoDevice baud rate.</p>
@@ -502,6 +579,39 @@ TempicoDevice.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getDateTime">
+<span class="sig-name descname"><span class="pre">getDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the number of seconds since the Tempico device was powered on,
+based on its internal clock. If the device has been synchronized, the
+seconds count corresponds to the system time of the host PC.</p>
+<p>This function sends the <cite>DTIMe?</cite> command to the device, reads the response,
+and parses it into a float representing the elapsed time in seconds.
+If the device does not respond correctly, the function returns -1.</p>
+<p>The timestamp resolution is in microseconds (µs), and the count starts from
+power-up by default. Synchronization with the PC time must be previously configured
+on the device, otherwise the value is relative to the device’s uptime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>convertToDatetime</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the value is returned as a</p></li>
+<li><p><strong>False.</strong> (<em>datetime object. Default is</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Elapsed time in seconds since the device was powered on</dt><dd><p>or synchronized with the PC clock. Returns -1 if no valid
+response is received.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -544,6 +654,154 @@ is returned.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getLastStart">
+<span class="sig-name descname"><span class="pre">getLastStart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getLastStart" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the datetime of the last start event registered by the TempicoDevice.</p>
+<p>If the connection is established with the TempicoDevice, this function
+requests the device for the last start timestamp using the
+‘DTIMe:LSTart?’ command. If not, the value -1 is returned.</p>
+<p>The returned value corresponds to the timestamp of the most recent start
+event. If no start has occurred yet, the device returns 0.
+If <cite>convertToDatetime</cite> is set to True, the value is
+returned as a datetime object instead of a float.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>convertToDatetime</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the value is returned as a</p></li>
+<li><p><strong>False.</strong> (<em>datetime object. Default is</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timestamp of the last start event, either as a float
+(Unix timestamp) or as a datetime object if convertToDatetime is True.
+Returns -1 if the value could not be retrieved.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getLastSync">
+<span class="sig-name descname"><span class="pre">getLastSync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getLastSync" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the datetime of the last synchronization performed on the TempicoDevice.</p>
+<p>If the connection is established with the TempicoDevice, this function
+requests the device for the last synchronization timestamp using the
+‘DTIMe:LSYNc?’ command. If not, the value -1 is returned.</p>
+<p>The returned value corresponds to the timestamp of the most recent
+synchronization with the host system. If no synchronization has occurred yet,
+the device returns 0. If <cite>convertToDatetime</cite> is
+set to True, the value is returned as a datetime object instead of a float.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>convertToDatetime</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the value is returned as a</p></li>
+<li><p><strong>False.</strong> (<em>datetime object. Default is</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timestamp of the last synchronization event, either
+as a float (Unix timestamp) or as a datetime object if convertToDatetime is True.
+Returns -1 if the value could not
+be retrieved.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getMaximumDatetime">
+<span class="sig-name descname"><span class="pre">getMaximumDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getMaximumDatetime" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the maximum datetime value allowed by the TempicoDevice.</p>
+<p>If the connection is established with the TempicoDevice, this function
+requests the device for the maximum allowed date using the
+‘DTIMe:MAXimum?’ command. If not, the value -1 is returned.</p>
+<p>The returned value corresponds to the latest timestamp that can be set
+on the device without causing an error. If <cite>convertToDatetime</cite> is set to True,
+the value is returned as a datetime object instead of a float.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>convertToDatetime</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the value is returned as a</p></li>
+<li><p><strong>False.</strong> (<em>datetime object. Default is</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Maximum allowed datetime, either as a float (Unix
+timestamp) or as a datetime object if convertToDatetime is True.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getMinimumDatetime">
+<span class="sig-name descname"><span class="pre">getMinimumDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getMinimumDatetime" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the minimum datetime value allowed by the TempicoDevice.</p>
+<p>If the connection is established with the TempicoDevice, this function
+requests the device for the minimum allowed date using the
+‘DTIMe:MINimum?’ command. If not, the value -1 is returned.</p>
+<p>The returned value corresponds to the earliest timestamp that can be set
+on the device without causing an error. If <cite>convertToDatetime</cite> is set to True,
+the value is returned as a datetime object instead of a float.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>convertToDatetime</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the value is returned as a</p></li>
+<li><p><strong>False.</strong> (<em>datetime object. Default is</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Minimum allowed datetime, either as a float (Unix
+timestamp) or as a datetime object if convertToDatetime is True.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float or datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getMode">
+<span class="sig-name descname"><span class="pre">getMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getMode" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the measurement mode of the specified TempicoChannel.</p>
+<p>By default, mode = 1.</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+current measurement mode. If the connection is not open, or the channel
+is invalid, the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Mode. Possible values are:</p>
+<ul class="simple">
+<li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
+<li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
+</ul>
+<p>Returns -1 if the channel is invalid.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getNumberOfRuns">
 <span class="sig-name descname"><span class="pre">getNumberOfRuns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getNumberOfRuns" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the number of measurement runs of the TDCs in TempicoDevice.</p>
@@ -560,6 +818,62 @@ returned.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getNumberOfStops">
+<span class="sig-name descname"><span class="pre">getNumberOfStops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getNumberOfStops" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the expected number of stop pulses for the specified TempicoChannel.</p>
+<p>By default, number of stops = 1 (single start → single stop).</p>
+<p>The TDC must receive all the expected number of stops to register them
+as a valid measurement; otherwise, the measurements are discarded.</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+number of stops. If the connection is not open, or the channel is invalid,
+the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of stops, or -1 if the channel is invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getSerialNumber">
+<span class="sig-name descname"><span class="pre">getSerialNumber</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getSerialNumber" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the serial number of the connected TempicoDevice.</p>
+<p>This function searches for the serial number associated with the current
+COM port used by the device. If the connection is established, it queries
+the list of available serial ports to match the active one and extract
+its serial number.</p>
+<p>If the connection is not open, a message is printed and an empty string
+is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Serial number of the device, or empty string if not found
+or if the connection is not open.
+e.g: “TP1004-220500”</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
 </dd>
 </dl>
 </dd></dl>
@@ -584,6 +898,135 @@ TempicoDevice.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStartEdge">
+<span class="sig-name descname"><span class="pre">getStartEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStartEdge" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the edge type used on start pulses of the specified TempicoChannel.</p>
+<p>By default, start edge = ‘RISE’.</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+configured start edge type. If the connection is not open, or the channel
+is invalid, the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Start edge type. Possible values are:</p>
+<ul class="simple">
+<li><p>’RISE’: TDC timing starts on a rising edge of the start pulse.</p></li>
+<li><p>’FALL’: TDC timing starts on a falling edge of the start pulse.</p></li>
+</ul>
+<p>Returns -1 if the channel is invalid.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string or int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStopEdge">
+<span class="sig-name descname"><span class="pre">getStopEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStopEdge" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the edge type used on stop pulses of the specified TempicoChannel.</p>
+<p>By default, stop edge = ‘RISE’.</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+configured stop edge type. If the connection is not open, or the channel
+is invalid, the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>Stop edge type. Possible values are:</p>
+<ul class="simple">
+<li><p>’RISE’: TDC timing ends on a rising edge of the stop pulse.</p></li>
+<li><p>’FALL’: TDC timing ends on a falling edge of the stop pulse.</p></li>
+</ul>
+<p>Returns -1 if the channel is invalid.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string or int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStopMask">
+<span class="sig-name descname"><span class="pre">getStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStopMask" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the stop mask time (in microseconds) of the specified TempicoChannel.</p>
+<p>By default, stop mask = 0 (no masking).</p>
+<p>The stop mask defines the period after receiving a start pulse during which
+stop pulses are ignored. This helps eliminate unwanted noise or early pulses.</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+current stop mask time. If the connection is not open, or the channel is
+invalid, the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Stop mask time in microseconds, or -1 if the channel is invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getTempicoChannel">
+<span class="sig-name descname"><span class="pre">getTempicoChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getTempicoChannel" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the TempicoChannel object corresponding to the specified channel.</p>
+<p>This function allows selecting a channel by its number (1–4) or label
+(‘A’–‘D’). If the input is valid, it returns the corresponding
+TempicoChannel instance. If the input is invalid, an error message
+is printed and -1 is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:</p></li>
+<li><p><strong>'a'</strong> (<em>- 1</em><em> or </em><em>'A' or</em>) – </p></li>
+<li><p><strong>'b'</strong> (<em>- 2</em><em> or </em><em>'B' or</em>) – </p></li>
+<li><p><strong>'c'</strong> (<em>- 3</em><em> or </em><em>'C' or</em>) – </p></li>
+<li><p><strong>'d'</strong> (<em>- 4</em><em> or </em><em>'D' or</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The corresponding TempicoChannel object if the
+input is valid, or -1 if the channel is invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel">TempicoChannel</a> or int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -632,6 +1075,36 @@ TempicoDevice.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.isEnabled">
+<span class="sig-name descname"><span class="pre">isEnabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.isEnabled" title="Permalink to this definition"></a></dt>
+<dd><p>Returns whether the specified TempicoChannel is enabled.</p>
+<p>By default, channels are enabled.</p>
+<p>If the connection is established with the TempicoDevice, this function
+delegates the query to the selected channel object and retrieves its
+current enable status. If the connection is not open, or the channel is
+invalid, the function returns -1.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and query the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the channel is enabled, False if disabled, or
+-1 if the channel is invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool or int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -812,6 +1285,129 @@ TempicoDevice.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setAverageCycles">
+<span class="sig-name descname"><span class="pre">setAverageCycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">averageCycles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setAverageCycles" title="Permalink to this definition"></a></dt>
+<dd><p>Modifies the average cycles of the specified TempicoChannel.</p>
+<p>By default, average cycles = 1 (no multi-cycle averaging).</p>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the configuration to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p></li>
+<li><p><strong>averageCycles</strong> (<em>int</em>) – Desired average cycles for the TDC.
+Valid values are: 1, 2, 4, 8, 16, 32, 64, 128.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setDateTime">
+<span class="sig-name descname"><span class="pre">setDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeStampDateTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the internal clock of the Tempico device to a specified timestamp
+or to the current system time.</p>
+<p>Sends a <cite>DTIMe &lt;timestamp&gt;</cite> command using either the provided
+<cite>timeStampDateTime</cite> or the current time in Unix format with microsecond
+precision. If no response is received from the device, the function
+verifies the update by comparing timestamps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeStampDateTime</strong> (<em>float</em><em>, </em><em>optional</em>) – Unix timestamp (in seconds) to set</p></li>
+<li><p><strong>provided</strong> (<em>on the device. If not</em>) – </p></li>
+<li><p><strong>used.</strong> (<em>the current system time is</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setMaximumDatetime">
+<span class="sig-name descname"><span class="pre">setMaximumDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximumDateTime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setMaximumDatetime" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the maximum datetime value allowed by the TempicoDevice.</p>
+<p>If the connection is established with the TempicoDevice, this function
+sends the ‘DTIMe:MAXimum &lt;timestamp&gt;’ command to update the maximum
+allowed timestamp. If the device accepts the value, it should return
+a confirmation response. If no response is received, the value is
+validated by re-reading it from the device.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This feature may not yet be implemented in the Tempico firmware.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maximumDateTime</strong> (<em>float</em>) – New maximum timestamp to configure on the device.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setMinimumDatetime">
+<span class="sig-name descname"><span class="pre">setMinimumDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimumDateTime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setMinimumDatetime" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the minimum datetime value allowed by the TempicoDevice.</p>
+<p>If the connection is established with the TempicoDevice, this function
+sends the ‘DTIMe:MINimum &lt;timestamp&gt;’ command to update the minimum
+allowed timestamp. If the device accepts the value, it should return
+a confirmation response. If no response is received, the value is
+validated by re-reading it from the device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>minimumDateTime</strong> (<em>float</em>) – New minimum timestamp to configure on the device.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setMode">
+<span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setMode" title="Permalink to this definition"></a></dt>
+<dd><p>Modifies the measurement mode of the specified TempicoChannel.</p>
+<p>By default, mode = 1. Possible values are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
+<li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
+</ul>
+</div></blockquote>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the configuration to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p></li>
+<li><p><strong>mode</strong> (<em>int</em>) – Desired measurement mode for the TDC.
+Valid values are 1 or 2.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setNumberOfRuns">
 <span class="sig-name descname"><span class="pre">setNumberOfRuns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setNumberOfRuns" title="Permalink to this definition"></a></dt>
 <dd><p>Modifies the number of measurement runs of the TDCs in TempicoDevice.</p>
@@ -822,6 +1418,128 @@ TempicoDevice.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>number</strong> (<em>int</em>) – desired number of runs for every TDC.
 Valid values are from 1 to 1000.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setNumberOfStops">
+<span class="sig-name descname"><span class="pre">setNumberOfStops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfStops</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setNumberOfStops" title="Permalink to this definition"></a></dt>
+<dd><p>Modifies the expected number of stop pulses of the specified TempicoChannel.</p>
+<p>By default, number of stops = 1 (single start → single stop).</p>
+<p>The TDC must receive all the expected number of stops to register them
+as a valid measurement; otherwise, the measurements are discarded. For
+extending the valid time range, consider using measurement mode 2.</p>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the configuration to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p></li>
+<li><p><strong>numberOfStops</strong> (<em>int</em>) – Desired number of stops for the TDC.
+Valid values are from 1 to 5.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setStartEdge">
+<span class="sig-name descname"><span class="pre">setStartEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startEdge</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setStartEdge" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the edge type used on start pulses of the specified TempicoChannel.</p>
+<p>By default, start edge = ‘RISE’. Possible values are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘RISE’: TDC timing starts on a rising edge of the start pulse.</p></li>
+<li><p>‘FALL’: TDC timing starts on a falling edge of the start pulse.</p></li>
+</ul>
+</div></blockquote>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the configuration to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p></li>
+<li><p><strong>startEdge</strong> (<em>str</em><em> or </em><em>int</em>) – Desired start edge type for the TDC.
+Accepted values are ‘RISE’, 1, ‘RIS’ or ‘FALL’, 0, ‘FAL’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setStopEdge">
+<span class="sig-name descname"><span class="pre">setStopEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopEdge</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setStopEdge" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the edge type used on stop pulses of the specified TempicoChannel.</p>
+<p>By default, stop edge = ‘RISE’. Possible values are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘RISE’: TDC timing ends on a rising edge of the stop pulse.</p></li>
+<li><p>‘FALL’: TDC timing ends on a falling edge of the stop pulse.</p></li>
+</ul>
+</div></blockquote>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the configuration to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p></li>
+<li><p><strong>stopEdge</strong> (<em>str</em><em> or </em><em>int</em>) – Desired stop edge type for the TDC.
+Accepted values are ‘RISE’, 1, ‘RIS’ or ‘FALL’, 0, ‘FAL’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setStopMask">
+<span class="sig-name descname"><span class="pre">setStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopMask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setStopMask" title="Permalink to this definition"></a></dt>
+<dd><p>Modifies the stop mask time of the specified TempicoChannel.</p>
+<p>By default, stop mask = 0 (no masking).</p>
+<p>The stop mask defines the period (in microseconds) after receiving a start
+pulse during which stop pulses are ignored. This can help suppress
+unwanted noise or early signals.</p>
+<p>This function requires that a connection is established with the
+TempicoDevice, and delegates the configuration to the selected
+TempicoChannel. If the channel is invalid, the function does nothing.</p>
+<p>This version belongs to the TempicoDevice class and requires specifying
+the channel number or label (‘A’–‘D’) to access and configure the
+corresponding TempicoChannel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – Channel identifier. Accepted values are:
+- 1 or ‘A’ or ‘a’
+- 2 or ‘B’ or ‘b’
+- 3 or ‘C’ or ‘c’
+- 4 or ‘D’ or ‘d’</p></li>
+<li><p><strong>stopMask</strong> (<em>int</em>) – Desired stop mask time in microseconds.
+Valid values are from 0 to 4000.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
