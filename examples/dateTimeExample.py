@@ -20,6 +20,8 @@ Instructions:
 3. Run the script.
 
 Author: Joan Amaya, Tausand Electronics
+    Email: jamaya@tausand.com
+    Website: https://www.tausand.com
 """
 import pyTempico
 
@@ -64,6 +66,15 @@ my_device.setDateTime(3102462800.0)
 
 print("\nWe can now verify that the time was correctly synchronized.\n")
 print(f"Device time via my_device.getDateTime(): {my_device.getDateTime()}")
+
+print("\nAlso we can synchronize the time with our pc, using the same function without parameter.\n")
+print("Setting the time using: my_device.setDateTime()")
+my_device.setDateTime()
+
+print("\nWe can now verify that the time was correctly synchronized.\n")
+print(f"Device time via my_device.getDateTime(): {my_device.getDateTime()}")
+print(f"With a date format now my_device.getDateTime(True): {my_device.getDateTime(True)}")
+
 
 print("\nIf we want to use a timestamp outside the current limits, we can update the allowed range.\n")
 print(f"Setting new maximum with my_device.setMaximumDatetime(4103462800.0): {my_device.setMaximumDatetime(4103462800.0)}")

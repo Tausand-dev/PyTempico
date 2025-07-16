@@ -48,8 +48,8 @@ print(f"New value: {my_device.ch1.getAverageCycles()}")
 # Reset and apply the same setting using device-level method
 print("\nResetting...")
 my_device.reset()
-print("\n[3] Setting average cycles via device method (Channel 1 → 4 cycles):")
-my_device.setAverageCycles(1, 4)
+print("\n[3] Setting average cycles via device method (Channel 1 → 8 cycles):")
+my_device.setAverageCycles(1, 8)
 print(f"Verified: {my_device.getAverageCycles(1)}")
 
 # Modify number of stops
@@ -62,22 +62,22 @@ print(f"New value: {my_device.ch1.getNumberOfStops()}")
 # Reset and set using device method
 print("\nResetting...")
 my_device.reset()
-print("\n[5] Setting number of stops via device method (Channel 1 → 5 stops):")
-my_device.setNumberOfStops(1, 5)
+print("\n[5] Setting number of stops via device method (Channel 1 → 4 stops):")
+my_device.setNumberOfStops(1, 4)
 print(f"Verified: {my_device.getNumberOfStops(1)}")
 
 # Modify stop mask
 print("\nResetting...")
 my_device.reset()
-print("\n[6] Setting stop mask on Channel 1 using direct method:")
+print("\n[6] Setting stop mask on 1000 us in Channel 1 using direct method:")
 my_device.ch1.setStopMask(1000)
 print(f"New value: {my_device.ch1.getStopMask()}")
 
 # Reset and set using device method
 print("\nResetting...")
 my_device.reset()
-print("\n[7] Setting stop mask via device method (Channel 1 → 1000):")
-my_device.setStopMask(1, 1000)
+print("\n[7] Setting stop mask on 2000 us via device method (Channel 1 → 2000):")
+my_device.setStopMask(1, 2000)
 print(f"Verified: {my_device.getStopMask(1)}")
 
 # Close connection
