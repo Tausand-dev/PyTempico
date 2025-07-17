@@ -4,10 +4,11 @@ library and examples to use Tausand Tempico TP1000 devices with Python
 
 Written in Python3, pyTempico relies on the following modules:
 
+- hidapi
 - pyserial
 
 Library version:       1.2.0<br/>
-Current release date:  07/16/2025 (mm/dd/yyyy)<br/>
+Current release date:  07/17/2025 (mm/dd/yyyy)<br/>
 Original release date: 02/12/2024<br/>
 Supported models:      TP1004.
 
