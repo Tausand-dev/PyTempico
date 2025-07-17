@@ -1856,7 +1856,7 @@ class TempicoDevice():
         """
         self.setThresholdVoltage("MIN")
     
-    def getDateTime(self,convertToDatetime=False):
+    def getDatetime(self,convertToDatetime=False):
         """
         Returns the number of seconds since the Tempico device was powered on, 
         based on its internal clock. If the device has been synchronized, the 
@@ -1900,12 +1900,10 @@ class TempicoDevice():
             print("Unable to get.")
             
             
-        return time_response
-                
-                    
+        return time_response            
                 
     #TO DO: Optional parameter for the user timestamp      
-    def setDateTime(self, timeStampDateTime=None):
+    def setDatetime(self, timeStampDateTime=None):
         """
         Sets the internal clock of the Tempico device to a specified timestamp 
         or to the current system time.
@@ -2112,7 +2110,37 @@ class TempicoDevice():
         else:
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
+            
+    #alternative naming for "Datetime" methods, as "DateTime" with capital 'T'
+    def getDateTime(self,convertToDatetime=False):
+        """Same as getDatetime
+        """
+        return self.getDatetime(convertToDatetime)
+        
+    def setDateTime(self, timeStampDateTime=None):
+        """Same as setDatetime
+        """
+        self.setDatetime(timeStampDateTime)
+        
+    def getMaximumDateTime(self,convertToDatetime=False):
+        """Same as getMaximumDatetime
+        """
+        return self.getMaximumDatetime(convertToDatetime)
+        
+    def setMaximumDateTime(self, maximumDateTime):
+        """Same as setMaximumDatetime
+        """
+        self.setMaximumDatetime(maximumDateTime)
+        
+    def getMinimumDateTime(self, convertToDatetime=False):
+        """Same as getMinimumDatetime
+        """
+        return self.getMinimumDatetime(convertToDatetime)
     
+    def setMinimumDateTime(self, minimumDateTime):
+        """Same as setMinimumDatetime
+        """
+        self.setMinimumDatetime(minimumDateTime)    
 
     def getLastStart(self, convertToDatetime=False):
         """Returns the datetime of the last start event registered by the TempicoDevice.
