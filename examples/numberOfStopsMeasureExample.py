@@ -56,12 +56,11 @@ my_device.ch1.setMode(2)    #default mode is 1, changing to mode 2
 print('my_device.ch1.getMode():',my_device.ch1.getMode())
 
 print('\nchanging number of stops in channel 1 to 5')
-my_device.ch1.setNumberOfStops(5)    #default number of run is 1, changing to number of run 1000
+my_device.ch1.setNumberOfStops(5)    #default number of stops is 1, changing number of stops to 5
 #verify
 print('my_device.ch1.getNumberOfStops():',my_device.ch1.getNumberOfStops())
 
 print('\nsending a measure request to device')
-my_device.measure()   #starts a measurement, and saves response in 'data'
 data = my_device.measure()   #starts a measurement, and saves response in 'data'
 print('measured data, in ps:',data)
 

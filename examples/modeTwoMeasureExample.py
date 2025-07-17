@@ -48,7 +48,6 @@ my_device.ch1.setMode(2)    #default mode is 1, changing to mode 2
 print('my_device.ch1.getMode():',my_device.ch1.getMode())
 
 print('\nsending a measure request to device')
-my_device.measure()   #starts a measurement, and saves response in 'data'
 data = my_device.measure()   #starts a measurement, and saves response in 'data'
 print('measured data, in ps:',data)
 

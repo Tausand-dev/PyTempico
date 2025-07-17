@@ -77,14 +77,16 @@ print(f"With a date format now my_device.getDateTime(True): {my_device.getDateTi
 
 
 print("\nIf we want to use a timestamp outside the current limits, we can update the allowed range.\n")
-print(f"Setting new maximum with my_device.setMaximumDatetime(4103462800.0): {my_device.setMaximumDatetime(4103462800.0)}")
-print(f"Setting new minimum with my_device.setMinimumDatetime(1576854800.0): {my_device.setMinimumDatetime(1576854800.0)}")
+print(f"Setting new maximum with my_device.setMaximumDatetime(4103462800.0).")
+my_device.setMaximumDatetime(4103462800.0)
+print(f"Setting new minimum with my_device.setMinimumDatetime(1576854800.0).")
+my_device.setMinimumDatetime(1576854800.0)
 
 print("\nNow we can retrieve the new minimum and maximum values.\n")
 print(f"New maximum: my_device.getMaximumDatetime(): {my_device.getMaximumDatetime()}")
 print(f"New minimum: my_device.getMinimumDatetime(): {my_device.getMinimumDatetime()}")
 
-print("\nThese values are useful to determine when a start signal was received. We will now perform a measurement — a connected signal is not required.\n")
+print("\nThese values are useful to determine when a start signal was received. We will now perform a measurement — a connected start signal is required.\n")
 
 print("Disabling channels 2–4.")
 my_device.ch1.enableChannel()

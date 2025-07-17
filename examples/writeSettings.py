@@ -41,7 +41,7 @@ settings = my_device.getSettings()
 print(settings)
 
 # Modify average cycles (Channel 1)
-print("\n[2] Setting average cycles on Channel 1 using direct channel method:")
+print("\n[2] Setting average cycles on Channel 1 using direct channel method (Channel 1 → 4 cycles):")
 my_device.ch1.setAverageCycles(4)
 print(f"New value: {my_device.ch1.getAverageCycles()}")
 
@@ -55,7 +55,7 @@ print(f"Verified: {my_device.getAverageCycles(1)}")
 # Modify number of stops
 print("\nResetting...")
 my_device.reset()
-print("\n[4] Setting number of stops on Channel 1 using direct method:")
+print("\n[4] Setting number of stops on Channel 1 using direct method (Channel 1 → 5 stops):")
 my_device.ch1.setNumberOfStops(5)
 print(f"New value: {my_device.ch1.getNumberOfStops()}")
 
@@ -69,7 +69,7 @@ print(f"Verified: {my_device.getNumberOfStops(1)}")
 # Modify stop mask
 print("\nResetting...")
 my_device.reset()
-print("\n[6] Setting stop mask on 1000 us in Channel 1 using direct method:")
+print("\n[6] Setting stop mask on 1000 us in Channel 1 using direct method (Channel 1 → 1000):")
 my_device.ch1.setStopMask(1000)
 print(f"New value: {my_device.ch1.getStopMask()}")
 

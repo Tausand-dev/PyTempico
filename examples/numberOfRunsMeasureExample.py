@@ -3,8 +3,8 @@
 
     Created on Tue Jul  14 16:42 2025
 
-    Example script for measuring with a Tausand Tempico device using Mode 2 
-    (125 ns – 4 ms range) on Channel 1.
+    Example script for measuring with a Tausand Tempico device using extended 
+    number of runs (1000), and using Mode 2 (125 ns – 4 ms range) on Channel 1.
 
     This example connects to the Tempico device, configures it to only enable 
     Channel 1, sets the measurement mode to Mode 2, and adjusts the number of 
@@ -55,18 +55,17 @@ my_device.ch1.setMode(2)    #default mode is 1, changing to mode 2
 #verify
 print('my_device.ch1.getMode():',my_device.ch1.getMode())
 
-print('\nchanging number of runs to 1000, this setting is applied for all device')
+print('\nchanging number of runs to 1000, this setting is applied to every channel in the device')
 my_device.setNumberOfRuns(1000)    #default number of run is 1, changing to number of run 1000
 #verify
 print('my_device.getNumberOfRuns():',my_device.getNumberOfRuns())
 
 print('\nsending a measure request to device')
-my_device.measure()   #starts a measurement, and saves response in 'data'
 data = my_device.measure()   #starts a measurement, and saves response in 'data'
 print('measured data, in ps:',data)
 
 print('fetch:',my_device.fetch()) #fetch most recent data
-print('\nIf a measurement was succesfully you will see 1000 different measurements only calling 1 time the measurement function')
+print('\nIf a measurement was succesful, you will see 1000 different measurements with a single call of the measurement function.')
 
 my_device.close()
 if my_device.isOpen():

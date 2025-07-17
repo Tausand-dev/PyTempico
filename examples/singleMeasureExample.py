@@ -32,7 +32,6 @@ else:
     print('connection with my_device is close')
 
 print('sending a measure request to device')
-my_device.measure()   #starts a measurement, and saves response in 'data'
 data = my_device.measure()   #starts a measurement, and saves response in 'data'
 print('measured data, in ps:',data)
 
