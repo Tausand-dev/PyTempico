@@ -921,10 +921,10 @@ class TempicoDevice():
     ch3 = None
     ch4 = None
     #Communication and identification parameters        
-    idn = ""
+    idn = ""   #when opening a connection, getIdn() updates this parameter
     port = ""    
     serial_timeout = 1 #by default, 1 second of timeout
-    sn = "N/A" #TO DO: get serial number
+    sn = "" #when opening a connection, getSerialNumber() updates this parameter
     __baudrate = 500000 #by default, 500kbaud
     __connected = False
     __firmware = ""    
@@ -975,6 +975,8 @@ class TempicoDevice():
                     desired_port = self.port
                     self.device = serial.Serial(port = desired_port, baudrate=self.getBaudRate(), timeout=self.serial_timeout) # open serial port
                     self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
+                    self.sn = self.getSerialNumber() #get serial number when opening
+                    self.idn = self.getIdn() #get identification string when opening
             except Exception as e:
                 print('verify the device in port',desired_port
                     ,'is connected, is turned on, and is not being used by other software.')
@@ -2745,6 +2747,9 @@ class TempicoDevice():
             else:
                 completeSerial=""
             return completeSerial
+        elif (self.sn != ""):
+            #if current registered sn is not empty
+            return self.sn  #return saved string
         else:
             print("Device connection not opened. First open a connection.")
             print("Unable to get.")
