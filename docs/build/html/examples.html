@@ -96,7 +96,7 @@
 <span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM17&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
@@ -157,7 +157,7 @@
 <span class="sd">    Website: https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="c1"># Set your device port here</span>
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM5&#39;</span>
@@ -181,7 +181,7 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
 
 <span class="c1"># Modify average cycles (Channel 1)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[2] Setting average cycles on Channel 1 using direct channel method:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[2] Setting average cycles on Channel 1 using direct channel method (Channel 1 → 4 cycles):&quot;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setAverageCycles</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New value: </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -195,7 +195,7 @@
 <span class="c1"># Modify number of stops</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resetting...&quot;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[4] Setting number of stops on Channel 1 using direct method:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[4] Setting number of stops on Channel 1 using direct method (Channel 1 → 5 stops):&quot;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setNumberOfStops</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New value: </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getNumberOfStops</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -209,7 +209,7 @@
 <span class="c1"># Modify stop mask</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resetting...&quot;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[6] Setting stop mask on 1000 us in Channel 1 using direct method:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[6] Setting stop mask on 1000 us in Channel 1 using direct method (Channel 1 → 1000):&quot;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setStopMask</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New value: </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getStopMask</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -258,7 +258,7 @@
 <span class="sd">    Email: jamaya@tausand.com</span>
 <span class="sd">    Website: https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM5&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
@@ -312,14 +312,16 @@
 
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">If we want to use a timestamp outside the current limits, we can update the allowed range.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting new maximum with my_device.setMaximumDatetime(4103462800.0): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">setMaximumDatetime</span><span class="p">(</span><span class="mf">4103462800.0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting new minimum with my_device.setMinimumDatetime(1576854800.0): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">setMinimumDatetime</span><span class="p">(</span><span class="mf">1576854800.0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting new maximum with my_device.setMaximumDatetime(4103462800.0).&quot;</span><span class="p">)</span>
+<span class="n">my_device</span><span class="o">.</span><span class="n">setMaximumDatetime</span><span class="p">(</span><span class="mf">4103462800.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Setting new minimum with my_device.setMinimumDatetime(1576854800.0).&quot;</span><span class="p">)</span>
+<span class="n">my_device</span><span class="o">.</span><span class="n">setMinimumDatetime</span><span class="p">(</span><span class="mf">1576854800.0</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Now we can retrieve the new minimum and maximum values.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New maximum: my_device.getMaximumDatetime(): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">getMaximumDatetime</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New minimum: my_device.getMinimumDatetime(): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">getMinimumDatetime</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">These values are useful to determine when a start signal was received. We will now perform a measurement — a connected signal is not required.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">These values are useful to determine when a start signal was received. We will now perform a measurement — a connected start signal is required.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Disabling channels 2–4.&quot;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">enableChannel</span><span class="p">()</span>
@@ -370,7 +372,7 @@
 <span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM16&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
@@ -384,7 +386,6 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sending a measure request to device&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;measured data, in ps:&#39;</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 
@@ -419,7 +420,7 @@
 <span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM16&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
@@ -448,7 +449,6 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my_device.ch1.getMode():&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getMode</span><span class="p">())</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sending a measure request to device&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;measured data, in ps:&#39;</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 
@@ -469,8 +469,8 @@
 
 <span class="sd">    Created on Tue Jul  14 16:42 2025</span>
 
-<span class="sd">    Example script for measuring with a Tausand Tempico device using Mode 2 </span>
-<span class="sd">    (125 ns – 4 ms range) on Channel 1.</span>
+<span class="sd">    Example script for measuring with a Tausand Tempico device using extended </span>
+<span class="sd">    number of runs (1000), and using Mode 2 (125 ns – 4 ms range) on Channel 1.</span>
 
 <span class="sd">    This example connects to the Tempico device, configures it to only enable </span>
 <span class="sd">    Channel 1, sets the measurement mode to Mode 2, and adjusts the number of </span>
@@ -493,7 +493,7 @@
 <span class="sd">    Email: jamaya@tausand.com</span>
 <span class="sd">    Website: https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM5&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
@@ -521,18 +521,17 @@
 <span class="c1">#verify</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my_device.ch1.getMode():&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getMode</span><span class="p">())</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">changing number of runs to 1000, this setting is applied for all device&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">changing number of runs to 1000, this setting is applied to every channel in the device&#39;</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">setNumberOfRuns</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>    <span class="c1">#default number of run is 1, changing to number of run 1000</span>
 <span class="c1">#verify</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my_device.getNumberOfRuns():&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">getNumberOfRuns</span><span class="p">())</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sending a measure request to device&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;measured data, in ps:&#39;</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fetch:&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">fetch</span><span class="p">())</span> <span class="c1">#fetch most recent data</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">If a measurement was succesfully you will see 1000 different measurements only calling 1 time the measurement function&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">If a measurement was succesful, you will see 1000 different measurements with a single call of the measurement function.&#39;</span><span class="p">)</span>
 
 <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
@@ -573,7 +572,7 @@
 <span class="sd">    Email: jamaya@tausand.com</span>
 <span class="sd">    Website: https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
 <span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM5&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
@@ -602,12 +601,11 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my_device.ch1.getMode():&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getMode</span><span class="p">())</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">changing number of stops in channel 1 to 5&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setNumberOfStops</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c1">#default number of run is 1, changing to number of run 1000</span>
+<span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setNumberOfStops</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>    <span class="c1">#default number of stops is 1, changing number of stops to 5</span>
 <span class="c1">#verify</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;my_device.ch1.getNumberOfStops():&#39;</span><span class="p">,</span><span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getNumberOfStops</span><span class="p">())</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sending a measure request to device&#39;</span><span class="p">)</span>
-<span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;measured data, in ps:&#39;</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
 
