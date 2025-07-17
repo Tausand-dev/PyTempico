@@ -586,6 +586,12 @@ TempicoChannel.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getDateTime">
 <span class="sig-name descname"><span class="pre">getDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Same as getDatetime</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getDatetime">
+<span class="sig-name descname"><span class="pre">getDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getDatetime" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the number of seconds since the Tempico device was powered on,
 based on its internal clock. If the device has been synchronized, the
 seconds count corresponds to the system time of the host PC.</p>
@@ -713,6 +719,12 @@ be retrieved.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getMaximumDateTime">
+<span class="sig-name descname"><span class="pre">getMaximumDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getMaximumDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Same as getMaximumDatetime</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getMaximumDatetime">
 <span class="sig-name descname"><span class="pre">getMaximumDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getMaximumDatetime" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the maximum datetime value allowed by the TempicoDevice.</p>
@@ -737,6 +749,12 @@ timestamp) or as a datetime object if convertToDatetime is True.</p>
 <dd class="field-odd"><p>float or datetime</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getMinimumDateTime">
+<span class="sig-name descname"><span class="pre">getMinimumDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">convertToDatetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getMinimumDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Same as getMinimumDatetime</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1313,6 +1331,12 @@ Valid values are: 1, 2, 4, 8, 16, 32, 64, 128.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setDateTime">
 <span class="sig-name descname"><span class="pre">setDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeStampDateTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Same as setDatetime</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setDatetime">
+<span class="sig-name descname"><span class="pre">setDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeStampDateTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setDatetime" title="Permalink to this definition"></a></dt>
 <dd><p>Sets the internal clock of the Tempico device to a specified timestamp
 or to the current system time.</p>
 <p>Sends a <cite>DTIMe &lt;timestamp&gt;</cite> command using either the provided
@@ -1331,6 +1355,12 @@ verifies the update by comparing timestamps.</p>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setMaximumDateTime">
+<span class="sig-name descname"><span class="pre">setMaximumDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximumDateTime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setMaximumDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Same as setMaximumDatetime</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1354,6 +1384,12 @@ validated by re-reading it from the device.</p>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setMinimumDateTime">
+<span class="sig-name descname"><span class="pre">setMinimumDateTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimumDateTime</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setMinimumDateTime" title="Permalink to this definition"></a></dt>
+<dd><p>Same as setMinimumDatetime</p>
 </dd></dl>
 
 <dl class="py method">
