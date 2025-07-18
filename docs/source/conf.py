@@ -16,9 +16,9 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 
 # -- Project information -----------------------------------------------------
-
+from datetime import date
 project = 'pyTempico'
-copyright = '2025, Tausand Electronics'
+copyright = f'{date.today().year}, Tausand Electronics' #updates to current year
 author = 'Tausand Electronics'
 language = 'en'
 
