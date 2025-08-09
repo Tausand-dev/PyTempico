@@ -247,24 +247,24 @@ class TempicoChannel():
         
         
     
-    #Method chao() for tests only. TO DO: Delete after testing.
-    def chao(self):
-        #example to access upper level class methods
-        print('chao',self.channel_number)
-        #find port of device
-        dev_id = self.id_tempico_device
-        this_port = ''
-        my_tempico_dev = None
-        global tempico_devices_list
-        for d in tempico_devices_list:
-            if d.id_tempico_device == dev_id:
-                my_tempico_dev = d
-                print(d) #print device object of TempicoDevice class
-                this_port = d.port
-                print(this_port)
-        print('using id:     ',my_tempico_dev.getIdn())
-        #other alternative, using parent_tempico_device reference
-        print('using parent: ',self.parent_tempico_device.getIdn())
+    # #Method chao() for tests only. TO DO: Delete after testing.
+    # def chao(self):
+    #     #example to access upper level class methods
+    #     print('chao',self.channel_number)
+    #     #find port of device
+    #     dev_id = self.id_tempico_device
+    #     this_port = ''
+    #     my_tempico_dev = None
+    #     global tempico_devices_list
+    #     for d in tempico_devices_list:
+    #         if d.id_tempico_device == dev_id:
+    #             my_tempico_dev = d
+    #             print(d) #print device object of TempicoDevice class
+    #             this_port = d.port
+    #             print(this_port)
+    #     print('using id:     ',my_tempico_dev.getIdn())
+    #     #other alternative, using parent_tempico_device reference
+    #     print('using parent: ',self.parent_tempico_device.getIdn())
     
     def getAverageCycles(self):
         """Returns the average cycles of the TDC :func:`~pyTempico.core.TempicoChannel`.
@@ -941,6 +941,8 @@ class TempicoDevice():
     number_of_runs = 1 #by default, nruns=1.        
     threshold = 1 #by default, thr=1.00
     #Measured data parameters
+    stop_min = -1e6 #-1us =-1e6*1ps, used to report overflow in TP1204
+    stop_max =  5e9 # 5ms = 5e9*1ps
     ##TO DO: add parameters to save measured data
     
     def __init__(self,com_port):
@@ -985,6 +987,13 @@ class TempicoDevice():
                     self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
                     self.sn = self.getSerialNumber() #get serial number when opening
                     self.idn = self.getIdn() #get identification string when opening
+                    self.number_of_runs = self.getNumberOfRuns() #get number of runs when opening
+                    self.threshold = self.getThresholdVoltage() #get threshold voltage when opening
+                    self.ch1.number_of_stops = self.ch1.getNumberOfStops()
+                    self.ch2.number_of_stops = self.ch2.getNumberOfStops()
+                    self.ch3.number_of_stops = self.ch3.getNumberOfStops()
+                    self.ch4.number_of_stops = self.ch4.getNumberOfStops()
+                    
             except Exception as e:
                 print('verify the device in port',desired_port
                     ,'is connected, is turned on, and is not being used by other software.')
@@ -1346,11 +1355,16 @@ class TempicoDevice():
         """
         try:
             self.writeMessage('FETCH?')
-            #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
             #mylist = self.convertReadDataToIntList(data)
             #mylist = self.convertReadDataToFloatList(data)
             mylist = self.convertReadDataToNumberList(data)
+            
+            #NEW 2025-08-09: validate list contents
+            mylist = self.cleanNumberList(mylist)
+            
+            #TO DO: create alternative version of fetch() without validation.
+            
             return mylist
         except Exception as e: 
             print(e)
@@ -1391,18 +1405,23 @@ class TempicoDevice():
             #TO DO: validate if a measurement is in progress, before 
             #requesting a new measurement
             self.writeMessage('MEAS?')
-            #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
             #mylist = self.convertReadDataToIntList(data)
             #mylist = self.convertReadDataToFloatList(data)
             mylist = self.convertReadDataToNumberList(data)
+            
+            #NEW 2025-08-09: validate list contents
+            mylist = self.cleanNumberList(mylist)
+            
+            #TO DO: create alternative version of fetch() without validation.
+            
             return mylist
         except Exception as e: 
             print(e)   
             
     def convertReadDataToNumberList(self,data_string):
         """Converts a string with a read dataset message issued by a 
-        :func:`~pyTempico.core.TempicoDevice`, into an number of number 2D-list (integer or float).
+        :func:`~pyTempico.core.TempicoDevice`, into a number 2D-list (integer or float).
         
         The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format::
             
@@ -1456,7 +1475,7 @@ class TempicoDevice():
         """Converts a string with a read dataset message issued by a 
         :func:`~pyTempico.core.TempicoDevice`, into an float 2D-list.
         
-        The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format::
+        The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format:
             
             [[ch,run,start_s,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
             
@@ -1545,6 +1564,236 @@ class TempicoDevice():
     #             #TO DO: rise exception
 
     #     return data_list
+    
+    def isValidNumberListRow(self,row):
+        """Single row validation of a number 2D-list (read data).
+        
+        Validations applied:
+            
+        - length of row
+        - type of data (integers, except for start_s register)
+        - ch in range
+        - run in range
+        - sorted stops
+        - stops in range
+        
+        A single row of the dataset of a :func:`~pyTempico.core.TempicoDevice` 
+        is in the following format:
+            
+            [ch,run,start_s,stop_ps1,...,stop_psN]
+        
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_s' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+                          
+        Args:
+            row list(number): single line of dataset message converted.
+            
+        Returns:
+            bool: True when single row passes all validations.
+        """
+        
+        #TO DO: validate size of received data with nstops per channel    
+        try:    
+            length = len(row)
+            ##Validate length of row
+            if (length<4) or (length >8):  #0: ch, 1: seq, 2: start, 3: stop1, ..., 7: stop5
+                # print(row)
+                # print('error: length=',length)
+                #discard this row
+                return False #return: is NOT valid
+        
+            ch = row[0]
+            run = row[1]
+            start = row[2]
+            stops = row[3:]
+            ##Validate all numbers are integers, except for the start register.
+            if not all(isinstance(a, int) for a in [ch] + [run] + stops):
+                #looks if all elements in [ch],[run] and stops are integers
+                #if not, error found.
+                #notice that [start] should be a float
+                # print(row)
+                # print('error: unexpected non-integer=',row)
+                #discard this row
+                return False #return: is NOT valid
+            ##Validate channel number is within 1..ch_MAX
+            ch_range = range(1,self.number_of_channels+1) #range starting in 1, ending in ch_MAX+1 exclusive (e.g. 4+1 ends in 4)
+            if ch not in ch_range:
+                # print(row)
+                # print('error: ch=',ch)
+                #discard this row
+                return False #return: is NOT valid
+            ##Validate sequential run number is within 1..nruns_MAX
+            nruns_range = range(1,self.number_of_runs+1) #range starting in 1, ending in nruns_MAX+1 exclusive (e.g. 1000+1 ends in 1000)
+            if run not in nruns_range:
+                # print(row)
+                # print('error: run=',run)
+                #discard this row
+                return False #return: is NOT valid
+            
+            ##Validate stop values are sorted
+            stops_sorted = sorted(stops)#make a copy of stops and sort them
+            if (stops != stops_sorted):
+                #if stops are not ordered
+                # print(row)
+                # print('error: stops are not progressive=',stops)
+                #discard this row
+                return False #return: is NOT valid
+            
+            ##Validate stop values are in valid range stop_MIN..stop_MAX
+            if (stops_sorted[0] < self.stop_min) or (stops_sorted[-1] > self.stop_max):
+                #if any stop is out of range, from stop_MIN to stop_MAX
+                # print(row)
+                # print('error: stop is out of valid range=',stops)
+                #discard this row
+                return False #return: is NOT valid 
+            ##All validations passed
+            return True #otherwise return: is valid
+        except Exception as e: 
+            print(e)
+            return False #failed to validate
+
+    def isValidConsecutiveNumberListRows(self,row,next_row):
+        """Pair of consecutive rows validation of a number 2D-list (read data).
+        
+        Validations applied:
+            
+        - length of next_row
+        - sequential run values
+        - increasing start
+        
+        A single row of the dataset of a :func:`~pyTempico.core.TempicoDevice` 
+        is in the following format:
+            
+            [ch,run,start_s,stop_ps1,...,stop_psN]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_s' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+        
+        Args:
+            row list(number): single line of dataset message converted.
+            next_row list(number): next single line of dataset message converted.
+            
+        Returns:
+            bool: True when pair of rows passes all validations.
+        """
+        
+        try:
+            ###Validate continuity of data, comparing a row with the next one
+            lengthnext = len(next_row)
+            ##Validate next row length
+            if (lengthnext < 3):    #required to have at least 0:ch, 1:run, and 2: start.
+                # print(next_row)
+                # print('warning: next row length=',lengthnext)
+                #can't compare, but do not discard this one; the wrong one is the next
+                return True #return: is valid (there are not enough info to declare it as invalid)
+            ch = row[0]
+            run = row[1]
+            start = row[2]
+            chnext = next_row[0]
+            runnext = next_row[1]
+            startnext = next_row[2]
+            ##Validate sequential run number is incremented by one
+            if ((runnext - run) != 1) and (ch == chnext):
+                #if run is not sequential, and channel is the same
+                # print(row)
+                # print(next_row)
+                # print('error: not consecutive run=',run,runnext)
+                #discard this row, not the next one
+                return False #return: is NOT valid
+            ##Validate start time is increasing
+            if (startnext < start) and (ch == chnext):
+                #if start is not incremental, and channel is the same
+                # print(row)
+                # print(next_row)
+                # print('error: not incrementing start=',start,startnext)
+                #discard this row, not the next one
+                return False #return: is NOT valid 
+            
+            ##All validations passed
+            return True #otherwise return: is valid
+        except Exception as e: 
+            print(e)
+            return False #failed to validate
+        
+    def cleanNumberList(self,number_list):
+        """Removes non-valid elements of a Tempico dataset, given in 
+        number_list, a number 2D-list (read data). Returns a clean number 
+        2D-list.
+        
+        Validations applied:
+            
+        - length of row
+        - type of data (integers, except for start_s register)
+        - ch in range
+        - run in range
+        - sorted stops
+        - stops in range
+        - sequential run values
+        - increasing start
+        
+            
+        The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format:
+            
+            [[ch,run,start_s,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_s' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+        
+        Args:
+            number_list list(number): a complete dataset message converted.
+            
+        Returns:
+            list(number): a cleaned complete dataset message converted.
+        """
+
+        cleanlist = []
+        try:        
+            for line, nextline in zip(number_list,number_list[1:]): #get each line and the next one
+                ##Validate single row contents of data
+                if not self.isValidNumberListRow(line):
+                    #if validation is not passed, discard this row
+                    continue #discard and continue with next row
+                
+                ##Validate continuity of data, comparing this row with the next one
+                if not self.isValidConsecutiveNumberListRows(line, nextline):
+                    #if validation is not passed, discard this row
+                    continue #discard and continue with next row
+                
+                ##Done all validations.
+                #once that all validations are passed, append this line into clean list
+                cleanlist.append(line)
+        
+            ##Validate last row by itself; the previous for loop removes the last row.
+            lastline = number_list[-1]
+            if self.isValidNumberListRow(lastline):
+                #if all validations are passed, append this line into clean list
+                cleanlist.append(lastline)   
+            
+            ##Send a warning message if items were removed
+            removed_items = len(number_list) - len(cleanlist)
+            if (removed_items > 0):
+                print('Warning. Missing data. Previous data may be incomplete.')
+            
+            return cleanlist
+        except Exception as e: 
+            print(e)
+            return cleanlist
+
             
     ##settings methods
     def getSettings(self):
