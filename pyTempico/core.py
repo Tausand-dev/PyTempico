@@ -246,25 +246,7 @@ class TempicoChannel():
         self.channel_number = ch_num
         
         
-    
-    #Method chao() for tests only. TO DO: Delete after testing.
-    def chao(self):
-        #example to access upper level class methods
-        print('chao',self.channel_number)
-        #find port of device
-        dev_id = self.id_tempico_device
-        this_port = ''
-        my_tempico_dev = None
-        global tempico_devices_list
-        for d in tempico_devices_list:
-            if d.id_tempico_device == dev_id:
-                my_tempico_dev = d
-                print(d) #print device object of TempicoDevice class
-                this_port = d.port
-                print(this_port)
-        print('using id:     ',my_tempico_dev.getIdn())
-        #other alternative, using parent_tempico_device reference
-        print('using parent: ',self.parent_tempico_device.getIdn())
+
     
     def getAverageCycles(self):
         """Returns the average cycles of the TDC :func:`~pyTempico.core.TempicoChannel`.
@@ -941,6 +923,8 @@ class TempicoDevice():
     number_of_runs = 1 #by default, nruns=1.        
     threshold = 1 #by default, thr=1.00
     #Measured data parameters
+    stop_min = -1e6 #-1us =-1e6*1ps, used to report overflow in TP1204
+    stop_max =  5e9 # 5ms = 5e9*1ps
     ##TO DO: add parameters to save measured data
     
     def __init__(self,com_port):
@@ -985,6 +969,13 @@ class TempicoDevice():
                     self.__connected = self.device.is_open #gets if the device was connected from the serial object property 'is_open'
                     self.sn = self.getSerialNumber() #get serial number when opening
                     self.idn = self.getIdn() #get identification string when opening
+                    self.number_of_runs = self.getNumberOfRuns() #get number of runs when opening
+                    self.threshold = self.getThresholdVoltage() #get threshold voltage when opening
+                    self.ch1.number_of_stops = self.ch1.getNumberOfStops()
+                    self.ch2.number_of_stops = self.ch2.getNumberOfStops()
+                    self.ch3.number_of_stops = self.ch3.getNumberOfStops()
+                    self.ch4.number_of_stops = self.ch4.getNumberOfStops()
+                    
             except Exception as e:
                 print('verify the device in port',desired_port
                     ,'is connected, is turned on, and is not being used by other software.')
@@ -1314,7 +1305,7 @@ class TempicoDevice():
             
 
     ##measure methods
-    def fetch(self):
+    def fetch(self,validate=True):
         """Reads the most recent measurement data set form a :func:`~pyTempico.core.TempicoDevice`.
         
         The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format::
@@ -1339,23 +1330,28 @@ class TempicoDevice():
         :func:`~pyTempico.core.TempicoDevice`. 
                      
         Args:
-            (none)
+            validate (bool, optional): If True, the measured dataset is
+                validated, and invalid registers get cleaned. Default is True.
             
         Returns:
             list(number): measured dataset.
         """
         try:
             self.writeMessage('FETCH?')
-            #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
             #mylist = self.convertReadDataToIntList(data)
             #mylist = self.convertReadDataToFloatList(data)
             mylist = self.convertReadDataToNumberList(data)
+            
+            #validate list contents, when requested
+            if validate:
+                mylist = self.cleanNumberList(mylist)
+            
             return mylist
         except Exception as e: 
             print(e)
     
-    def measure(self):
+    def measure(self,validate=True):
         """Begins a measurement sequence and reads its dataset from a 
         :func:`~pyTempico.core.TempicoDevice`.
         
@@ -1382,7 +1378,8 @@ class TempicoDevice():
         :func:`~pyTempico.core.TempicoDevice`. 
                      
         Args:
-            (none)
+            validate (bool, optional): If True, the measured dataset is
+                validated, and invalid registers get cleaned. Default is True.
             
         Returns:
             list(number): measured dataset.
@@ -1391,18 +1388,22 @@ class TempicoDevice():
             #TO DO: validate if a measurement is in progress, before 
             #requesting a new measurement
             self.writeMessage('MEAS?')
-            #TO DO: save measured data in local memory, and validate data
             data = self.readMessage()
             #mylist = self.convertReadDataToIntList(data)
             #mylist = self.convertReadDataToFloatList(data)
             mylist = self.convertReadDataToNumberList(data)
+            
+            #validate list contents, when requested
+            if validate:
+                mylist = self.cleanNumberList(mylist)
+                        
             return mylist
         except Exception as e: 
             print(e)   
             
     def convertReadDataToNumberList(self,data_string):
         """Converts a string with a read dataset message issued by a 
-        :func:`~pyTempico.core.TempicoDevice`, into an number of number 2D-list (integer or float).
+        :func:`~pyTempico.core.TempicoDevice`, into a number 2D-list (integer or float).
         
         The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format::
             
@@ -1456,7 +1457,7 @@ class TempicoDevice():
         """Converts a string with a read dataset message issued by a 
         :func:`~pyTempico.core.TempicoDevice`, into an float 2D-list.
         
-        The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format::
+        The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format:
             
             [[ch,run,start_s,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
             
@@ -1545,6 +1546,238 @@ class TempicoDevice():
     #             #TO DO: rise exception
 
     #     return data_list
+    
+    def isValidNumberListRow(self,row):
+        """Single row validation of a number 2D-list (read data).
+        
+        Validations applied:
+            
+        - length of row
+        - type of data (integers, except for start_s register)
+        - ch in range
+        - run in range
+        - sorted stops
+        - stops in range
+        
+        A single row of the dataset of a :func:`~pyTempico.core.TempicoDevice` 
+        is in the following format:
+            
+            [ch,run,start_s,stop_ps1,...,stop_psN]
+        
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_s' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+                          
+        Args:
+            row list(number): single line of dataset message converted.
+            
+        Returns:
+            bool: True when single row passes all validations.
+        """
+        
+        #TO DO: validate size of received data with nstops per channel    
+        try:    
+            length = len(row)
+            ##Validate length of row
+            if (length<4) or (length >8):  #0: ch, 1: seq, 2: start, 3: stop1, ..., 7: stop5
+                # print(row)
+                # print('error: length=',length)
+                #discard this row
+                return False #return: is NOT valid
+        
+            ch = row[0]
+            run = row[1]
+            start = row[2]
+            stops = row[3:]
+            ##Validate all numbers are integers, except for the start register.
+            if not all(isinstance(a, int) for a in [ch] + [run] + stops):
+                #looks if all elements in [ch],[run] and stops are integers
+                #if not, error found.
+                #notice that [start] should be a float
+                # print(row)
+                # print('error: unexpected non-integer=',row)
+                #discard this row
+                return False #return: is NOT valid
+            ##Validate channel number is within 1..ch_MAX
+            if (ch < 1) or (ch > self.number_of_channels):
+                #this method is x2.5 faster than asking "if ch not in range(1,self.number_of_channels+1)"
+            
+                # print(row)
+                # print('error: ch=',ch)
+                #discard this row
+                return False #return: is NOT valid
+            ##Validate sequential run number is within 1..nruns_MAX
+            if (run < 1) or (run > self.number_of_runs):
+                #this method is x2.5 faster than asking "if run not in range(1,self.number_of_runs+1)"
+                
+                # print(row)
+                # print('error: run=',run)
+                #discard this row
+                return False #return: is NOT valid
+            
+            ##Validate stop values are sorted
+            stops_sorted = sorted(stops)#make a copy of stops and sort them
+            if (stops != stops_sorted):
+                #if stops are not ordered
+                # print(row)
+                # print('error: stops are not progressive=',stops)
+                #discard this row
+                return False #return: is NOT valid
+            
+            ##Validate stop values are in valid range stop_MIN..stop_MAX
+            if (stops_sorted[0] < self.stop_min) or (stops_sorted[-1] > self.stop_max):
+                #if any stop is out of range, from stop_MIN to stop_MAX
+                # print(row)
+                # print('error: stop is out of valid range=',stops)
+                #discard this row
+                return False #return: is NOT valid 
+            ##All validations passed
+            return True #otherwise return: is valid
+        except Exception as e: 
+            print(e)
+            return False #failed to validate
+
+    def isValidConsecutiveNumberListRows(self,row,next_row):
+        """Pair of consecutive rows validation of a number 2D-list (read data).
+        
+        Validations applied:
+            
+        - length of next_row
+        - sequential run values
+        - increasing start
+        
+        A single row of the dataset of a :func:`~pyTempico.core.TempicoDevice` 
+        is in the following format:
+            
+            [ch,run,start_s,stop_ps1,...,stop_psN]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_s' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+        
+        Args:
+            row list(number): single line of dataset message converted.
+            next_row list(number): next single line of dataset message converted.
+            
+        Returns:
+            bool: True when pair of rows passes all validations.
+        """
+        
+        try:
+            ###Validate continuity of data, comparing a row with the next one
+            lengthnext = len(next_row)
+            ##Validate next row length
+            if (lengthnext < 3):    #required to have at least 0:ch, 1:run, and 2: start.
+                # print(next_row)
+                # print('warning: next row length=',lengthnext)
+                #can't compare, but do not discard this one; the wrong one is the next
+                return True #return: is valid (there are not enough info to declare it as invalid)
+            ch = row[0]
+            run = row[1]
+            start = row[2]
+            chnext = next_row[0]
+            runnext = next_row[1]
+            startnext = next_row[2]
+            ##Validate sequential run number is incremented by one
+            if ((runnext - run) != 1) and (ch == chnext):
+                #if run is not sequential, and channel is the same
+                # print(row)
+                # print(next_row)
+                # print('error: not consecutive run=',run,runnext)
+                #discard this row, not the next one
+                return False #return: is NOT valid
+            ##Validate start time is increasing
+            if (startnext < start) and (ch == chnext):
+                #if start is not incremental, and channel is the same
+                # print(row)
+                # print(next_row)
+                # print('error: not incrementing start=',start,startnext)
+                #discard this row, not the next one
+                return False #return: is NOT valid 
+            
+            ##All validations passed
+            return True #otherwise return: is valid
+        except Exception as e: 
+            print(e)
+            return False #failed to validate
+        
+    def cleanNumberList(self,number_list):
+        """Removes non-valid elements of a Tempico dataset, given in 
+        number_list, a number 2D-list (read data). Returns a clean number 
+        2D-list.
+        
+        Validations applied:
+            
+        - length of row
+        - type of data (integers, except for start_s register)
+        - ch in range
+        - run in range
+        - sorted stops
+        - stops in range
+        - sequential run values
+        - increasing start
+        
+            
+        The dataset of a :func:`~pyTempico.core.TempicoDevice` is in the following format:
+            
+            [[ch,run,start_s,stop_ps1,...,stop_psN],...,[ch,run,start_time_us,stop_ps1,...,stop_psN]]
+            
+        where
+        
+        - 'ch' indicates the TDC channel,
+        - 'run' goes from 1 to NumberOfRuns,
+        - 'start_s' is the epoch timestamp of start pulse, in seconds, with microseconds precision; this value overflows (go back to zero) after 2^32 seconds,
+        - 'stop_ps1' is the measured precision timelapse between start and the 1st stop pulse, in picoseconds,
+        - 'N' is the NumberOfStops.
+        
+        Args:
+            number_list list(number): a complete dataset message converted.
+            
+        Returns:
+            list(number): a cleaned complete dataset message converted.
+        """
+
+        cleanlist = []
+        try:        
+            for line, nextline in zip(number_list,number_list[1:]): #get each line and the next one
+                ##Validate single row contents of data
+                if not self.isValidNumberListRow(line):
+                    #if validation is not passed, discard this row
+                    continue #discard and continue with next row
+                
+                ##Validate continuity of data, comparing this row with the next one
+                if not self.isValidConsecutiveNumberListRows(line, nextline):
+                    #if validation is not passed, discard this row
+                    continue #discard and continue with next row
+                
+                ##Done all validations.
+                #once that all validations are passed, append this line into clean list
+                cleanlist.append(line)
+        
+            ##Validate last row by itself; the previous for loop removes the last row.
+            lastline = number_list[-1]
+            if self.isValidNumberListRow(lastline):
+                #if all validations are passed, append this line into clean list
+                cleanlist.append(lastline)   
+            
+            ##Send a warning message if items were removed
+            removed_items = len(number_list) - len(cleanlist)
+            if (removed_items > 0):
+                print('Warning. Missing data. Previous data may be incomplete.')
+            
+            return cleanlist
+        except Exception as e: 
+            print(e)
+            return cleanlist
+
             
     ##settings methods
     def getSettings(self):
@@ -1864,7 +2097,7 @@ class TempicoDevice():
         """
         self.setThresholdVoltage("MIN")
     
-    def getDatetime(self,convertToDatetime=False):
+    def getDatetime(self,convert_to_datetime=False):
         """
         Returns the number of seconds since the Tempico device was powered on, 
         based on its internal clock. If the device has been synchronized, the 
@@ -1879,7 +2112,7 @@ class TempicoDevice():
         on the device, otherwise the value is relative to the device's uptime.
 
         Args:
-            convertToDatetime (bool, optional): If True, the value is returned as a 
+            convert_to_datetime (bool, optional): If True, the value is returned as a 
                 datetime object. Default is False.
 
         Returns:
@@ -1896,7 +2129,7 @@ class TempicoDevice():
                 try:
                     if response_first_line!="":
                         time_response= float(response_first_line)
-                        if convertToDatetime:
+                        if convert_to_datetime:
                             time_response = datetime.fromtimestamp(time_response)
                     else:
                         print("Device does not respond correctly to DTIMe? request")
@@ -1957,7 +2190,7 @@ class TempicoDevice():
             print("Unable to set.")
     
     
-    def getMaximumDatetime(self,convertToDatetime=False):
+    def getMaximumDatetime(self,convert_to_datetime=False):
         """Returns the maximum datetime value allowed by the :func:`~pyTempico.core.TempicoDevice`.
 
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
@@ -1965,16 +2198,16 @@ class TempicoDevice():
         'DTIMe:MAXimum?' command. If not, the value -1 is returned.
         
         The returned value corresponds to the latest timestamp that can be set 
-        on the device without causing an error. If `convertToDatetime` is set to True, 
+        on the device without causing an error. If `convert_to_datetime` is set to True, 
         the value is returned as a datetime object instead of a float.
 
         Args:
-            convertToDatetime (bool, optional): If True, the value is returned as a 
+            convert_to_datetime (bool, optional): If True, the value is returned as a 
                 datetime object. Default is False.
 
         Returns:
             float or datetime: Maximum allowed datetime, either as a float (Unix 
-            timestamp) or as a datetime object if convertToDatetime is True.
+            timestamp) or as a datetime object if convert_to_datetime is True.
         """
         time_maximum = -1
         if self.isOpen():
@@ -1988,7 +2221,7 @@ class TempicoDevice():
                 try:
                     if response_first_line!="":
                         time_maximum= float(response_first_line)
-                        if convertToDatetime:
+                        if convert_to_datetime:
                             time_maximum = datetime.fromtimestamp(time_maximum)
                     else:
                         print("Device does not respond correctly to DTIMe:MAXimum? request")
@@ -2003,8 +2236,7 @@ class TempicoDevice():
         return time_maximum
     
     
-    #Change not implemented yet in tempico firmware
-    def setMaximumDatetime(self, maximumDateTime):
+    def setMaximumDatetime(self, maximum_datetime):
         """Sets the maximum datetime value allowed by the :func:`~pyTempico.core.TempicoDevice`.
 
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
@@ -2014,21 +2246,21 @@ class TempicoDevice():
         validated by re-reading it from the device.
 
         Args:
-            maximumDateTime (float): New maximum timestamp to configure on the device.
+            maximum_datetime (float): New maximum timestamp to configure on the device.
 
         Returns:
             None
         """
         if self.isOpen():
             self.waitAndReadMessage()
-            msg=f"DTIMe:MAXimum {maximumDateTime}"
+            msg=f"DTIMe:MAXimum {maximum_datetime}"
             self.writeMessage(msg)
             response = self.waitAndReadMessage()
             if response !='':
                print(response.splitlines()[0]) 
             else:
                 new_maximum_time = self.getMaximumDatetime()
-                if new_maximum_time== maximumDateTime:
+                if new_maximum_time== maximum_datetime:
                     pass
                 else:
                     print('Failed.')
@@ -2037,7 +2269,7 @@ class TempicoDevice():
             print("Unable to set.")
             
 
-    def getMinimumDatetime(self, convertToDatetime=False):
+    def getMinimumDatetime(self, convert_to_datetime=False):
         """Returns the minimum datetime value allowed by the :func:`~pyTempico.core.TempicoDevice`.
 
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
@@ -2045,16 +2277,16 @@ class TempicoDevice():
         'DTIMe:MINimum?' command. If not, the value -1 is returned.
 
         The returned value corresponds to the earliest timestamp that can be set 
-        on the device without causing an error. If `convertToDatetime` is set to True, 
+        on the device without causing an error. If `convert_to_datetime` is set to True, 
         the value is returned as a datetime object instead of a float.
 
         Args:
-            convertToDatetime (bool, optional): If True, the value is returned as a 
+            convert_to_datetime (bool, optional): If True, the value is returned as a 
                 datetime object. Default is False.
 
         Returns:
             float or datetime: Minimum allowed datetime, either as a float (Unix 
-            timestamp) or as a datetime object if convertToDatetime is True.
+            timestamp) or as a datetime object if convert_to_datetime is True.
         """
         time_minimum = -1
         if self.isOpen():
@@ -2068,7 +2300,7 @@ class TempicoDevice():
                 try:
                     if response_first_line!="":
                         time_minimum= float(response_first_line)
-                        if convertToDatetime:
+                        if convert_to_datetime:
                             time_minimum = datetime.fromtimestamp(time_minimum)      
                     else:
                         print("Device does not respond correctly to DTIMe:MINimum? request")
@@ -2083,7 +2315,7 @@ class TempicoDevice():
         return time_minimum
     
     
-    def setMinimumDatetime(self, minimumDateTime):
+    def setMinimumDatetime(self, minimum_datetime):
         """Sets the minimum datetime value allowed by the :func:`~pyTempico.core.TempicoDevice`.
 
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
@@ -2093,21 +2325,21 @@ class TempicoDevice():
         validated by re-reading it from the device.
 
         Args:
-            minimumDateTime (float): New minimum timestamp to configure on the device.
+            minimum_datetime (float): New minimum timestamp to configure on the device.
 
         Returns:
             None
         """
         if self.isOpen():
             self.waitAndReadMessage()
-            msg=f"DTIMe:MINimum {minimumDateTime}"
+            msg=f"DTIMe:MINimum {minimum_datetime}"
             self.writeMessage(msg)
             response = self.waitAndReadMessage()
             if response !='':
                print(response.splitlines()[0]) 
             else:
                 new_minimum_time = self.getMinimumDatetime()
-                if new_minimum_time== minimumDateTime:
+                if new_minimum_time== minimum_datetime:
                     pass
                 else:
                     print('Failed.')
@@ -2116,37 +2348,37 @@ class TempicoDevice():
             print("Unable to set.")
             
     #alternative naming for "Datetime" methods, as "DateTime" with capital 'T'
-    def getDateTime(self,convertToDatetime=False):
+    def getDateTime(self,convert_to_datetime=False):
         """Same as getDatetime
         """
-        return self.getDatetime(convertToDatetime)
+        return self.getDatetime(convert_to_datetime)
         
     def setDateTime(self, timeStampDateTime=None):
         """Same as setDatetime
         """
         self.setDatetime(timeStampDateTime)
         
-    def getMaximumDateTime(self,convertToDatetime=False):
+    def getMaximumDateTime(self,convert_to_datetime=False):
         """Same as getMaximumDatetime
         """
-        return self.getMaximumDatetime(convertToDatetime)
+        return self.getMaximumDatetime(convert_to_datetime)
         
-    def setMaximumDateTime(self, maximumDateTime):
+    def setMaximumDateTime(self, maximum_datetime):
         """Same as setMaximumDatetime
         """
-        self.setMaximumDatetime(maximumDateTime)
+        self.setMaximumDatetime(maximum_datetime)
         
-    def getMinimumDateTime(self, convertToDatetime=False):
+    def getMinimumDateTime(self, convert_to_datetime=False):
         """Same as getMinimumDatetime
         """
-        return self.getMinimumDatetime(convertToDatetime)
+        return self.getMinimumDatetime(convert_to_datetime)
     
-    def setMinimumDateTime(self, minimumDateTime):
+    def setMinimumDateTime(self, minimum_datetime):
         """Same as setMinimumDatetime
         """
-        self.setMinimumDatetime(minimumDateTime)    
+        self.setMinimumDatetime(minimum_datetime)    
 
-    def getLastStart(self, convertToDatetime=False):
+    def getLastStart(self, convert_to_datetime=False):
         """Returns the datetime of the last start event registered by the :func:`~pyTempico.core.TempicoDevice`.
 
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
@@ -2155,16 +2387,16 @@ class TempicoDevice():
 
         The returned value corresponds to the timestamp of the most recent start 
         event. If no start has occurred yet, the device returns 0.
-        If `convertToDatetime` is set to True, the value is 
+        If `convert_to_datetime` is set to True, the value is 
         returned as a datetime object instead of a float.
 
         Args:
-            convertToDatetime (bool, optional): If True, the value is returned as a 
+            convert_to_datetime (bool, optional): If True, the value is returned as a 
                 datetime object. Default is False.
 
         Returns:
             float or datetime: Timestamp of the last start event, either as a float 
-            (Unix timestamp) or as a datetime object if convertToDatetime is True. 
+            (Unix timestamp) or as a datetime object if convert_to_datetime is True. 
             Returns -1 if the value could not be retrieved.
         """
         time_last_start = -1
@@ -2179,7 +2411,7 @@ class TempicoDevice():
                 try:
                     if response_first_line!="":
                         time_last_start= float(response_first_line)
-                        if convertToDatetime and time_last_start!=-1:
+                        if convert_to_datetime and time_last_start!=-1:
                             time_last_start = datetime.fromtimestamp(time_last_start)
                     else:
                         print("Device does not respond correctly to DTIMe:LSTart? request")
@@ -2194,7 +2426,7 @@ class TempicoDevice():
         return time_last_start
         
         
-    def getLastSync(self, convertToDatetime=False):
+    def getLastSync(self, convert_to_datetime=False):
         """Returns the datetime of the last synchronization performed on the :func:`~pyTempico.core.TempicoDevice`.
 
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
@@ -2203,16 +2435,16 @@ class TempicoDevice():
 
         The returned value corresponds to the timestamp of the most recent 
         synchronization with the host system. If no synchronization has occurred yet, 
-        the device returns 0. If `convertToDatetime` is 
+        the device returns 0. If `convert_to_datetime` is 
         set to True, the value is returned as a datetime object instead of a float.
 
         Args:
-            convertToDatetime (bool, optional): If True, the value is returned as a 
+            convert_to_datetime (bool, optional): If True, the value is returned as a 
                 datetime object. Default is False.
 
         Returns:
             float or datetime: Timestamp of the last synchronization event, either 
-            as a float (Unix timestamp) or as a datetime object if convertToDatetime is True. 
+            as a float (Unix timestamp) or as a datetime object if convert_to_datetime is True. 
             Returns -1 if the value could not be retrieved.
         """
         time_last_sync = -1
@@ -2227,7 +2459,7 @@ class TempicoDevice():
                 try:
                     if response_first_line!="":
                         time_last_sync= float(response_first_line)
-                        if convertToDatetime and time_last_sync!=-1:
+                        if convert_to_datetime and time_last_sync!=-1:
                             time_last_sync = datetime.fromtimestamp(time_last_sync)
                     else:
                         print("Device does not respond correctly to DTIMe:LSYNc? request")
