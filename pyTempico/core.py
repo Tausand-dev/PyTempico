@@ -1603,15 +1603,17 @@ class TempicoDevice():
                 #discard this row
                 return False #return: is NOT valid
             ##Validate channel number is within 1..ch_MAX
-            ch_range = range(1,self.number_of_channels+1) #range starting in 1, ending in ch_MAX+1 exclusive (e.g. 4+1 ends in 4)
-            if ch not in ch_range:
+            if (ch < 1) or (ch > self.number_of_channels):
+                #this method is x2.5 faster than asking "if ch not in range(1,self.number_of_channels+1)"
+            
                 # print(row)
                 # print('error: ch=',ch)
                 #discard this row
                 return False #return: is NOT valid
             ##Validate sequential run number is within 1..nruns_MAX
-            nruns_range = range(1,self.number_of_runs+1) #range starting in 1, ending in nruns_MAX+1 exclusive (e.g. 1000+1 ends in 1000)
-            if run not in nruns_range:
+            if (run < 1) or (run > self.number_of_runs):
+                #this method is x2.5 faster than asking "if run not in range(1,self.number_of_runs+1)"
+                
                 # print(row)
                 # print('error: run=',run)
                 #discard this row
