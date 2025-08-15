@@ -7,8 +7,8 @@ Written in Python3, pyTempico relies on the following modules:
 - hidapi
 - pyserial
 
-Library version:       1.2.0<br/>
-Current release date:  07/17/2025 (mm/dd/yyyy)<br/>
+Library version:       1.3.0<br/>
+Current release date:  08/15/2025 (mm/dd/yyyy)<br/>
 Original release date: 02/12/2024<br/>
 Supported models:      TP1004.
 
