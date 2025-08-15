@@ -683,6 +683,32 @@ class TempicoChannel():
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
             #TO DO: raise expection?
+            
+    def getStatus(self):
+        status_dict = {}
+        my_tempico = self.parent_tempico_device
+        if my_tempico.isOpen():
+            #read from device and update local variable
+            my_tempico.waitAndReadMessage() #to clear any previous response
+            msg = 'STATus:CH'+str(self.channel_number)+'?'
+            #print(msg)
+            my_tempico.writeMessage(msg)
+            response = my_tempico.readMessage()
+            if response != '':
+                response = response.splitlines()
+                response = response[0]
+                #replace string format to dict assignment format
+                #for example "FIELD=#,FIELD=#" to "{'FIELD':#,'FIELD':#"}"
+                response=response.replace('=','\':').replace(',',',\'')
+                response='{\''+response+'}'
+                status_dict=eval(response) #save response string as a Python dict
+                if (len(status_dict) < 10): #if dict contains less than 10 fields
+                    #TO DO: rise exception, or retry
+                    print('Failed.')
+            else:
+                #TO DO: rise exception, or retry
+                print('Failed.')
+            return status_dict
     
     def getStopEdge(self):
         """Returns the edge type used on stop pulses of the TDC :func:`~pyTempico.core.TempicoChannel`.
@@ -1040,6 +1066,37 @@ class TempicoDevice():
         return self.__connected
     
     ##general requests methods
+    def abort(self):
+        """
+        Cancels an ongoing measurement on the :func:`~pyTempico.core.TempicoDevice`.
+
+        This function sends a cancel command to the :func:`~pyTempico.core.TempicoDevice` to stop any 
+        measurement currently in progress. It ensures that all measurement processes 
+        are halted and the device is ready for a new operation or safely turned off.
+
+        This function requires that a connection is established with the 
+        :func:`~pyTempico.core.TempicoDevice`.
+
+        Args:
+            (none)
+        """
+        try:
+            # self.writeMessage('ABORt')
+            
+            num_try = 0
+            max_try = 3
+            min_wait_time_ms = 8 #wait 8ms is recommended to abort
+            abort_done = False
+            while(num_try < max_try) and (abort_done  == False):
+                num_try = num_try + 1 #keep counting number of trials
+                self.writeMessage('ABORT') #send an Abort request
+                time.sleep(num_try*min_wait_time_ms/1000) #each try, wait longer than before
+                
+                #validate if state=1 (idle) or state=0 (disabled) after aborting
+                abort_done = self.isIdleOrDisabled()
+        except Exception as e: 
+            print(e)
+    
     def getBaudRate(self):
         """Returns the :func:`~pyTempico.core.TempicoDevice` baud rate.
                      
@@ -1092,6 +1149,42 @@ class TempicoDevice():
             #TO DO: raise expection?
         return self.idn
     
+    def getSerialNumber(self):
+        """Returns the serial number of the connected :func:`~pyTempico.core.TempicoDevice`.
+
+        This function searches for the serial number associated with the current 
+        COM port used by the device. If the connection is established, it queries 
+        the list of available serial ports to match the active one and extract 
+        its serial number.
+
+        If the connection is not open, a message is printed and an empty string 
+        is returned.
+
+        Args:
+            (none)
+
+        Returns:
+            string: Serial number of the device, or empty string if not found 
+            or if the connection is not open.
+            e.g: "TP1004-220500"
+        """
+        completeSerial=""
+        if self.isOpen():
+            current_port = self.device.port
+            for port in serial.tools.list_ports.comports():
+                if port.device == current_port:
+                    completeSerial=port.serial_number     
+                    break
+            else:
+                completeSerial=""
+            return completeSerial
+        elif (self.sn != ""):
+            #if current registered sn is not empty
+            return self.sn  #return saved string
+        else:
+            print("Device connection not opened. First open a connection.")
+            print("Unable to get.")
+    
     def readIdnFromDevice(self):
         """Returns the :func:`~pyTempico.core.TempicoDevice` identification string, by requesting it to
         the device.
@@ -1142,9 +1235,25 @@ class TempicoDevice():
             (none)
         """
         try:
-            self.writeMessage('*RST')
-            #TO DO: validate if device has applied the reset request; if not, 
-            #try again to reset.
+            num_try = 0
+            max_try = 3
+            min_wait_time_ms = 15 #it is recommended to wait 15ms to apply reset
+            reset_done = False
+            while(num_try < max_try) and (reset_done == False):
+                num_try = num_try + 1 #keep counting number of trials
+                self.writeMessage('*RST') #send a Reset request
+                time.sleep(num_try*min_wait_time_ms/1000) #each try, wait longer than before
+                   
+                #validate if state=1 (idle) after reset
+                reset_done = self.isIdle()
+            
+            if (not reset_done):
+                print("Failed.")
+                #TO DO: raise expection?
+                
+            # self.writeMessage('*RST')
+            # #TO DO: validate if device has applied the reset request; if not, 
+            # #try again to reset.
         except Exception as e: 
             print(e)
     
@@ -1181,26 +1290,7 @@ class TempicoDevice():
         except Exception as e:
             print(e)
             return ''
-    
-    def abort(self):
-        """
-        Cancels an ongoing measurement on the :func:`~pyTempico.core.TempicoDevice`.
-
-        This function sends a cancel command to the :func:`~pyTempico.core.TempicoDevice` to stop any 
-        measurement currently in progress. It ensures that all measurement processes 
-        are halted and the device is ready for a new operation or safely turned off.
-
-        This function requires that a connection is established with the 
-        :func:`~pyTempico.core.TempicoDevice`.
-
-        Args:
-            (none)
-        """
-        try:
-            self.writeMessage('ABORt')
-        except Exception as e: 
-            print(e)
-    
+       
     def selfTest(self):
         """
         Performs a self-test on the :func:`~pyTempico.core.TempicoDevice` hardware.
@@ -2649,6 +2739,22 @@ class TempicoDevice():
             startEdge=channelSelected.getStartEdge()
         return startEdge
     
+    def getStates(self):
+        states=[]
+        try:            
+            ch1_status = self.ch1.getStatus()
+            ch2_status = self.ch2.getStatus()
+            ch3_status = self.ch3.getStatus()
+            ch4_status = self.ch4.getStatus()            
+            states = [ch1_status["STATE"],ch2_status["STATE"],
+                      ch3_status["STATE"],ch4_status["STATE"]]
+        except Exception as e: 
+            print(e)    
+        
+        return states
+            
+    
+    
     def getStopEdge(self,channel):
         """Returns the edge type used on stop pulses of the specified :func:`~pyTempico.core.TempicoChannel`.
 
@@ -2718,6 +2824,7 @@ class TempicoDevice():
         if channelSelected!=-1:
             stopMask=channelSelected.getStopMask()
         return stopMask
+    
 
     #Setters
     
@@ -2939,6 +3046,32 @@ class TempicoDevice():
             enable=channelSelected.isEnabled()
         return enable
     
+    def isIdle(self):
+        is_idle = False
+        try:
+            states = self.getStates()    
+            
+            #validate if state=1 (idle)
+            if (set(states).issubset([1])) and (len(states) == self.number_of_channels): #if every item is '1'
+                is_idle = True
+        except Exception as e: 
+            print(e)
+            
+        return is_idle
+
+    def isIdleOrDisabled(self):
+        is_idle_or_disabled = False
+        try:
+            states = self.getStates()
+            
+            #validate if state=1 (idle) or state=0 (disabled)
+            if (set(states).issubset([0,1])) and (len(states) == self.number_of_channels): #if every item is either '0' or '1'
+                is_idle_or_disabled = True
+        except Exception as e: 
+            print(e)
+                
+        return is_idle_or_disabled
+    
     def enableChannel(self,channel):
         """Enables the specified :func:`~pyTempico.core.TempicoChannel`.
 
@@ -2996,40 +3129,5 @@ class TempicoDevice():
             channelSelected.disableChannel()
     
     
-    def getSerialNumber(self):
-        """Returns the serial number of the connected :func:`~pyTempico.core.TempicoDevice`.
-
-        This function searches for the serial number associated with the current 
-        COM port used by the device. If the connection is established, it queries 
-        the list of available serial ports to match the active one and extract 
-        its serial number.
-
-        If the connection is not open, a message is printed and an empty string 
-        is returned.
-
-        Args:
-            (none)
-
-        Returns:
-            string: Serial number of the device, or empty string if not found 
-            or if the connection is not open.
-            e.g: "TP1004-220500"
-        """
-        completeSerial=""
-        if self.isOpen():
-            current_port = self.device.port
-            for port in serial.tools.list_ports.comports():
-                if port.device == current_port:
-                    completeSerial=port.serial_number     
-                    break
-            else:
-                completeSerial=""
-            return completeSerial
-        elif (self.sn != ""):
-            #if current registered sn is not empty
-            return self.sn  #return saved string
-        else:
-            print("Device connection not opened. First open a connection.")
-            print("Unable to get.")
         
     
