@@ -19,7 +19,7 @@ import os
 from datetime import datetime
 
 
-##Global variables. 
+### GLOBAL VARIABLES
 #Create, if they do not exist already
 if not('last_id_tempico_device' in globals()):
     last_id_tempico_device = 0
@@ -33,7 +33,7 @@ if not('tempico_channels_list' in globals()):
     tempico_channels_list = []
 
 
-##Classes definitions
+### CLASSES DEFINITIONS
 
 def simpletest():
     """ simple function for tests
@@ -684,7 +684,46 @@ class TempicoChannel():
             print("Unable to set.")
             #TO DO: raise expection?
             
+    def getState(self):
+        """Returns the state of a :func:`~pyTempico.core.TempicoChannel`.
+        
+        This function is used to validate if a reset or an abort command has 
+        been successfully applied.
+        
+        Some possible states are:
+            
+            - 0:  disabled.
+            - 1:  idle, enabled.
+            - 10: processing a reset.
+            - 11: processing an abort.
+        
+        other states are related with the measurement process.
+        
+        Args:
+            (none)
+    
+        Returns:
+            int: state.
+        """
+        try:
+            status = self.getStatus()
+            state = status["STATE"]
+            return int(state)
+        except Exception as e:
+            print(e)
+            
     def getStatus(self):
+        """Returns the internal status of a :func:`~pyTempico.core.TempicoChannel`.
+        
+        This function is used to obtain the state of a channel, used to 
+        validate if a reset or an abort command has been successfully applied.
+        
+        Args:
+            (none)
+    
+        Returns:
+            dict: status fields and values.
+        """
         status_dict = {}
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
@@ -971,7 +1010,8 @@ class TempicoDevice():
         self.ch4 = TempicoChannel(new_id,4)
         self.TempicoDevices=TempicoDevicesSearch()
     
-    ##open and closing connection methods
+    
+    ### TempicoDevice: OPEN AND CLOSING CONNECTION METHODS
     def open(self):
         """Establishes (opens) a connection with a :func:`~pyTempico.core.TempicoDevice`.
         
@@ -1065,8 +1105,9 @@ class TempicoDevice():
         """
         return self.__connected
     
-    ##general requests methods
-    def abort(self):
+    
+    ### TempicoDevice: GENERAL REQUESTS METHODS
+    def abort(self,validate=True):
         """
         Cancels an ongoing measurement on the :func:`~pyTempico.core.TempicoDevice`.
 
@@ -1078,22 +1119,26 @@ class TempicoDevice():
         :func:`~pyTempico.core.TempicoDevice`.
 
         Args:
-            (none)
+            validate (bool, optional): If True, waits and validates if every
+                channel applies the abort sucessfully. Default is True.
         """
         try:
-            # self.writeMessage('ABORt')
-            
             num_try = 0
             max_try = 3
-            min_wait_time_ms = 8 #wait 8ms is recommended to abort
+            min_wait_time_ms = 8 #it is recommended to wait 8ms to apply an abort
             abort_done = False
             while(num_try < max_try) and (abort_done  == False):
                 num_try = num_try + 1 #keep counting number of trials
                 self.writeMessage('ABORT') #send an Abort request
                 time.sleep(num_try*min_wait_time_ms/1000) #each try, wait longer than before
                 
-                #validate if state=1 (idle) or state=0 (disabled) after aborting
-                abort_done = self.isIdleOrDisabled()
+                if validate:
+                    #validate if state=1 (idle) or state=0 (disabled) after aborting
+                    abort_done = self.isIdleOrDisabled()
+                else:
+                    #do not validate, assume is done
+                    abort_done = True
+                
         except Exception as e: 
             print(e)
     
@@ -1222,7 +1267,7 @@ class TempicoDevice():
             
         return self.idn
     
-    def reset(self):
+    def reset(self,validate=True):
         """Sends a reset command to the :func:`~pyTempico.core.TempicoDevice`.
         
         Applying a reset clears all the settings of the :func:`~pyTempico.core.TempicoDevice` and its 
@@ -1232,7 +1277,8 @@ class TempicoDevice():
         :func:`~pyTempico.core.TempicoDevice`.
                      
         Args:
-            (none)
+            validate (bool, optional): If True, waits and validates if every
+                channel applies the reset sucessfully. Default is True.
         """
         try:
             num_try = 0
@@ -1244,20 +1290,22 @@ class TempicoDevice():
                 self.writeMessage('*RST') #send a Reset request
                 time.sleep(num_try*min_wait_time_ms/1000) #each try, wait longer than before
                    
-                #validate if state=1 (idle) after reset
-                reset_done = self.isIdle()
+                if validate:
+                    #validate if state=1 (idle) after reset
+                    reset_done = self.isIdle()
+                else:
+                    #do not validate, assume is done
+                    reset_done = True
             
             if (not reset_done):
                 print("Failed.")
                 #TO DO: raise expection?
-                
-            # self.writeMessage('*RST')
-            # #TO DO: validate if device has applied the reset request; if not, 
-            # #try again to reset.
+
         except Exception as e: 
             print(e)
     
-    ##read and write via serial port methods
+    
+    ### TempicoDevice: READ AND WRITE VIA SERIAL PORT METHODS
     def readMessage(self):
         """Reads pending messages sent by a :func:`~pyTempico.core.TempicoDevice` from its serial port.
         
@@ -1394,7 +1442,7 @@ class TempicoDevice():
             print(e)
             
 
-    ##measure methods
+    ### TempicoDevice: MEASURE METHODS
     def fetch(self,validate=True):
         """Reads the most recent measurement data set form a :func:`~pyTempico.core.TempicoDevice`.
         
@@ -1663,7 +1711,7 @@ class TempicoDevice():
         - 'N' is the NumberOfStops.
                           
         Args:
-            row list(number): single line of dataset message converted.
+            row (list(number)): single line of dataset message converted.
             
         Returns:
             bool: True when single row passes all validations.
@@ -1754,8 +1802,8 @@ class TempicoDevice():
         - 'N' is the NumberOfStops.
         
         Args:
-            row list(number): single line of dataset message converted.
-            next_row list(number): next single line of dataset message converted.
+            row (list(number)): single line of dataset message converted.
+            next_row (list(number)): next single line of dataset message converted.
             
         Returns:
             bool: True when pair of rows passes all validations.
@@ -1829,7 +1877,7 @@ class TempicoDevice():
         - 'N' is the NumberOfStops.
         
         Args:
-            number_list list(number): a complete dataset message converted.
+            number_list (list(number)): a complete dataset message converted.
             
         Returns:
             list(number): a cleaned complete dataset message converted.
@@ -1869,7 +1917,7 @@ class TempicoDevice():
             return cleanlist
 
             
-    ##settings methods
+    ### TempicoDevice: SETTINGS METHODS
     def getSettings(self):
         """Reads the current settings form a :func:`~pyTempico.core.TempicoDevice`.
         
@@ -2740,14 +2788,34 @@ class TempicoDevice():
         return startEdge
     
     def getStates(self):
+        """Returns the state of each :func:`~pyTempico.core.TempicoChannel`
+        within :func:`~pyTempico.core.TempicoDevice`.
+        
+        This function is used to validate if a reset or an abort command has 
+        been successfully applied.
+        
+        Some possible states are:
+            
+            - 0:  disabled.
+            - 1:  idle, enabled.
+            - 10: processing a reset.
+            - 11: processing an abort.
+        
+        other states are related with the measurement process.
+        
+        Args:
+            (none)
+    
+        Returns:
+            list(integer): states per channel.
+        """
         states=[]
         try:            
-            ch1_status = self.ch1.getStatus()
-            ch2_status = self.ch2.getStatus()
-            ch3_status = self.ch3.getStatus()
-            ch4_status = self.ch4.getStatus()            
-            states = [ch1_status["STATE"],ch2_status["STATE"],
-                      ch3_status["STATE"],ch4_status["STATE"]]
+            ch1_state = self.ch1.getState()
+            ch2_state = self.ch2.getState()
+            ch3_state = self.ch3.getState()
+            ch4_state = self.ch4.getState()
+            states = [ch1_state,ch2_state,ch3_state,ch4_state]
         except Exception as e: 
             print(e)    
         
@@ -3047,6 +3115,16 @@ class TempicoDevice():
         return enable
     
     def isIdle(self):
+        """Finds if every channel in the :func:`~pyTempico.core.TempicoDevice`
+        is in the idle state.
+        
+        This method is used to validate if a reset command has been 
+        successfully applied.
+
+        Returns:
+            bool: True if every channel is idle.
+        """
+        
         is_idle = False
         try:
             states = self.getStates()    
@@ -3060,6 +3138,15 @@ class TempicoDevice():
         return is_idle
 
     def isIdleOrDisabled(self):
+        """Finds if every channel in the :func:`~pyTempico.core.TempicoDevice`
+        is in the idle state or in the disabled state.
+        
+        This method is used to validate if an abort command has been 
+        successfully applied.
+
+        Returns:
+            bool: True if every channel is either idle or disabled.
+        """
         is_idle_or_disabled = False
         try:
             states = self.getStates()
