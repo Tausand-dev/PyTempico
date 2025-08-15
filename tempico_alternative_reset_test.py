@@ -53,6 +53,7 @@ def getStatus(tempico_channel):
 def getStates(tempico_device):
     states=[]
     try:
+        
         ch1_status = getStatus(my_device.ch1)
         ch2_status = getStatus(my_device.ch2)
         ch3_status = getStatus(my_device.ch3)
@@ -64,6 +65,45 @@ def getStates(tempico_device):
         print(e)    
     
     return states
+
+def isIdle(tempico_device):
+    is_idle = False
+    try:
+        states = getStates(tempico_device)    
+        
+        #validate if state=1 (idle)
+        if (set(states).issubset([1])) and (len(states) == my_device.number_of_channels): #if every item is '1'
+            is_idle = True
+    except Exception as e: 
+        print(e)
+        
+    return is_idle
+
+def isIdleOrDisabled(tempico_device):
+    is_idle_or_disabled = False
+    try:
+        states = getStates(tempico_device)
+        
+        #validate if state=1 (idle) or state=0 (disabled)
+        if (set(states).issubset([0,1])) and (len(states) == my_device.number_of_channels): #if every item is either '0' or '1'
+            is_idle_or_disabled = True
+    except Exception as e: 
+        print(e)
+            
+    return is_idle_or_disabled
+
+###Functions for this test only
+def initialSettingsForThisTest(tempico_device):
+    tempico_device.setDateTime()
+    
+    #configure a long measurement, with 1 channel disabled
+    tempico_device.setNumberOfRuns(1000)
+    tempico_device.setNumberOfStops(1, 5) #5 stops in channel A
+    tempico_device.setNumberOfStops(2, 5) #5 stops in channel B
+    tempico_device.setNumberOfStops(3, 5) #5 stops in channel C
+    tempico_device.setNumberOfStops(4, 5) #5 stops in channel D
+    tempico_device.disableChannel(3)
+
 
 ########################
 #Main code
@@ -84,112 +124,116 @@ print('\nSerial number: ',my_device.getSerialNumber())
 print('IDN:           ',my_device.getIdn())
 print('Firmware:      ',my_device.getFirmware())
 
-my_device.setDateTime()
-
-#configure a long measurement
-my_device.setNumberOfRuns(1000)
-my_device.setNumberOfStops(1, 5) #5 stops in channel A
-my_device.setNumberOfStops(2, 5) #5 stops in channel B
-my_device.setNumberOfStops(3, 5) #5 stops in channel C
-my_device.setNumberOfStops(4, 5) #5 stops in channel D
-my_device.disableChannel(3)
 
 
 print('\nRESET TEST')
 print('sending a measure request to device')
-# datameas = my_device.measure()   #starts a measurement, and saves response in 'data'
+initialSettingsForThisTest(my_device)
+datameas = my_device.measure()   #starts a measurement, and saves response in 'data'
 # print('measured data, in ps:',datameas)
 
-# ch1_status = getStatus(my_device.ch1)
-# ch2_status = getStatus(my_device.ch2)
-# ch3_status = getStatus(my_device.ch3)
-# ch4_status = getStatus(my_device.ch4)
-# states_initial = [ch1_status["STATE"],ch2_status["STATE"],ch3_status["STATE"],ch4_status["STATE"]]
-states_initial = getStates(my_device)
+states_i = getStates(my_device)
 
 ### RESET TEST STARTS HERE
-# print('sending a reset request')
-#my_device.reset()
-numTry = 0
-maxTry = 3
+print('begin new reset routine')
+ti = time.perf_counter()
+num_try = 0
+max_try = 3
+min_wait_time_ms = 15 #wait 15ms is recommended to reset
 reset_done = False
-while(numTry < maxTry) or (reset_done == True):
-    numTry = numTry + 1 #keep counting number of trials
+while(num_try < max_try) and (reset_done == False):
+    num_try = num_try + 1 #keep counting number of trials
     my_device.writeMessage('*RST') #send a Reset request
-    time.sleep(0.016) #wait at least 16ms for a reset to be applied
-
-    # ch1_status_after = getStatus(my_device.ch1)
-    # ch2_status_after = getStatus(my_device.ch2)
-    # ch3_status_after = getStatus(my_device.ch3)
-    # ch4_status_after = getStatus(my_device.ch4)
-    # states_after = [ch1_status_after["STATE"],ch2_status_after["STATE"],ch3_status_after["STATE"],ch4_status_after["STATE"]]
-    
-    states_after = getStates(my_device)
-    
-    #validate if state=1 (idle) after reset    
-    if set(states_after).issubset([1]): #if every item is '1'
-        reset_done = True
-        break #reset done succesfully, get out of while
-
-print('Number of trials:',numTry)
-if reset_done:
-    print('Reset done fine')
-print('Initial states are:',states_initial)
-print('Final states are:',states_after)
-
+    time.sleep(num_try*min_wait_time_ms/1000) #each try, wait longer than before
+       
+    #validate if state=1 (idle) after reset
+    reset_done = isIdle(my_device)
+tf = time.perf_counter()
 ### RESET TEST ENDS HERE
 
+states_f = getStates(my_device)
+print('Number of trials:',num_try)
+print('Initial states are:',states_i)
+print('Final states are:',states_f)
+if reset_done:
+    print('Reset done fine')
+else:
+    print('Reset failed')
+print('time=',tf-ti)
+
+print('\nTEST tempicoDevice.reset()')
+print('sending a measure request to device')
+initialSettingsForThisTest(my_device)
+my_device.measure()
+states_i = getStates(my_device)
+ti = time.perf_counter()
+my_device.reset()
+tf = time.perf_counter()
+states_f = getStates(my_device)
+if my_device.isIdle():
+    print('Reset done fine')
+else:
+    print('Reset failed')    
+
+print('Initial states are:',states_i)
+print('Final states are:',states_f)
+print('time=',tf-ti)
 
 
-my_device.setDateTime()
 
-#configure a long measurement
-my_device.setNumberOfRuns(1000)
-my_device.setNumberOfStops(1, 5) #5 stops in channel A
-my_device.setNumberOfStops(2, 5) #5 stops in channel B
-my_device.setNumberOfStops(3, 5) #5 stops in channel C
-my_device.setNumberOfStops(4, 5) #5 stops in channel D
-my_device.disableChannel(3)
-
+initialSettingsForThisTest(my_device)
 print('\nABORT TEST')
 print('sending a measure request to device')
 my_device.measure()
-# ch1_status = getStatus(my_device.ch1)
-# ch2_status = getStatus(my_device.ch2)
-# ch3_status = getStatus(my_device.ch3)
-# ch4_status = getStatus(my_device.ch4)
-# states_i_abort = [ch1_status["STATE"],ch2_status["STATE"],ch3_status["STATE"],ch4_status["STATE"]]
-
 states_i_abort = getStates(my_device)
 
 ### ABORT TEST STARTS HERE
-numTry = 0
-maxTry = 3
+print('begin new abort routine')
+ti = time.perf_counter()
+num_try = 0
+max_try = 3
+min_wait_time_ms = 8 #wait 8ms is recommended to abort
 abort_done = False
-while(numTry < maxTry) or (abort_done  == True):
-    numTry = numTry + 1 #keep counting number of trials
+while(num_try < max_try) and (abort_done  == False):
+    num_try = num_try + 1 #keep counting number of trials
     my_device.writeMessage('ABORT') #send an Abort request
-    time.sleep(0.009) #wait at least 9ms for an abort to be applied
+    time.sleep(num_try*min_wait_time_ms/1000) #each try, wait longer than before
     
-    # ch1_status_after = getStatus(my_device.ch1)
-    # ch2_status_after = getStatus(my_device.ch2)
-    # ch3_status_after = getStatus(my_device.ch3)
-    # ch4_status_after = getStatus(my_device.ch4)    
-    # states_f_abort = [ch1_status_after["STATE"],ch2_status_after["STATE"],ch3_status_after["STATE"],ch4_status_after["STATE"]]
-    
-    states_f_abort = getStates(my_device)
     #validate if state=1 (idle) or state=0 (disabled) after aborting
-    if set(states_f_abort).issubset([0,1]): #if every item is either '0' or '1'
-        abort_done  = True
-        break #abort done succesfully, get out of while
+    abort_done = isIdleOrDisabled(my_device)
 
-print('Number of trials:',numTry)
-if abort_done:
-    print('Abort done fine')
+tf = time.perf_counter()
+### ABORT TEST ENDS HERE
+
+states_f_abort = getStates(my_device)
+print('Number of trials:',num_try)
 print('Initial states are:',states_i_abort)
 print('Final states are:',states_f_abort)
+if abort_done:
+    print('Abort done fine')
+else:
+    print('Abort failed')
+print('time=',tf-ti)
 
-### RESET TEST ENDS HERE
+
+print('\nTEST tempicoDevice.abort()')
+print('sending a measure request to device')
+initialSettingsForThisTest(my_device)
+my_device.measure()
+states_i = getStates(my_device)
+ti = time.perf_counter()
+my_device.abort()
+tf = time.perf_counter()
+if my_device.isIdleOrDisabled():
+    print('Abort done fine')
+else:
+    print('Abort failed')
+    
+states_f = getStates(my_device)
+print('Initial states are:',states_i)
+print('Final states are:',states_f)
+print('time=',tf-ti)
+
 
 
 
