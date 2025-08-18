@@ -1,3 +1,15 @@
+# Release Notes 1.3.0 – August 2025
+
+## New Features
+
+* Added methods to read current status and state of a channel.
+
+## Improved Features
+
+* **Measure**  and **fetch** methods now apply data **validation**.
+
+* **Abort** and **reset** methods now **wait** and **validate** if every channel applies the requested command, abort or reset, successfully.
+
 # Release Notes 1.2.0 – July 2025
 
 ## New Features
@@ -16,7 +28,7 @@
 
 ## Bug fixed
 
-- Fixed compatibilty with macOS
+- Fixed compatibilty with macOS.
 
 ---
 
@@ -35,7 +47,7 @@
 
 ## Bug Fixed
 
-- Fixed bug in getFirmare() method
+- Fixed bug in getFirmware() method.
 
 ---
 
@@ -56,4 +68,3 @@
   - **Wait for responses** and **retrieve the last measurement**.
   - Query the device's **IDN** and **firmware version**.
 - Utility functions to **read and view device configuration**.
-

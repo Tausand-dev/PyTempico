@@ -1997,6 +1997,85 @@ class TempicoDevice():
         except Exception as e: 
             print(e)
             
+    def getStates(self):
+        """Returns a list with the state of each :func:`~pyTempico.core.TempicoChannel`
+        within :func:`~pyTempico.core.TempicoDevice`.
+        
+        This function is used to validate if a reset or an abort command has 
+        been successfully applied.
+        
+        Some possible states are:
+            
+            - 0:  disabled.
+            - 1:  idle, enabled.
+            - 10: processing a reset.
+            - 11: processing an abort.
+        
+        other states are related with the measurement process.
+        
+        Args:
+            (none)
+    
+        Returns:
+            list(integer): states per channel.
+        """
+        states=[]
+        try:            
+            ch1_state = self.ch1.getState()
+            ch2_state = self.ch2.getState()
+            ch3_state = self.ch3.getState()
+            ch4_state = self.ch4.getState()
+            states = [ch1_state,ch2_state,ch3_state,ch4_state]
+        except Exception as e: 
+            print(e)    
+        
+        return states
+            
+    def isIdle(self):
+        """Finds if every channel in the :func:`~pyTempico.core.TempicoDevice`
+        is in the idle state.
+        
+        This method is used to validate if a reset command has been 
+        successfully applied.
+
+        Returns:
+            bool: True if every channel is idle.
+        """
+        
+        is_idle = False
+        try:
+            states = self.getStates()    
+            
+            #validate if state=1 (idle)
+            if (set(states).issubset([1])) and (len(states) == self.number_of_channels): #if every item is '1'
+                is_idle = True
+        except Exception as e: 
+            print(e)
+            
+        return is_idle
+
+    def isIdleOrDisabled(self):
+        """Finds if every channel in the :func:`~pyTempico.core.TempicoDevice`
+        is in the idle state or in the disabled state.
+        
+        This method is used to validate if an abort command has been 
+        successfully applied.
+
+        Returns:
+            bool: True if every channel is either idle or disabled.
+        """
+        is_idle_or_disabled = False
+        try:
+            states = self.getStates()
+            
+            #validate if state=1 (idle) or state=0 (disabled)
+            if (set(states).issubset([0,1])) and (len(states) == self.number_of_channels): #if every item is either '0' or '1'
+                is_idle_or_disabled = True
+        except Exception as e: 
+            print(e)
+                
+        return is_idle_or_disabled
+    
     def getNumberOfRuns(self):
         """Returns the number of measurement runs of the TDCs in :func:`~pyTempico.core.TempicoDevice`.
         
@@ -2066,7 +2145,8 @@ class TempicoDevice():
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
             #TO DO: raise exception?
-            
+    
+
     def getThresholdVoltage(self):
         """Returns the threshold voltage on the rising edge of start and stops 
         inputs of TDCs in the :func:`~pyTempico.core.TempicoDevice`.
@@ -2610,10 +2690,12 @@ class TempicoDevice():
             print("Unable to get.")         
         return time_last_sync
     
+    
+    ### TempicoDevice: SINGLE CHANNEL SETTINGS METHODS
     #Functions come from tempico device
     # The channels could be A or 1, B or 2, C or 3, D or 4
 
-    # This function will be use in order to reuse the code
+    # This function will be used in order to reuse the code
     def getTempicoChannel(self, channel):
         """Returns the :func:`~pyTempico.core.TempicoChannel` object corresponding to the specified channel.
 
@@ -2647,7 +2729,7 @@ class TempicoDevice():
             return -1
         return channelSelected
 
-    #Getters tempico device
+    ### TempicoDevice: SINGLE CHANNEL SETTINGS METHODS, GETTERS
     def getAverageCycles(self,channel):
         """Returns the average cycles of the specified :func:`~pyTempico.core.TempicoChannel`.
 
@@ -2787,9 +2869,8 @@ class TempicoDevice():
             startEdge=channelSelected.getStartEdge()
         return startEdge
     
-    def getStates(self):
-        """Returns the state of each :func:`~pyTempico.core.TempicoChannel`
-        within :func:`~pyTempico.core.TempicoDevice`.
+    def getState(self,channel):
+        """Returns the state of the specified :func:`~pyTempico.core.TempicoChannel`.
         
         This function is used to validate if a reset or an abort command has 
         been successfully applied.
@@ -2803,24 +2884,59 @@ class TempicoDevice():
         
         other states are related with the measurement process.
         
+        This version belongs to the :func:`~pyTempico.core.TempicoDevice` class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        :func:`~pyTempico.core.TempicoChannel`.
+        
         Args:
-            (none)
+            channel (int or str): Channel identifier. Accepted values are:
+            
+                - 1 or 'A' or 'a'
+                - 2 or 'B' or 'b'
+                - 3 or 'C' or 'c'
+                - 4 or 'D' or 'd'
     
         Returns:
-            list(integer): states per channel.
-        """
-        states=[]
-        try:            
-            ch1_state = self.ch1.getState()
-            ch2_state = self.ch2.getState()
-            ch3_state = self.ch3.getState()
-            ch4_state = self.ch4.getState()
-            states = [ch1_state,ch2_state,ch3_state,ch4_state]
-        except Exception as e: 
-            print(e)    
-        
-        return states
+            int: state.
             
+            Returns -1 if the channel is invalid.
+        """
+        
+        channelSelected=self.getTempicoChannel(channel)
+        state=-1
+        if channelSelected!=-1:
+            state=channelSelected.getState()
+        return state
+
+            
+    def getStatus(self,channel):
+        """Returns the internal status of the specified :func:`~pyTempico.core.TempicoChannel`.
+        
+        This function is used to obtain the state of a channel, used to 
+        validate if a reset or an abort command has been successfully applied.
+        
+        This version belongs to the :func:`~pyTempico.core.TempicoDevice` class and requires specifying 
+        the channel number or label ('A'–'D') to access the corresponding 
+        :func:`~pyTempico.core.TempicoChannel`.
+        
+        Args:
+            channel (int or str): Channel identifier. Accepted values are:
+            
+                - 1 or 'A' or 'a'
+                - 2 or 'B' or 'b'
+                - 3 or 'C' or 'c'
+                - 4 or 'D' or 'd'
+    
+        Returns:
+            dict: status fields and values.
+            
+            Returns -1 if the channel is invalid.
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        status=-1
+        if channelSelected!=-1:
+            status=channelSelected.getStatus()
+        return status
     
     
     def getStopEdge(self,channel):
@@ -2894,8 +3010,7 @@ class TempicoDevice():
         return stopMask
     
 
-    #Setters
-    
+    ### TempicoDevice: SINGLE CHANNEL SETTINGS METHODS, SETTERS    
     def setAverageCycles(self,channel,averageCycles):
         """Modifies the average cycles of the specified :func:`~pyTempico.core.TempicoChannel`.
 
@@ -3081,7 +3196,7 @@ class TempicoDevice():
         if channelSelected!=-1:
             channelSelected.setStopMask(stopMask)
     
-    #Other functions
+    ### TempicoDevice: SINGLE CHANNEL SETTINGS METHODS, OTHER FUNCTIONS
     def isEnabled(self,channel):
         """Returns whether the specified :func:`~pyTempico.core.TempicoChannel` is enabled.
 
@@ -3113,51 +3228,7 @@ class TempicoDevice():
         if channelSelected!=-1:
             enable=channelSelected.isEnabled()
         return enable
-    
-    def isIdle(self):
-        """Finds if every channel in the :func:`~pyTempico.core.TempicoDevice`
-        is in the idle state.
-        
-        This method is used to validate if a reset command has been 
-        successfully applied.
 
-        Returns:
-            bool: True if every channel is idle.
-        """
-        
-        is_idle = False
-        try:
-            states = self.getStates()    
-            
-            #validate if state=1 (idle)
-            if (set(states).issubset([1])) and (len(states) == self.number_of_channels): #if every item is '1'
-                is_idle = True
-        except Exception as e: 
-            print(e)
-            
-        return is_idle
-
-    def isIdleOrDisabled(self):
-        """Finds if every channel in the :func:`~pyTempico.core.TempicoDevice`
-        is in the idle state or in the disabled state.
-        
-        This method is used to validate if an abort command has been 
-        successfully applied.
-
-        Returns:
-            bool: True if every channel is either idle or disabled.
-        """
-        is_idle_or_disabled = False
-        try:
-            states = self.getStates()
-            
-            #validate if state=1 (idle) or state=0 (disabled)
-            if (set(states).issubset([0,1])) and (len(states) == self.number_of_channels): #if every item is either '0' or '1'
-                is_idle_or_disabled = True
-        except Exception as e: 
-            print(e)
-                
-        return is_idle_or_disabled
     
     def enableChannel(self,channel):
         """Enables the specified :func:`~pyTempico.core.TempicoChannel`.
