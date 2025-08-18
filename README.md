@@ -8,7 +8,7 @@ Written in Python3, pyTempico relies on the following modules:
 - pyserial
 
 Library version:       1.3.0<br/>
-Current release date:  08/15/2025 (mm/dd/yyyy)<br/>
+Current release date:  08/18/2025 (mm/dd/yyyy)<br/>
 Original release date: 02/12/2024<br/>
 Supported models:      TP1004.
 
