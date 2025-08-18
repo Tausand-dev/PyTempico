@@ -1007,9 +1007,50 @@ the channel number or label (‘A’–‘D’) to access the corresponding
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getState">
+<span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getState" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the state of the specified <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
+<p>This function is used to validate if a reset or an abort command has
+been successfully applied.</p>
+<p>Some possible states are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>0:  disabled.</p></li>
+<li><p>1:  idle, enabled.</p></li>
+<li><p>10: processing a reset.</p></li>
+<li><p>11: processing an abort.</p></li>
+</ul>
+</div></blockquote>
+<p>other states are related with the measurement process.</p>
+<p>This version belongs to the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a> class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+<a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – <p>Channel identifier. Accepted values are:</p>
+<ul class="simple">
+<li><p>1 or ‘A’ or ‘a’</p></li>
+<li><p>2 or ‘B’ or ‘b’</p></li>
+<li><p>3 or ‘C’ or ‘c’</p></li>
+<li><p>4 or ‘D’ or ‘d’</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>state.</p>
+<p>Returns -1 if the channel is invalid.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStates">
 <span class="sig-name descname"><span class="pre">getStates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStates" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the state of each <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>
+<dd><p>Returns a list with the state of each <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>
 within <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>.</p>
 <p>This function is used to validate if a reset or an abort command has
 been successfully applied.</p>
@@ -1032,6 +1073,37 @@ been successfully applied.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list(integer)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStatus">
+<span class="sig-name descname"><span class="pre">getStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStatus" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the internal status of the specified <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
+<p>This function is used to obtain the state of a channel, used to
+validate if a reset or an abort command has been successfully applied.</p>
+<p>This version belongs to the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a> class and requires specifying
+the channel number or label (‘A’–‘D’) to access the corresponding
+<a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>int</em><em> or </em><em>str</em>) – <p>Channel identifier. Accepted values are:</p>
+<ul class="simple">
+<li><p>1 or ‘A’ or ‘a’</p></li>
+<li><p>2 or ‘B’ or ‘b’</p></li>
+<li><p>3 or ‘C’ or ‘c’</p></li>
+<li><p>4 or ‘D’ or ‘d’</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>status fields and values.</p>
+<p>Returns -1 if the channel is invalid.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
