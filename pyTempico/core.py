@@ -864,7 +864,7 @@ class TempicoChannel():
             response = my_tempico.readMessage()
             response = response.splitlines()
             response = int(response[0])
-            if response > 0:
+            if response >= 0:
                  #update local variable
                  self.stop_mask = response
         return self.stop_mask
@@ -2239,8 +2239,8 @@ class TempicoDevice():
                 #validate if message was applied
                 new_thr = self.getThresholdVoltage()
                 if type(desired_voltage) == float:
-                    if round(new_thr*10) == round(desired_voltage*10):
-                        #if desired and real voltages are close by 0.1
+                    if abs(new_thr - desired_voltage) < 0.02:
+                        #if desired and real voltages are close by +/-0.019
                         #ok
                         pass
                     else:
@@ -3102,7 +3102,7 @@ class TempicoDevice():
         if channelSelected!=-1:
             channelSelected.setMode(mode)
     
-    def setStartEdge(self,channel,startEdge):
+    def setStartEdge(self,channel,edge_type):
         """Sets the edge type used on start pulses of the specified :func:`~pyTempico.core.TempicoChannel`.
 
         By default, start edge = 'RISE'. Possible values are:
@@ -3126,14 +3126,14 @@ class TempicoDevice():
                 - 3 or 'C' or 'c'
                 - 4 or 'D' or 'd'
 
-            startEdge (str or int): Desired start edge type for the TDC.
+            edge_type (str or int): Desired start edge type for the TDC.
                 Accepted values are 'RISE', 1, 'RIS' or 'FALL', 0, 'FAL'.
         """
         channelSelected=self.getTempicoChannel(channel)
         if channelSelected!=-1:
-            channelSelected.setStartEdge(startEdge)
+            channelSelected.setStartEdge(edge_type)
     
-    def setStopEdge(self,channel,stopEdge):
+    def setStopEdge(self,channel,edge_type):
         """Sets the edge type used on stop pulses of the specified :func:`~pyTempico.core.TempicoChannel`.
 
         By default, stop edge = 'RISE'. Possible values are:
@@ -3157,14 +3157,14 @@ class TempicoDevice():
                 - 3 or 'C' or 'c'
                 - 4 or 'D' or 'd'
 
-            stopEdge (str or int): Desired stop edge type for the TDC.
+            edge_type (str or int): Desired stop edge type for the TDC.
                 Accepted values are 'RISE', 1, 'RIS' or 'FALL', 0, 'FAL'.
         """
         channelSelected=self.getTempicoChannel(channel)
         if channelSelected!=-1:
-            channelSelected.setStopEdge(stopEdge)
+            channelSelected.setStopEdge(edge_type)
     
-    def setStopMask(self,channel,stopMask):
+    def setStopMask(self,channel,stop_mask_in_us):
         """Modifies the stop mask time of the specified :func:`~pyTempico.core.TempicoChannel`.
 
         By default, stop mask = 0 (no masking).
@@ -3189,12 +3189,12 @@ class TempicoDevice():
                 - 3 or 'C' or 'c'
                 - 4 or 'D' or 'd'
 
-            stopMask (int): Desired stop mask time in microseconds.
+            stop_mask_in_us (int): Desired stop mask time in microseconds.
                 Valid values are from 0 to 4000.
         """
         channelSelected=self.getTempicoChannel(channel)
         if channelSelected!=-1:
-            channelSelected.setStopMask(stopMask)
+            channelSelected.setStopMask(stop_mask_in_us)
     
     ### TempicoDevice: SINGLE CHANNEL SETTINGS METHODS, OTHER FUNCTIONS
     def isEnabled(self,channel):
