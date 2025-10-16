@@ -913,6 +913,23 @@ class TempicoChannel():
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
             #TO DO: raise expection?
+    
+    def getDelay(self):
+        response=-1000000
+        my_tempico = self.parent_tempico_device
+        if my_tempico.hardwareVersion=="TP12":
+            if my_tempico.isOpen():
+                my_tempico.waitAndReadMessage()
+                msg = 'CONFigure:CH'+str(self.channel_number)+':DELay?'
+                my_tempico.writeMessage(msg)
+                response = my_tempico.readMessage()
+                response = response.splitlines()
+                response = float(response[0])
+        elif my_tempico.hardwareVersion=="TP10":
+            print("This feature is not available for Tempico TP1004")
+        else:
+            print("The connection with the device is not open, or an error occurred while opening it.")             
+        return response
 
 
 class TempicoDevice():       
@@ -1002,7 +1019,8 @@ class TempicoDevice():
         global tempico_devices_list
         tempico_devices_list.append(self)
         #Communication and identification parameters        
-        self.port = com_port         
+        self.port = com_port     
+        self.hardwareVersion = "TP10"    
         #create channels, and link to this device
         self.ch1 = TempicoChannel(new_id,1)
         self.ch2 = TempicoChannel(new_id,2)
@@ -1041,6 +1059,7 @@ class TempicoDevice():
                     self.ch2.number_of_stops = self.ch2.getNumberOfStops()
                     self.ch3.number_of_stops = self.ch3.getNumberOfStops()
                     self.ch4.number_of_stops = self.ch4.getNumberOfStops()
+                self.hardwareVersion=self.getTempicoVersion()
                     
             except Exception as e:
                 print('verify the device in port',desired_port
@@ -1104,6 +1123,20 @@ class TempicoDevice():
             bool: True when :func:`~pyTempico.core.TempicoDevice` connection is open.
         """
         return self.__connected
+
+    def getTempicoVersion(self):
+        self.readMessage()
+        self.writeMessage("*IDN?")
+        serialDescription= self.readMessage()
+        versionValue=""
+        try:
+            versionValue = serialDescription.split(",")[1].split(" ")[1].replace("04","")
+        except Exception as e:
+            print(e)
+        return versionValue
+            
+            
+        
     
     
     ### TempicoDevice: GENERAL REQUESTS METHODS
@@ -3285,6 +3318,68 @@ class TempicoDevice():
         channelSelected=self.getTempicoChannel(channel)
         if channelSelected!=-1:
             channelSelected.disableChannel()
+    
+    
+    #Functions for delay
+    def delayCalibration(self):
+        try:
+            if self.hardwareVersion=="TP12":
+                self.writeMessage("CONFigure:DELay")
+            else:
+                print("This feature is not available for Tempico TP1004")
+        except NameError as e:
+            print(e)
+    
+    
+    def getDelay(self, channel):
+        channelSelected=self.getTempicoChannel(channel)
+        delay=-1000000
+        if channelSelected!=-1:
+            delay=channelSelected.getDelay()
+        return delay
+
+    def getLastDelaySync(self, convert_to_datetime=False):
+        time_last_sync = -1
+        if self.hardwareVersion=="TP12":
+            if self.isOpen():
+                self.waitAndReadMessage()
+                msg="DTIMe:LDELay?"
+                self.writeMessage(msg)
+                response= self.readMessage()
+                response= response.splitlines()
+                if len(response)>0:
+                    response_first_line = response[0]
+                    try:
+                        if response_first_line!="":
+                            time_last_sync= float(response_first_line)
+                            if convert_to_datetime and time_last_sync!=-1:
+                                time_last_sync = datetime.fromtimestamp(time_last_sync)
+                        else:
+                            print("Device does not respond correctly to DTIMe:LDELay? request")
+                    except:
+                        print("Device does not respond correctly to DTIMe:LDELay? request")
+                else:
+                    print("Device does not respond correctly to DTIMe:LDELay? request")
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to get.")
+        else:
+            print("This feature is not available for Tempico TP1004")
+        return time_last_sync
+    
+    
+    
+    def getOverflowParameter(self):
+        overflow=-1
+        if self.hardwareVersion=="TP12":
+            return -1000000
+        return overflow
+    
+
+    
+    
+        
+        
     
     
         
