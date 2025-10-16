@@ -925,11 +925,91 @@ class TempicoChannel():
                 response = my_tempico.readMessage()
                 response = response.splitlines()
                 response = float(response[0])
+            else:
+                print("The connection with the device is not open, or an error occurred while opening it.")             
+        elif my_tempico.hardwareVersion=="TP10":
+            print("This feature is not available for Tempico TP1004")
+        return response
+
+    
+    def __getStartStopSource(self, startStop):
+        response=""
+        my_tempico = self.parent_tempico_device
+        if my_tempico.hardwareVersion=="TP12":
+            if my_tempico.isOpen():
+                my_tempico.waitAndReadMessage()
+                if startStop=="START":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STARt:SOURce?'
+                elif startStop=="STOP":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STOP:SOURce?'
+                my_tempico.writeMessage(msg)
+                response = my_tempico.readMessage()
+                response = response.splitlines()
+                response = response[0]
         elif my_tempico.hardwareVersion=="TP10":
             print("This feature is not available for Tempico TP1004")
         else:
             print("The connection with the device is not open, or an error occurred while opening it.")             
         return response
+
+    def getStartSource(self):
+        startSource=self.__getStartStopSource("START")
+        return startSource
+    
+    def getStopSource(self):
+        stopSource=self.__getStartStopSource("STOP")
+        return stopSource
+
+    
+    def __setStartStopSource(self, startStop, intExt):
+        response=""
+        if intExt=="EXT":
+            responseExpected="EXTERNAL"
+        elif intExt=="INT":
+            responseExpected="INTERNAL"
+        my_tempico = self.parent_tempico_device
+        if my_tempico.hardwareVersion=="TP12":
+            if my_tempico.isOpen():
+                my_tempico.waitAndReadMessage()
+                if startStop=="START":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STARt:SOURce '+ intExt
+                elif startStop=="STOP":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STOP:SOURce '+ intExt
+                my_tempico.writeMessage(msg)
+                
+                response = my_tempico.readMessage()
+                response = response.splitlines()
+                if response!="":
+                    consistentValue=False
+                    if startStop=="START":
+                        startSource = self.getStartSource()
+                        consistentValue = startSource==responseExpected
+                    elif startStop=="STOP":
+                        stopSource = self.getStopSource()
+                        consistentValue = stopSource==responseExpected
+                    if not consistentValue:
+                        print("Failed")
+                else:
+                    print("Failed")
+            else:
+                print("The connection with the device is not open, or an error occurred while opening it.")             
+        elif my_tempico.hardwareVersion=="TP10":
+            print("This feature is not available for Tempico TP1004")
+        
+
+    def setStartExternalSource(self):
+        self.__setStartStopSource("START", "EXT")
+    
+    def setStartInternalSource(self):
+        self.__setStartStopSource("START", "INT")
+    
+    def setStopExternalSource(self):
+        self.__setStartStopSource("STOP", "EXT")
+    
+    def setStopInternalSource(self):
+        self.__setStartStopSource("STOP", "INT")
+        
+    
 
 
 class TempicoDevice():       
@@ -3471,6 +3551,45 @@ class TempicoDevice():
     
     def decreaseGeneratorFrequency(self):
         self.__incDecGeneratorFrequency("DOWN")
+    
+    
+    def getStartSource(self,channel):
+        channelSelected=self.getTempicoChannel(channel)
+        startSource=-1
+        if channelSelected!=-1:
+            startSource=channelSelected.getStartSource()
+        return startSource
+    
+    
+    def getStopSource(self,channel):
+        channelSelected=self.getTempicoChannel(channel)
+        stopSource=-1
+        if channelSelected!=-1:
+            stopSource=channelSelected.getStopSource()
+        return stopSource
+
+    
+    def setStartExternalSource(self,channel):
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStartExternalSource()
+    
+    def setStartInternalSource(self,channel):
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStartInternalSource()
+    
+    def setStopExternalSource(self,channel):
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStopExternalSource()
+    
+    
+    def setStopInternalSource(self,channel):
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStopInternalSource()
+    
     
     
         
