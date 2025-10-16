@@ -3375,7 +3375,102 @@ class TempicoDevice():
             return -1000000
         return overflow
     
+    def getGeneratorFrequency(self):
+        response=""
+        if self.hardwareVersion=="TP12":
+            if self.isOpen():
+                self.waitAndReadMessage()
+                msg = 'CONF:GEN:FREQ?'
+                self.writeMessage(msg)
+                response = self.readMessage()
+                response = response.splitlines()
+                response = float(response[0])
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to get.")
+        else:
+            print("This feature is not available for Tempico TP1004")
+        return response
 
+
+    
+    
+    def setGeneratorFrequency(self,desired_frequency):
+        if self.hardwareVersion=="TP12":
+            if self.isOpen() == True:
+                #try to convert to a float
+                try:
+                    desired_frequency = float(desired_frequency) #coherce to a float number
+                    if desired_frequency>=100 and desired_frequency<=10_000_000:
+                        msg = 'CONF:GEN:FREQ ' + str(desired_frequency)
+                        self.writeMessage(msg)
+                        
+                        #verify if an error message is issued by the device
+                        response = self.waitAndReadMessage()
+                        if response != '':
+                            #an error or warning was found
+                            #TO DO: rise exception
+                            print(response.splitlines()[0])
+                        else:            
+                            #validate if message was applied
+                            new_freq = self.getGeneratorFrequency()
+                            if type(desired_frequency) == float:
+                                rel_err=(abs(new_freq-desired_frequency)/desired_frequency)*100
+                                if rel_err < 3:
+                                    #if rel_err is less than 3%
+                                    #ok
+                                    pass
+                                else:
+                                    print('Failed')
+                                    #TO DO: rise exception, or retry
+                            else:
+                                print('Failed')
+                    else:
+                        print("Value applied out of range, the value must be between 100Hz and 10000000Hz")
+                except NameError as e:
+                    print(e)
+
+            
+            
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to set.")
+        else:
+            print("This feature is not available for Tempico TP1004")
+            
+    
+    
+    def __incDecGeneratorFrequency(self,incDec):
+        if self.hardwareVersion=="TP12":
+            if self.isOpen() == True:
+                #try to convert to a float
+                try:
+                    if incDec=="UP":
+                        msg = 'CONF:GEN:INCR'
+                    elif incDec=="DOWN":
+                        msg = 'CONF:GEN:DECR'
+                        
+                    self.writeMessage(msg)
+                    response = self.waitAndReadMessage()
+                    if response != '':
+                        #an error or warning was found
+                        #TO DO: rise exception
+                        print(response.splitlines()[0])
+                except NameError as e:
+                    print(e)
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to set.")
+        else:
+            print("This feature is not available for Tempico TP1004")
+    
+    
+    def increaseGeneratorFrequency(self):
+        self.__incDecGeneratorFrequency("UP")
+    
+    
+    def decreaseGeneratorFrequency(self):
+        self.__incDecGeneratorFrequency("DOWN")
     
     
         
