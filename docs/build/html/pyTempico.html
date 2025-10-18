@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyTempico package &mdash; pyTempico 1.4.0 documentation</title>
+  <title>pyTempico package &mdash; pyTempico 2.0.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -356,6 +356,22 @@ channel applies the abort sucessfully. Default is True.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.calibrateDelay">
+<span class="sig-name descname"><span class="pre">calibrateDelay</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.calibrateDelay" title="Permalink to this definition"></a></dt>
+<dd><p>Calibrates the internal delay`.</p>
+<p>This command adjusts the hardware’s internal timing to ensure accurate
+delay measurements. Only supported on devices with hardware version “TP12”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.cleanNumberList">
 <span class="sig-name descname"><span class="pre">cleanNumberList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.cleanNumberList" title="Permalink to this definition"></a></dt>
 <dd><p>Removes non-valid elements of a Tempico dataset, given in
@@ -513,22 +529,6 @@ should be called.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>(</strong><strong>none</strong><strong>)</strong> – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.delayCalibration">
-<span class="sig-name descname"><span class="pre">delayCalibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.delayCalibration" title="Permalink to this definition"></a></dt>
-<dd><p>Calibrates the internal delay of the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>.</p>
-<p>This command adjusts the hardware’s internal timing to ensure accurate
-delay measurements. Only supported on devices with hardware version “TP12”.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>None</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -708,7 +708,7 @@ or synchronized with the PC clock. Returns -1 if no valid response is received.<
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getDelay">
 <span class="sig-name descname"><span class="pre">getDelay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getDelay" title="Permalink to this definition"></a></dt>
-<dd><p>Retrieves the delay value for the specified channel of the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>.</p>
+<dd><p>Retrieves the delay value for the specified channel`.</p>
 <p>The function selects the given channel and queries its current delay setting.
 If the channel is invalid, it returns -1000000.</p>
 <dl class="field-list simple">
@@ -1017,7 +1017,7 @@ the channel number or label (‘A’–‘D’) to access the corresponding
 <dl class="py method">
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getOverflowParameter">
 <span class="sig-name descname"><span class="pre">getOverflowParameter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getOverflowParameter" title="Permalink to this definition"></a></dt>
-<dd><p>Retrieves the overflow parameter of the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>.</p>
+<dd><p>Retrieves the overflow parameter.</p>
 <p>The returned value depends on the device hardware version. For TP12 devices,
 the function returns -1000000; otherwise, it returns -1.</p>
 <dl class="field-list simple">
@@ -1809,14 +1809,14 @@ on the device. If not provided, the current system time is used.</p>
 <span class="sig-name descname"><span class="pre">setGeneratorFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setGeneratorFrequency" title="Permalink to this definition"></a></dt>
 <dd><p>Sets the frequency of the internal pulse generator (only for TP12 devices).</p>
 <p>This function changes the frequency of the internal generator using the
-‘CONF:GEN:FREQ’ command. The value must be between 100 Hz and 10 000 000 Hz.
+‘CONF:GEN:FREQ’ command. The value must be between 10 Hz and 10 000 000 Hz.
 The command is verified by reading back the applied frequency and checking
 that the relative error is below 3%. If the connection is not open or the
 hardware version is not supported, an informational message is printed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>desired_frequency</strong> (<em>float</em>) – Desired generator frequency in hertz
-(100 Hz – 10 000 000 Hz).</p>
+(10 Hz – 10 000 000 Hz).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>None</p>

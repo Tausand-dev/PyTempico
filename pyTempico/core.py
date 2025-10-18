@@ -930,7 +930,7 @@ class TempicoChannel():
         """
         response=-1000000
         my_tempico = self.parent_tempico_device
-        if my_tempico.hardwareVersion=="TP12":
+        if "TP12" in my_tempico.model_idn :
             if my_tempico.isOpen():
                 my_tempico.waitAndReadMessage()
                 msg = 'CONFigure:CH'+str(self.channel_number)+':DELay?'
@@ -940,12 +940,13 @@ class TempicoChannel():
                 response = float(response[0])
             else:
                 print("The connection with the device is not open, or an error occurred while opening it.")             
-        elif my_tempico.hardwareVersion=="TP10":
-            print("This feature is not available for Tempico TP1004")
+        elif "TP10" in my_tempico.model_idn:
+            print(f"This feature is not available for Tempico {my_tempico.model_idn}")
         return response
 
     
     def __getStartStopSource(self, startStop):
+        #If is TP10 always is EXTERNAL
         """Returns the signal source (internal or external) for the start or stop input of this channel (only for TP12 devices).
 
         This function queries the device to determine whether the specified input 
@@ -962,7 +963,7 @@ class TempicoChannel():
         """
         response=""
         my_tempico = self.parent_tempico_device
-        if my_tempico.hardwareVersion=="TP12":
+        if "TP12" in my_tempico.model_idn :
             if my_tempico.isOpen():
                 my_tempico.waitAndReadMessage()
                 if startStop=="START":
@@ -973,10 +974,10 @@ class TempicoChannel():
                 response = my_tempico.readMessage()
                 response = response.splitlines()
                 response = response[0]
-        elif my_tempico.hardwareVersion=="TP10":
-            print("This feature is not available for Tempico TP1004")
+            else:
+                print("The connection with the device is not open, or an error occurred while opening it.")             
         else:
-            print("The connection with the device is not open, or an error occurred while opening it.")             
+            response="EXTERNAL"    
         return response
 
     def getStartSource(self):
@@ -1031,7 +1032,7 @@ class TempicoChannel():
         elif intExt=="INT":
             responseExpected="INTERNAL"
         my_tempico = self.parent_tempico_device
-        if my_tempico.hardwareVersion=="TP12":
+        if "TP12" in my_tempico.model_idn:
             if my_tempico.isOpen():
                 my_tempico.waitAndReadMessage()
                 if startStop=="START":
@@ -1056,8 +1057,8 @@ class TempicoChannel():
                     print("Failed")
             else:
                 print("The connection with the device is not open, or an error occurred while opening it.")             
-        elif my_tempico.hardwareVersion=="TP10":
-            print("This feature is not available for Tempico TP1004")
+        elif "TP10" in my_tempico.model_idn:
+            print(f"This feature is not available for Tempico {my_tempico.model_idn}")
         
 
     def setStartExternalSource(self):
@@ -1206,8 +1207,10 @@ class TempicoDevice():
         global tempico_devices_list
         tempico_devices_list.append(self)
         #Communication and identification parameters        
-        self.port = com_port     
-        self.hardwareVersion = "TP10"    
+        self.port = com_port
+        #Rename as model     
+        self.model_idn = "TP1004"
+        self.is_model_read=False
         #create channels, and link to this device
         self.ch1 = TempicoChannel(new_id,1)
         self.ch2 = TempicoChannel(new_id,2)
@@ -1246,7 +1249,7 @@ class TempicoDevice():
                     self.ch2.number_of_stops = self.ch2.getNumberOfStops()
                     self.ch3.number_of_stops = self.ch3.getNumberOfStops()
                     self.ch4.number_of_stops = self.ch4.getNumberOfStops()
-                self.hardwareVersion=self.getTempicoVersion()
+                self.readIdnFromDevice()
                     
             except Exception as e:
                 print('verify the device in port',desired_port
@@ -1310,17 +1313,6 @@ class TempicoDevice():
             bool: True when :func:`~pyTempico.core.TempicoDevice` connection is open.
         """
         return self.__connected
-
-    def getTempicoVersion(self):
-        self.readMessage()
-        self.writeMessage("*IDN?")
-        serialDescription= self.readMessage()
-        versionValue=""
-        try:
-            versionValue = serialDescription.split(",")[1].split(" ")[1].replace("04","")
-        except Exception as e:
-            print(e)
-        return versionValue
             
             
         
@@ -1475,7 +1467,10 @@ class TempicoDevice():
             
             if len(splitted_response) == 4: #expected 4 words
                 manufacturer_idn_string = splitted_response[0]  #e.g.: Tausand
-                model_idn_string = splitted_response[1]         #e.g.: Tempico TP1004
+                model_idn_string = splitted_response[1]#e.g.: Tempico TP1004
+                if not self.is_model_read:
+                    self.model_idn=model_idn_string.split(" ")[1]
+                    self.is_model_read=True
                 ##splitted_response[2] should be empty
                 version_idn_string = splitted_response[3]       #e.g.: 1.0
                 self.idn = manufacturer_idn_string + ' ' + model_idn_string
@@ -3508,8 +3503,9 @@ class TempicoDevice():
     
     
     #Functions for delay
-    def delayCalibration(self):
-        """Calibrates the internal delay of the :func:`~pyTempico.core.TempicoDevice`.
+    #TODO in error print the model version and dont hardcode
+    def calibrateDelay(self):
+        """Calibrates the internal delay`.
 
         This command adjusts the hardware’s internal timing to ensure accurate
         delay measurements. Only supported on devices with hardware version "TP12".
@@ -3521,16 +3517,16 @@ class TempicoDevice():
             None
         """
         try:
-            if self.hardwareVersion=="TP12":
+            if "TP12" in self.model_idn:
                 self.writeMessage("CONFigure:DELay")
             else:
-                print("This feature is not available for Tempico TP1004")
+                print(f"This feature is not available for Tempico {self.model_idn}")
         except NameError as e:
             print(e)
     
     
     def getDelay(self, channel):
-        """Retrieves the delay value for the specified channel of the :func:`~pyTempico.core.TempicoDevice`.
+        """Retrieves the delay value for the specified channel`.
 
         The function selects the given channel and queries its current delay setting.
         If the channel is invalid, it returns -1000000.
@@ -3563,7 +3559,7 @@ class TempicoDevice():
             timestamp or datetime object. Returns -1 if it cannot be retrieved.
         """
         time_last_sync = -1
-        if self.hardwareVersion=="TP12":
+        if "TP12" in self.model_idn:
             if self.isOpen():
                 self.waitAndReadMessage()
                 msg="DTIMe:LDELay?"
@@ -3587,13 +3583,13 @@ class TempicoDevice():
                 print("Device connection not opened. First open a connection.")
                 print("Unable to get.")
         else:
-            print("This feature is not available for Tempico TP1004")
+            print(f"This feature is not available for Tempico {self.model_idn}")
         return time_last_sync
     
     
-    
+    #TODO change ==by contains
     def getOverflowParameter(self):
-        """Retrieves the overflow parameter of the :func:`~pyTempico.core.TempicoDevice`.
+        """Retrieves the overflow parameter.
 
         The returned value depends on the device hardware version. For TP12 devices, 
         the function returns -1000000; otherwise, it returns -1.
@@ -3605,8 +3601,8 @@ class TempicoDevice():
             int: Overflow parameter value based on the hardware version.
         """
         overflow=-1
-        if self.hardwareVersion=="TP12":
-            return -1000000
+        if "TP12" in self.model_idn:
+            overflow= -1000000
         return overflow
     
     def getGeneratorFrequency(self):
@@ -3625,7 +3621,7 @@ class TempicoDevice():
             Returns an empty string if it cannot be retrieved.
         """
         response=""
-        if self.hardwareVersion=="TP12":
+        if "TP12" in self.model_idn:
             if self.isOpen():
                 self.waitAndReadMessage()
                 msg = 'CONF:GEN:FREQ?'
@@ -3637,7 +3633,7 @@ class TempicoDevice():
                 print("Device connection not opened. First open a connection.")
                 print("Unable to get.")
         else:
-            print("This feature is not available for Tempico TP1004")
+            print(f"This feature is not available for Tempico {self.model_idn}")
         return response
 
 
@@ -3647,24 +3643,24 @@ class TempicoDevice():
         """Sets the frequency of the internal pulse generator (only for TP12 devices).
 
         This function changes the frequency of the internal generator using the 
-        'CONF:GEN:FREQ' command. The value must be between 100 Hz and 10 000 000 Hz. 
+        'CONF:GEN:FREQ' command. The value must be between 10 Hz and 10 000 000 Hz. 
         The command is verified by reading back the applied frequency and checking 
         that the relative error is below 3%. If the connection is not open or the 
         hardware version is not supported, an informational message is printed.
 
         Args:
             desired_frequency (float): Desired generator frequency in hertz 
-                (100 Hz – 10 000 000 Hz).
+                (10 Hz – 10 000 000 Hz).
 
         Returns:
             None
         """
-        if self.hardwareVersion=="TP12":
+        if "TP12" in self.model_idn:
             if self.isOpen() == True:
                 #try to convert to a float
                 try:
                     desired_frequency = float(desired_frequency) #coherce to a float number
-                    if desired_frequency>=100 and desired_frequency<=10_000_000:
+                    if desired_frequency>=10 and desired_frequency<=10000000:
                         msg = 'CONF:GEN:FREQ ' + str(desired_frequency)
                         self.writeMessage(msg)
                         
@@ -3679,17 +3675,17 @@ class TempicoDevice():
                             new_freq = self.getGeneratorFrequency()
                             if type(desired_frequency) == float:
                                 rel_err=(abs(new_freq-desired_frequency)/desired_frequency)*100
-                                if rel_err < 3:
-                                    #if rel_err is less than 3%
+                                if rel_err < 0.5:
+                                    #if rel_err is less than 0.5%
                                     #ok
                                     pass
                                 else:
-                                    print('Failed')
+                                    print(f'Failed, the applied frequency is {int(new_freq)}Hz')
                                     #TO DO: rise exception, or retry
                             else:
                                 print('Failed')
                     else:
-                        print("Value applied out of range, the value must be between 100Hz and 10000000Hz")
+                        print("Value applied out of range, the value must be between 10Hz and 10000000Hz")
                 except NameError as e:
                     print(e)
 
@@ -3699,7 +3695,7 @@ class TempicoDevice():
                 print("Device connection not opened. First open a connection.")
                 print("Unable to set.")
         else:
-            print("This feature is not available for Tempico TP1004")
+            print(f"This feature is not available for Tempico {self.model_idn}")
             
     
     
@@ -3718,7 +3714,7 @@ class TempicoDevice():
         Returns:
             None
         """
-        if self.hardwareVersion=="TP12":
+        if "TP12" in self.model_idn:
             if self.isOpen() == True:
                 #try to convert to a float
                 try:
@@ -3739,7 +3735,7 @@ class TempicoDevice():
                 print("Device connection not opened. First open a connection.")
                 print("Unable to set.")
         else:
-            print("This feature is not available for Tempico TP1004")
+            print(f"This feature is not available for Tempico {self.model_idn}")
     
     
     def increaseGeneratorFrequency(self):
