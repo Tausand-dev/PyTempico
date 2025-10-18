@@ -1259,6 +1259,16 @@ class TempicoDevice():
         else:
             print("The port has not a tempico device connected")
     
+    
+    def getModelIdn(self):
+        """
+        Returns the identifier of the model associated with the device.
+
+        Returns:
+            str: The internal model identifier (`model_idn`).
+        """
+        return self.model_idn
+    
     def openTempico(self):
         """Establishes (opens) a connection with a :func:`~pyTempico.core.TempicoDevice`.
         
