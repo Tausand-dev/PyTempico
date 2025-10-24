@@ -3543,7 +3543,7 @@ class TempicoDevice():
     
     
     def getDelay(self, channel):
-        """Retrieves the internal delay for the specified channel.
+        """Retrieves the internal delay for the specified channel, in picoseconds.
         
         In TP10 devices, this value is zero.
         In TP12 devices, this value is read from the device.
@@ -3761,8 +3761,8 @@ class TempicoDevice():
     def incrementGeneratorFrequency(self):
         """Increases the internal generator frequency by one step (only for TP12 devices).
 
-        This function raises the generator frequency on a predefined increment scale
-        ({1, 2, 5}x10^n) depending on the current frequency.
+        This function raises the generator frequency on a predefined increment scale,
+        {1, 2, 5}*10^n, depending on the current frequency.
 
         Args:
             None
@@ -3776,8 +3776,8 @@ class TempicoDevice():
     def decrementGeneratorFrequency(self):
         """Decreases the internal generator frequency by one step (only for TP12 devices).
 
-        This function reduces the generator frequency on a predefined decrement scale
-        ({1, 2, 5}x10^n) depending on the current frequency.
+        This function reduces the generator frequency on a predefined decrement scale,
+        {1, 2, 5}*10^n, depending on the current frequency.
 
         Args:
             None
