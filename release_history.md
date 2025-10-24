@@ -10,9 +10,9 @@
 
 ## Bug fixed
 
-* Fixed bug in getStopMask() method when mask is zero.
+- Fixed bug in getStopMask() method when mask is zero.
 
-* Fixed bug in setThresholdVoltage() method due to incorrect rounding.
+- Fixed bug in setThresholdVoltage() method due to incorrect rounding.
 
 # Release Notes 1.3.0 – August 2025
 
