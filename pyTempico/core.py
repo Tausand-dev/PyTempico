@@ -3512,8 +3512,7 @@ class TempicoDevice():
             channelSelected.disableChannel()
     
     
-    #Functions for delay
-    #TODO in error print the model version and dont hardcode
+    ### TempicoDevice: INTERNAL DELAY CALIBRATION FUNCTIONS (TP12)
     def calibrateDelay(self):
         """Calibrates the internal delay`.
 
@@ -3597,7 +3596,6 @@ class TempicoDevice():
         return time_last_sync
     
     
-    #TODO change ==by contains
     def getOverflowParameter(self):
         """Retrieves the overflow parameter.
 
@@ -3614,7 +3612,8 @@ class TempicoDevice():
         if "TP12" in self.model_idn:
             overflow= -1000000
         return overflow
-    
+        
+    ### TempicoDevice: INTERNAL PULSE GENERATOR FUNCTIONS (TP12)    
     def getGeneratorFrequency(self):
         """Returns the frequency of the internal pulse generator (only for TP12 devices).
 
@@ -3748,11 +3747,11 @@ class TempicoDevice():
             print(f"This feature is not available for Tempico {self.model_idn}")
     
     
-    def increaseGeneratorFrequency(self):
+    def incrementGeneratorFrequency(self):
         """Increases the internal generator frequency by one step (only for TP12 devices).
 
         This function raises the generator frequency by a predefined increment factor 
-        (1, 2, 5, or 10 × 10) depending on the current frequency range.
+        (1, 2, 5, or 10 x 10) depending on the current frequency range.
 
         Args:
             None
@@ -3763,11 +3762,11 @@ class TempicoDevice():
         self.__incDecGeneratorFrequency("UP")
     
     
-    def decreaseGeneratorFrequency(self):
+    def decrementGeneratorFrequency(self):
         """Decreases the internal generator frequency by one step (only for TP12 devices).
 
         This function lowers the generator frequency by a predefined decrement factor 
-        (1, 2, 5, or 10 × 10) depending on the current frequency range.
+        (1, 2, 5, or 10 x 10) depending on the current frequency range.
 
         Args:
             None
