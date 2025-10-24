@@ -7,10 +7,10 @@ Written in Python3, pyTempico relies on the following modules:
 - hidapi
 - pyserial
 
-Library version:       1.3.0<br/>
-Current release date:  08/18/2025 (mm/dd/yyyy)<br/>
+Library version: 2.0.0<br/>
+Current release date: 10/24/2025 (mm/dd/yyyy)<br/>
 Original release date: 02/12/2024<br/>
-Supported models:      TP1004.
+Supported models: TP1004, TP1204.
 
 ## About Tausand Tempico TP1000
 
@@ -22,7 +22,7 @@ To obtain a Tausand's Tempico time-to-digital converter, visit our [online shop]
 
 ## Installation
 
-`pyTempico` can be installed using `pip` as: 
+`pyTempico` can be installed using `pip` as:
 
 ```
 pip install pyTempico
@@ -82,7 +82,7 @@ python -m pip install -r requirements.txt
 
 When a new version is created, the new numbering should be updated in the following files:
 
-- pyTempico/\_\_init__.py 
+- pyTempico/\_\_init\_\_.py
 - README.md
 
 ### Building docs

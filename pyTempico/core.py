@@ -913,6 +913,219 @@ class TempicoChannel():
             print("Device connection not opened. First open a connection.")
             print("Unable to set.")
             #TO DO: raise expection?
+    
+    def getDelay(self):
+        """Returns the internal delay value for this channel, in picoseconds.
+        
+        In TP10 devices, this value is zero.
+        In TP12 devices, this value is read from the device.
+
+        This function queries the device using the 
+        'CONFigure:CHx:DELay?' command to obtain the internal delay assigned 
+        to the current channel. If the connection is not open or the 
+        hardware version is not supported, an informational message is printed.
+
+        Args:
+            None
+
+        Returns:
+            float: internal delay of the stop channel with respect to the start, in picoseconds. Returns -1 when fails.
+        """
+        response=-1
+        my_tempico = self.parent_tempico_device
+        if "TP12" in my_tempico.model_idn :
+            if my_tempico.isOpen():
+                my_tempico.waitAndReadMessage()
+                msg = 'CONFigure:CH'+str(self.channel_number)+':DELay?'
+                my_tempico.writeMessage(msg)
+                response = my_tempico.readMessage()
+                response = response.splitlines()
+                response = float(response[0])
+            else:
+                print("The connection with the device is not open, or an error occurred while opening it.")             
+        elif "TP10" in my_tempico.model_idn:
+            response = 0
+            #print(f"This feature is not available for Tempico {my_tempico.model_idn}")
+        return response
+
+    
+    def __getStartStopSource(self, startStop):
+        #If is TP10, source is always EXTERNAL
+        """Returns the signal source (internal or external) for the start or stop input of this channel.
+
+        This function queries the device to determine whether the specified input 
+        ("START" or "STOP") is configured to use the internal generator or an 
+        external signal. It sends the corresponding 'CONFigure:CHx:STARt:SOURce?' 
+        or 'CONFigure:CHx:STOP:SOURce?' command.
+
+        Args:
+            startStop (str): Input type to check. Must be "START" or "STOP".
+
+        Returns:
+            str: Signal source identifier ("INTernal" or "EXTernal"). 
+            Returns an empty string if it cannot be retrieved.
+        """
+        response=""
+        my_tempico = self.parent_tempico_device
+        if "TP12" in my_tempico.model_idn :
+            if my_tempico.isOpen():
+                my_tempico.waitAndReadMessage()
+                if startStop=="START":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STARt:SOURce?'
+                elif startStop=="STOP":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STOP:SOURce?'
+                my_tempico.writeMessage(msg)
+                response = my_tempico.readMessage()
+                response = response.splitlines()
+                response = response[0]
+            else:
+                print("The connection with the device is not open, or an error occurred while opening it.")             
+        else:
+            response="EXTERNAL"    
+        return response
+
+    def getStartSource(self):
+        """Returns the start signal source for this channel.
+
+        This function determines whether the start signal of the current channel 
+        comes from the internal generator or from an external input.
+        
+        Internal pulse generator is available in TP12 devices.
+
+        Args:
+            None
+
+        Returns:
+            str: Signal source identifier ("INTernal" or "EXTernal").
+        """
+        startSource=self.__getStartStopSource("START")
+        return startSource
+    
+    def getStopSource(self):
+        """Returns the stop signal source for this channel.
+
+        This function determines whether the stop signal of the current channel 
+        comes from the internal generator or from an external input.
+        
+        Internal pulse generator is available in TP12 devices.
+
+        Args:
+            None
+
+        Returns:
+            str: Signal source identifier ("INTernal" or "EXTernal").
+        """
+        stopSource=self.__getStartStopSource("STOP")
+        return stopSource
+
+    
+    def __setStartStopSource(self, startStop, intExt):
+        """Sets the signal source (internal or external) for the start or stop input of this channel (only for TP12 devices).
+
+        This function configures the specified input ("START" or "STOP") to use either 
+        the internal generator or an external signal source. It sends the corresponding 
+        'CONFigure:CHx:STARt:SOURce' or 'CONFigure:CHx:STOP:SOURce' command and verifies 
+        that the change was applied successfully.
+
+        Args:
+            startStop (str): Input type to configure. Must be "START" or "STOP".
+            intExt (str): Source to apply. Must be "INT" for internal or "EXT" for external.
+
+        Returns:
+            None
+        """
+        response=""
+        if intExt=="EXT":
+            responseExpected="EXTERNAL"
+        elif intExt=="INT":
+            responseExpected="INTERNAL"
+        my_tempico = self.parent_tempico_device
+        if "TP12" in my_tempico.model_idn:
+            if my_tempico.isOpen():
+                my_tempico.waitAndReadMessage()
+                if startStop=="START":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STARt:SOURce '+ intExt
+                elif startStop=="STOP":
+                    msg = 'CONFigure:CH'+str(self.channel_number)+':STOP:SOURce '+ intExt
+                my_tempico.writeMessage(msg)
+                
+                response = my_tempico.readMessage()
+                response = response.splitlines()
+                if response!="":
+                    consistentValue=False
+                    if startStop=="START":
+                        startSource = self.getStartSource()
+                        consistentValue = startSource==responseExpected
+                    elif startStop=="STOP":
+                        stopSource = self.getStopSource()
+                        consistentValue = stopSource==responseExpected
+                    if not consistentValue:
+                        print("Failed")
+                else:
+                    print("Failed")
+            else:
+                print("The connection with the device is not open, or an error occurred while opening it.")             
+        elif "TP10" in my_tempico.model_idn:
+            print(f"This feature is not available for Tempico {my_tempico.model_idn}")
+        
+
+    def setStartExternalSource(self):
+        """Sets the start signal source to external (only for TP12 devices).
+
+        This function configures the start input of the current channel so that 
+        its signal comes from an external source instead of the internal generator.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__setStartStopSource("START", "EXT")
+    
+    def setStartInternalSource(self):
+        """Sets the start signal source to the internal generator (only for TP12 devices).
+
+        This function configures the start input of the current channel so that 
+        its signal is provided by the internal pulse generator instead of an external source.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__setStartStopSource("START", "INT")
+    
+    def setStopExternalSource(self):
+        """Sets the stop signal source to external (only for TP12 devices).
+
+        This function configures the stop input of the current channel so that 
+        its signal comes from an external source instead of the internal generator.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__setStartStopSource("STOP", "EXT")
+    
+    def setStopInternalSource(self):
+        """Sets the stop signal source to the internal generator (only for TP12 devices).
+
+        This function configures the stop input of the current channel so that 
+        its signal is provided by the internal pulse generator instead of an external source.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__setStartStopSource("STOP", "INT")
+        
+    
 
 
 class TempicoDevice():       
@@ -1002,7 +1215,10 @@ class TempicoDevice():
         global tempico_devices_list
         tempico_devices_list.append(self)
         #Communication and identification parameters        
-        self.port = com_port         
+        self.port = com_port
+        #Rename as model     
+        self.model_idn = "TP1004"
+        self.is_model_read=False
         #create channels, and link to this device
         self.ch1 = TempicoChannel(new_id,1)
         self.ch2 = TempicoChannel(new_id,2)
@@ -1041,6 +1257,7 @@ class TempicoDevice():
                     self.ch2.number_of_stops = self.ch2.getNumberOfStops()
                     self.ch3.number_of_stops = self.ch3.getNumberOfStops()
                     self.ch4.number_of_stops = self.ch4.getNumberOfStops()
+                self.readIdnFromDevice()
                     
             except Exception as e:
                 print('verify the device in port',desired_port
@@ -1049,6 +1266,16 @@ class TempicoDevice():
                 return
         else:
             print("The port has not a tempico device connected")
+    
+    
+    def getModelIdn(self):
+        """
+        Returns the identifier of the model associated with the device.
+
+        Returns:
+            str: The internal model identifier (`model_idn`).
+        """
+        return self.model_idn
     
     def openTempico(self):
         """Establishes (opens) a connection with a :func:`~pyTempico.core.TempicoDevice`.
@@ -1104,6 +1331,9 @@ class TempicoDevice():
             bool: True when :func:`~pyTempico.core.TempicoDevice` connection is open.
         """
         return self.__connected
+            
+            
+        
     
     
     ### TempicoDevice: GENERAL REQUESTS METHODS
@@ -1255,7 +1485,10 @@ class TempicoDevice():
             
             if len(splitted_response) == 4: #expected 4 words
                 manufacturer_idn_string = splitted_response[0]  #e.g.: Tausand
-                model_idn_string = splitted_response[1]         #e.g.: Tempico TP1004
+                model_idn_string = splitted_response[1]#e.g.: Tempico TP1004
+                if not self.is_model_read:
+                    self.model_idn=model_idn_string.split(" ")[1]
+                    self.is_model_read=True
                 ##splitted_response[2] should be empty
                 version_idn_string = splitted_response[3]       #e.g.: 1.0
                 self.idn = manufacturer_idn_string + ' ' + model_idn_string
@@ -2360,7 +2593,7 @@ class TempicoDevice():
             
         return time_response            
                 
-    #TO DO: Optional parameter for the user timestamp      
+    
     def setDatetime(self, timeStampDateTime=None):
         """
         Sets the internal clock of the Tempico device to a specified timestamp 
@@ -3285,6 +3518,385 @@ class TempicoDevice():
         channelSelected=self.getTempicoChannel(channel)
         if channelSelected!=-1:
             channelSelected.disableChannel()
+    
+    
+    ### TempicoDevice: INTERNAL DELAY CALIBRATION FUNCTIONS (TP12)
+    def calibrateDelay(self):
+        """Calibrates the internal delay.
+
+        This command adjusts the hardware’s internal timing delay to ensure accurate
+        measurements. Only supported on devices with hardware version "TP12".
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        try:
+            if "TP12" in self.model_idn:
+                self.writeMessage("CONFigure:DELay")
+            else:
+                print(f"This feature is not available for Tempico {self.model_idn}")
+        except NameError as e:
+            print(e)
+    
+    
+    def getDelay(self, channel):
+        """Retrieves the internal delay for the specified channel, in picoseconds.
+        
+        In TP10 devices, this value is zero.
+        In TP12 devices, this value is read from the device.
+
+        The function selects the given channel and queries its current delay setting.
+        If the channel is invalid, it returns -1.
+
+        Args:
+            channel (int): channel number to read the delay from.
+
+        Returns:
+            float: internal delay of the stop channel with respect to the start, in picoseconds. Returns -1 when fails.
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        delay=-1
+        if channelSelected!=-1:
+            delay=channelSelected.getDelay()
+        return delay
+
+    def getLastDelaySync(self, convert_to_datetime=False):
+        """Returns the timestamp of the last delay calibration performed on the :func:`~pyTempico.core.TempicoDevice`.
+
+        If the device is connected and the hardware version is "TP12", the function 
+        requests the last delay calibration time using the 'DTIMe:LDELay?' command. 
+        If `convert_to_datetime` is True, the value is returned as a datetime object.
+
+        Args:
+            convert_to_datetime (bool, optional): If True, returns the timestamp as a 
+                datetime object. Default is False.
+
+        Returns:
+            float or datetime: Timestamp of the last delay calibration, as a Unix 
+            timestamp or datetime object. Returns -1 if it cannot be retrieved.
+        """
+        time_last_sync = -1
+        if "TP12" in self.model_idn:
+            if self.isOpen():
+                self.waitAndReadMessage()
+                msg="DTIMe:LDELay?"
+                self.writeMessage(msg)
+                response= self.readMessage()
+                response= response.splitlines()
+                if len(response)>0:
+                    response_first_line = response[0]
+                    try:
+                        if response_first_line!="":
+                            time_last_sync= float(response_first_line)
+                            if convert_to_datetime and time_last_sync!=-1:
+                                time_last_sync = datetime.fromtimestamp(time_last_sync)
+                        else:
+                            print("Device does not respond correctly to DTIMe:LDELay? request")
+                    except:
+                        print("Device does not respond correctly to DTIMe:LDELay? request")
+                else:
+                    print("Device does not respond correctly to DTIMe:LDELay? request")
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to get.")
+        else:
+            print(f"This feature is not available for Tempico {self.model_idn}")
+        return time_last_sync
+    
+    
+    def getOverflowParameter(self):
+        """Retrieves the overflow parameter.
+
+        The returned value depends on the device hardware version. For TP12 devices, 
+        the function returns -1000000; otherwise, it returns -1.
+
+        Args:
+            None
+
+        Returns:
+            int: Overflow parameter value based on the hardware version.
+        """
+        overflow=-1
+        if "TP12" in self.model_idn:
+            overflow= -1000000
+        return overflow
+        
+    ### TempicoDevice: INTERNAL PULSE GENERATOR FUNCTIONS (TP12)    
+    def getGeneratorFrequency(self):
+        """Returns the frequency of the internal pulse generator (only for TP12 devices).
+
+        This function queries the device with the 'CONF:GEN:FREQ?' command to obtain 
+        the current frequency of the internal pulse generator. If the connection 
+        is not open, an informational message is printed. This feature is not 
+        available on TP1004 devices.
+
+        Args:
+            None
+
+        Returns:
+            float: Current frequency of the internal pulse generator. 
+            Returns an empty string if it cannot be retrieved.
+        """
+        response=""
+        if "TP12" in self.model_idn:
+            if self.isOpen():
+                self.waitAndReadMessage()
+                msg = 'CONF:GEN:FREQ?'
+                self.writeMessage(msg)
+                response = self.readMessage()
+                response = response.splitlines()
+                response = float(response[0])
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to get.")
+        else:
+            print(f"This feature is not available for Tempico {self.model_idn}")
+        return response
+
+
+    
+    
+    def setGeneratorFrequency(self,desired_frequency):
+        """Sets the frequency of the internal pulse generator (only for TP12 devices).
+
+        This function changes the frequency of the internal generator using the 
+        'CONF:GEN:FREQ' command. The value must be between 10 Hz and 10 000 000 Hz. 
+        The command is verified by reading back the applied frequency and checking 
+        that the relative error is below 0.5%. If the connection is not open or the 
+        hardware version is not supported, an informational message is printed.
+
+        Args:
+            desired_frequency (float): Desired generator frequency in hertz 
+                (10 Hz – 10 000 000 Hz).
+
+        Returns:
+            None
+        """
+        if "TP12" in self.model_idn:
+            if self.isOpen() == True:
+                #try to convert to a float
+                try:
+                    desired_frequency = float(desired_frequency) #coherce to a float number
+                    if desired_frequency>=10 and desired_frequency<=10000000:
+                        msg = 'CONF:GEN:FREQ ' + str(desired_frequency)
+                        self.writeMessage(msg)
+                        
+                        #verify if an error message is issued by the device
+                        response = self.waitAndReadMessage()
+                        if response != '':
+                            #an error or warning was found
+                            #TO DO: rise exception
+                            print(response.splitlines()[0])
+                        else:            
+                            #validate if message was applied
+                            new_freq = self.getGeneratorFrequency()
+                            if type(desired_frequency) == float:
+                                rel_err=(abs(new_freq-desired_frequency)/desired_frequency)*100
+                                if rel_err < 0.5:
+                                    #if rel_err is less than 0.5%
+                                    #ok
+                                    pass
+                                else:
+                                    print(f'Failed, the applied frequency is {int(new_freq)}Hz')
+                                    #TO DO: rise exception, or retry
+                            else:
+                                print('Failed')
+                    else:
+                        print("Value applied out of range, the value must be between 10Hz and 10000000Hz")
+                except NameError as e:
+                    print(e)
+
+            
+            
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to set.")
+        else:
+            print(f"This feature is not available for Tempico {self.model_idn}")
+            
+    
+    
+    def __incDecGeneratorFrequency(self,incDec):
+        """Increases or decreases the internal generator frequency (only for TP12 devices).
+
+        This function modifies the internal generator frequency in steps of 1, 2, 5, or 10 
+        times the current magnitude (10^n), depending on the device’s configuration. 
+        It sends the 'CONF:GEN:INCR' or 'CONF:GEN:DECR' command according to the 
+        value of `incDec`. If the connection is not open or the hardware version 
+        is not supported, an informational message is printed.
+
+        Args:
+            incDec (str): Direction of change, must be "UP" to increase or "DOWN" to decrease.
+
+        Returns:
+            None
+        """
+        if "TP12" in self.model_idn:
+            if self.isOpen() == True:
+                #try to convert to a float
+                try:
+                    if incDec=="UP":
+                        msg = 'CONF:GEN:INCR'
+                    elif incDec=="DOWN":
+                        msg = 'CONF:GEN:DECR'
+                        
+                    self.writeMessage(msg)
+                    response = self.waitAndReadMessage()
+                    if response != '':
+                        #an error or warning was found
+                        #TO DO: rise exception
+                        print(response.splitlines()[0])
+                except NameError as e:
+                    print(e)
+            else:
+                print("Device connection not opened. First open a connection.")
+                print("Unable to set.")
+        else:
+            print(f"This feature is not available for Tempico {self.model_idn}")
+    
+    
+    def incrementGeneratorFrequency(self):
+        """Increases the internal generator frequency by one step (only for TP12 devices).
+
+        This function raises the generator frequency on a predefined increment scale,
+        {1, 2, 5}*10^n, depending on the current frequency.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__incDecGeneratorFrequency("UP")
+    
+    
+    def decrementGeneratorFrequency(self):
+        """Decreases the internal generator frequency by one step (only for TP12 devices).
+
+        This function reduces the generator frequency on a predefined decrement scale,
+        {1, 2, 5}*10^n, depending on the current frequency.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.__incDecGeneratorFrequency("DOWN")
+    
+    
+    def getStartSource(self,channel):
+        """Returns the start signal source for the specified channel.
+
+        This function checks whether the start signal of the selected channel 
+        comes from the internal generator or from an external input connected 
+        to the device.
+
+        Args:
+            channel (int): Channel number to read the start source from.
+
+        Returns:
+            int: Start source identifier. Returns -1 if the channel is invalid.
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        startSource=-1
+        if channelSelected!=-1:
+            startSource=channelSelected.getStartSource()
+        return startSource
+    
+    
+    def getStopSource(self,channel):
+        """Returns the stop signal source for the specified channel.
+
+        This function checks whether the stop signal of the selected channel 
+        comes from the internal generator or from an external input connected 
+        to the device.
+
+        Args:
+            channel (int): Channel number to read the stop source from.
+
+        Returns:
+            int: Stop source identifier. Returns -1 if the channel is invalid.
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        stopSource=-1
+        if channelSelected!=-1:
+            stopSource=channelSelected.getStopSource()
+        return stopSource
+
+    
+    def setStartExternalSource(self,channel):
+        """Sets the start signal source to external for the specified channel.
+
+        This function configures the selected channel so that its start signal 
+        comes from an external input instead of the internal generator.
+
+        Args:
+            channel (int): Channel number to configure.
+
+        Returns:
+            None
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStartExternalSource()
+    
+    def setStartInternalSource(self,channel):
+        """Sets the start signal source to the internal generator for the specified channel.
+
+        This function configures the selected channel so that its start signal 
+        is provided by the internal pulse generator instead of an external input.
+
+        Args:
+            channel (int): Channel number to configure.
+
+        Returns:
+            None
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStartInternalSource()
+    
+    def setStopExternalSource(self,channel):
+        """Sets the stop signal source to external for the specified channel.
+
+        This function configures the selected channel so that its stop signal 
+        comes from an external input instead of the internal generator.
+
+        Args:
+            channel (int): Channel number to configure.
+
+        Returns:
+            None
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStopExternalSource()
+    
+    
+    def setStopInternalSource(self,channel):
+        """Sets the stop signal source to the internal generator for the specified channel.
+
+        This function configures the selected channel so that its stop signal 
+        is provided by the internal pulse generator instead of an external input.
+
+        Args:
+            channel (int): Channel number to configure.
+
+        Returns:
+            None
+        """
+        channelSelected=self.getTempicoChannel(channel)
+        if channelSelected!=-1:
+            channelSelected.setStopInternalSource()
+    
+    
+    
+        
+        
     
     
         
