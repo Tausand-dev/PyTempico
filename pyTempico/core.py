@@ -915,10 +915,13 @@ class TempicoChannel():
             #TO DO: raise expection?
     
     def getDelay(self):
-        """Returns the delay value for this channel (only for TP12 devices).
+        """Returns the internal delay value for this channel, in picoseconds.
+        
+        In TP10 devices, this value is zero.
+        In TP12 devices, this value is read from the device.
 
         This function queries the device using the 
-        'CONFigure:CHx:DELay?' command to obtain the delay assigned 
+        'CONFigure:CHx:DELay?' command to obtain the internal delay assigned 
         to the current channel. If the connection is not open or the 
         hardware version is not supported, an informational message is printed.
 
@@ -926,9 +929,9 @@ class TempicoChannel():
             None
 
         Returns:
-            float: Delay value of the channel. Returns -1000000 if it cannot be retrieved.
+            float: internal delay of the stop channel with respect to the start, in picoseconds. Returns -1 when fails.
         """
-        response=-1000000
+        response=-1
         my_tempico = self.parent_tempico_device
         if "TP12" in my_tempico.model_idn :
             if my_tempico.isOpen():
@@ -941,13 +944,14 @@ class TempicoChannel():
             else:
                 print("The connection with the device is not open, or an error occurred while opening it.")             
         elif "TP10" in my_tempico.model_idn:
-            print(f"This feature is not available for Tempico {my_tempico.model_idn}")
+            response = 0
+            #print(f"This feature is not available for Tempico {my_tempico.model_idn}")
         return response
 
     
     def __getStartStopSource(self, startStop):
-        #If is TP10 always is EXTERNAL
-        """Returns the signal source (internal or external) for the start or stop input of this channel (only for TP12 devices).
+        #If is TP10, source is always EXTERNAL
+        """Returns the signal source (internal or external) for the start or stop input of this channel.
 
         This function queries the device to determine whether the specified input 
         ("START" or "STOP") is configured to use the internal generator or an 
@@ -981,10 +985,12 @@ class TempicoChannel():
         return response
 
     def getStartSource(self):
-        """Returns the start signal source for this channel (only for TP12 devices).
+        """Returns the start signal source for this channel.
 
         This function determines whether the start signal of the current channel 
         comes from the internal generator or from an external input.
+        
+        Internal pulse generator is available in TP12 devices.
 
         Args:
             None
@@ -996,10 +1002,12 @@ class TempicoChannel():
         return startSource
     
     def getStopSource(self):
-        """Returns the stop signal source for this channel (only for TP12 devices).
+        """Returns the stop signal source for this channel.
 
         This function determines whether the stop signal of the current channel 
         comes from the internal generator or from an external input.
+        
+        Internal pulse generator is available in TP12 devices.
 
         Args:
             None
@@ -2585,7 +2593,7 @@ class TempicoDevice():
             
         return time_response            
                 
-    #TO DO: Optional parameter for the user timestamp      
+    
     def setDatetime(self, timeStampDateTime=None):
         """
         Sets the internal clock of the Tempico device to a specified timestamp 
@@ -3514,10 +3522,10 @@ class TempicoDevice():
     
     ### TempicoDevice: INTERNAL DELAY CALIBRATION FUNCTIONS (TP12)
     def calibrateDelay(self):
-        """Calibrates the internal delay`.
+        """Calibrates the internal delay.
 
-        This command adjusts the hardware’s internal timing to ensure accurate
-        delay measurements. Only supported on devices with hardware version "TP12".
+        This command adjusts the hardware’s internal timing delay to ensure accurate
+        measurements. Only supported on devices with hardware version "TP12".
 
         Args:
             None
@@ -3535,19 +3543,22 @@ class TempicoDevice():
     
     
     def getDelay(self, channel):
-        """Retrieves the delay value for the specified channel`.
+        """Retrieves the internal delay for the specified channel.
+        
+        In TP10 devices, this value is zero.
+        In TP12 devices, this value is read from the device.
 
         The function selects the given channel and queries its current delay setting.
-        If the channel is invalid, it returns -1000000.
+        If the channel is invalid, it returns -1.
 
         Args:
-            channel (int): Channel number to read the delay from.
+            channel (int): channel number to read the delay from.
 
         Returns:
-            float: Delay value of the selected channel, or -1000000 if the channel is invalid.
+            float: internal delay of the stop channel with respect to the start, in picoseconds. Returns -1 when fails.
         """
         channelSelected=self.getTempicoChannel(channel)
-        delay=-1000000
+        delay=-1
         if channelSelected!=-1:
             delay=channelSelected.getDelay()
         return delay
@@ -3654,7 +3665,7 @@ class TempicoDevice():
         This function changes the frequency of the internal generator using the 
         'CONF:GEN:FREQ' command. The value must be between 10 Hz and 10 000 000 Hz. 
         The command is verified by reading back the applied frequency and checking 
-        that the relative error is below 3%. If the connection is not open or the 
+        that the relative error is below 0.5%. If the connection is not open or the 
         hardware version is not supported, an informational message is printed.
 
         Args:
@@ -3750,8 +3761,8 @@ class TempicoDevice():
     def incrementGeneratorFrequency(self):
         """Increases the internal generator frequency by one step (only for TP12 devices).
 
-        This function raises the generator frequency by a predefined increment factor 
-        (1, 2, 5, or 10 x 10) depending on the current frequency range.
+        This function raises the generator frequency on a predefined increment scale
+        ({1, 2, 5}x10^n) depending on the current frequency.
 
         Args:
             None
@@ -3765,8 +3776,8 @@ class TempicoDevice():
     def decrementGeneratorFrequency(self):
         """Decreases the internal generator frequency by one step (only for TP12 devices).
 
-        This function lowers the generator frequency by a predefined decrement factor 
-        (1, 2, 5, or 10 x 10) depending on the current frequency range.
+        This function reduces the generator frequency on a predefined decrement scale
+        ({1, 2, 5}x10^n) depending on the current frequency.
 
         Args:
             None
