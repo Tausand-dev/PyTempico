@@ -1,14 +1,30 @@
+# Release Notes 2.0.0 – October 2025
+
+## New Features
+
+- Added compatibility with Tempico TP1204 devices.
+  
+  - New delay calibration functions for TP1200 devices.
+  
+  - New pulse generator functions for TP1200 devices.
+
+## Bug fixed
+
+* Fixed bug in getStopMask() method when mask is zero.
+
+* Fixed bug in setThresholdVoltage() method due to incorrect rounding.
+
 # Release Notes 1.3.0 – August 2025
 
 ## New Features
 
-* Added methods to read current status and state of a channel.
+- Added methods to read current status and state of a channel.
 
 ## Improved Features
 
-* **Measure**  and **fetch** methods now apply data **validation**.
+- **Measure**  and **fetch** methods now apply data **validation**.
 
-* **Abort** and **reset** methods now **wait** and **validate** if every channel applies the requested command, abort or reset, successfully.
+- **Abort** and **reset** methods now **wait** and **validate** if every channel applies the requested command, abort or reset, successfully.
 
 # Release Notes 1.2.0 – July 2025
 

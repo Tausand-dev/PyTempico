@@ -8,7 +8,7 @@ Written in Python3, pyTempico relies on the following modules:
 - pyserial
 
 Library version: 2.0.0<br/>
-Current release date: 10/18/2025 (mm/dd/yyyy)<br/>
+Current release date: 10/24/2025 (mm/dd/yyyy)<br/>
 Original release date: 02/12/2024<br/>
 Supported models: TP1004, TP1204.
 
@@ -53,13 +53,13 @@ python -m venv .venv
 #### Activate
 
 - On Unix systems:
-
+  
   ```
   source .venv/bin/activate
   ```
 
 - On Windows:
-
+  
   ```
   .venv\Scripts\activate
   ```
