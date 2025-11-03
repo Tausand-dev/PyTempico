@@ -1049,7 +1049,7 @@ class TempicoChannel():
                     msg = 'CONFigure:CH'+str(self.channel_number)+':STOP:SOURce '+ intExt
                 my_tempico.writeMessage(msg)
                 
-                response = my_tempico.readMessage()
+                response = my_tempico.waitAndReadMessage()
                 response = response.splitlines()
                 if response!="":
                     consistentValue=False
