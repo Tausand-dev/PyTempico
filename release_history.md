@@ -1,3 +1,9 @@
+# Release Notes 2.0.1 – November 2025
+
+## Bug fixed
+
+- Fixed bug in setStartExternalSource(), setStopExternalSource(),  setStartInternalSource() and setStopInternalSource() methods, due to expecting a response from device.
+
 # Release Notes 2.0.0 – October 2025
 
 ## New Features
