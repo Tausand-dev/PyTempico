@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
-"""
-dateTimeExample
+"""dateTimeExample
 
-This script demonstrates how to connect to a Tausand Tempico device and
-perform several operations related to time management and measurement flow.
+    This script demonstrates how to connect to a Tausand Tempico device and
+    perform several operations related to time management and measurement flow.
+    
+    Instructions: 
+        * ensure `pyTempico` is installed,
+        * change 'my_port' to your corresponding port,
+        * run the script.
+        
+    You do **not** need a connected signal to run this example.
 
-Steps:
-- Open connection to the device.
-- Reset and configure channels.
-- Read and synchronize time.
-- Modify allowed datetime range.
-- Perform a measurement.
-
-You do **not** need a connected signal to run this example.
-
-Instructions:
-1. Ensure `pyTempico` is installed.
-2. Replace `'COM5'` with your Tempico port.
-3. Run the script.
-
-Author: Joan Amaya, Tausand Electronics
-    Email: jamaya@tausand.com
-    Website: https://www.tausand.com
+    This example:
+        * opens connection to the device,
+        * reset and configure channels,
+        * read and synchronize time,
+        * modifies allowed datetime range,
+        * performs a measurement,
+        * closes connection.
+    
+    | @author: Joan Amaya, Tausand Electronics 
+    | jamaya@tausand.com 
+    | https://www.tausand.com
 """
 import pyTempico
 

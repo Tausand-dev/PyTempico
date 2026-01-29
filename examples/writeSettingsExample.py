@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""writeSettings
+"""writeSettingsExample
 
     Created on Tue Jul  14 16:42 2025
 
@@ -12,9 +12,9 @@
         - Replace 'COM5' with the appropriate serial port for your Tempico device.
         - Run the script.
 
-    Author: Joan Amaya, Tausand Electronics
-    Email: jamaya@tausand.com
-    Website: https://www.tausand.com
+    | @author: Joan Amaya, Tausand Electronics 
+    | jamaya@tausand.com 
+    | https://www.tausand.com
 """
 
 import pyTempico

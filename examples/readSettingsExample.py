@@ -10,7 +10,7 @@
         * change 'my_port' to your corresponding port.
         * run.
     
-    | @author: David Guzman at Tausand Electronics 
+    | @author: David Guzman, Tausand Electronics 
     | dguzman@tausand.com 
     | https://www.tausand.com
 """

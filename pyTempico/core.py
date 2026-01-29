@@ -1217,7 +1217,7 @@ class TempicoDevice():
         #Communication and identification parameters        
         self.port = com_port
         #Rename as model     
-        self.model_idn = "TP1004"
+        self.model_idn = ""
         self.is_model_read=False
         #create channels, and link to this device
         self.ch1 = TempicoChannel(new_id,1)
@@ -1275,6 +1275,15 @@ class TempicoDevice():
         Returns:
             str: The internal model identifier (`model_idn`).
         """
+        
+        if (self.__connected == True) and (self.model_idn == ""):
+            #try to read IDN (and model IDN) from device
+            self.readIdnFromDevice()
+        elif (self.__connected == False) and (self.model_idn == ""):
+            print("Device connection not opened. First open a connection.")
+            print("Unable to get Model IDN.")
+            #TO DO: raise expection?
+            
         return self.model_idn
     
     def openTempico(self):
@@ -1458,7 +1467,8 @@ class TempicoDevice():
             return self.sn  #return saved string
         else:
             print("Device connection not opened. First open a connection.")
-            print("Unable to get.")
+            print("Unable to get Serial Number.")
+            return completeSerial
     
     def readIdnFromDevice(self):
         """Returns the :func:`~pyTempico.core.TempicoDevice` identification string, by requesting it to

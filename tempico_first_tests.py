@@ -12,7 +12,7 @@ Last edited on 2024-01-24.
 import serial
 
 #Define local constants
-MYPORT = 'COM12' #change this to the corresponding port
+MYPORT = 'COM6' #change this to the corresponding port
 MYBAUDRATE = 500000 #in bauds, do not change
 
 ###Function definitions

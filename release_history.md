@@ -1,3 +1,15 @@
+# Release Notes 2.0.2 – January 2026
+
+## New Features
+
+- Added examples: 
+  - readIdentifiersExample.py, 
+  - calibrateExample.py.
+
+## Improved Features
+
+- Method getModelIdn() updated, now calling readIdnFromDevice() when model_idn is empty.
+
 # Release Notes 2.0.1 – November 2025
 
 ## Bug fixed

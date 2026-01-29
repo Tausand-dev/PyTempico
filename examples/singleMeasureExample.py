@@ -13,7 +13,7 @@
         this example will return an empty data array.
         * run.
     
-    | @author: David Guzman at Tausand Electronics 
+    | @author: David Guzman, Tausand Electronics 
     | dguzman@tausand.com 
     | https://www.tausand.com
 """

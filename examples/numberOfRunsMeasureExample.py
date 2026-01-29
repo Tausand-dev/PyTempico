@@ -23,9 +23,9 @@
         - Run the script. If no signals are present, the measurement will return 
           an empty array.
 
-    Author: Joan Amaya, Tausand Electronics
-    Email: jamaya@tausand.com
-    Website: https://www.tausand.com
+    | @author: Joan Amaya, Tausand Electronics 
+    | jamaya@tausand.com 
+    | https://www.tausand.com
 """
 import pyTempico
 

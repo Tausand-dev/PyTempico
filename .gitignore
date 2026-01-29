@@ -16,3 +16,8 @@ docs/build/latex/*
 # Distribution files, generated after command: python -m build
 dist/*
 pyTempico.egg-info/*
+
+#Ignore example files in root directory
+*Example.py
+#but do not ignore them in the examples/ directory
+!examples/*Example.py

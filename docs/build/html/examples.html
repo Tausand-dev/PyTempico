@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; pyTempico 2.0.1 documentation</title>
+  <title>Examples &mdash; pyTempico 2.0.2 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -40,13 +40,24 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="pyTempico.html">pyTempico package</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#readsettingsexample-py">readSettingsExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#writesettings-py">writeSettings.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#datetimeexample-py">dateTimeExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#singlemeasureexample-py">singleMeasureExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#modetwomeasureexample-py">modeTwoMeasureExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#numberofrunsmeasureexample-py">numberOfRunsMeasureExample.py</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#numberofstopsmeasureexample-py">numberOfStopsMeasureExample.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#settings-examples">Settings examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#readidentifiersexample-py">readIdentifiersExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#readsettingsexample-py">readSettingsExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#writesettingsexample-py">writeSettingsExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#datetimeexample-py">dateTimeExample.py</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#measurement-examples">Measurement examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#singlemeasureexample-py">singleMeasureExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modetwomeasureexample-py">modeTwoMeasureExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#numberofrunsmeasureexample-py">numberOfRunsMeasureExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#numberofstopsmeasureexample-py">numberOfStopsMeasureExample.py</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#tp1200-examples">TP1200 examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#calibrateexample-py">calibrateExample.py</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -77,8 +88,71 @@
              
   <section id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline"></a></h1>
+<section id="settings-examples">
+<h2>Settings examples<a class="headerlink" href="#settings-examples" title="Permalink to this headline"></a></h2>
+<p>Examples on how to read and change settings on a Tausand Tempico.</p>
+<section id="readidentifiersexample-py">
+<h3>readIdentifiersExample.py<a class="headerlink" href="#readidentifiersexample-py" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;readIdentifiersExample</span>
+
+<span class="sd">    Created on Thu Jan 29 11:03 2026</span>
+<span class="sd">    </span>
+<span class="sd">    Connects to a Tausand Tempico device and reads its identifier strings.</span>
+<span class="sd">    </span>
+<span class="sd">    Instructions: </span>
+<span class="sd">        * before running this example, pyTempico package must be installed.</span>
+<span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
+<span class="sd">        * run.</span>
+<span class="sd">        </span>
+<span class="sd">    You do **not** need a connected signal to run this example.</span>
+
+<span class="sd">    This example:</span>
+<span class="sd">        * opens connection to the device,</span>
+<span class="sd">        * uses get methods to read identifier strings,</span>
+<span class="sd">        * closes connection.</span>
+<span class="sd">    </span>
+<span class="sd">    | @author: David Guzman, Tausand Electronics </span>
+<span class="sd">    | dguzman@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
+
+<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM7&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
+
+<span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
+
+<span class="c1">#Open connection</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;opening connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
+<span class="n">my_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>             <span class="c1">#open connection with device</span>
+<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
+
+<span class="c1">#Use get methods to obtain identifier strings of a Tausand Tempico device</span>
+<span class="n">my_idn</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getIdn</span><span class="p">()</span>
+<span class="n">my_model_idn</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getModelIdn</span><span class="p">()</span>
+<span class="n">my_serial_number</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getSerialNumber</span><span class="p">()</span>
+<span class="n">my_firmware</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getFirmware</span><span class="p">()</span>
+
+<span class="c1">#Print string identifiers</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">IDN string:</span><span class="se">\t\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">my_idn</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model IDN:</span><span class="se">\t\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">my_model_idn</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Serial number:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">my_serial_number</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Firmware:</span><span class="se">\t\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">my_firmware</span><span class="p">)</span>
+
+<span class="c1">#Close connection</span>
+<span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">connection with my_device is open&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">connection with my_device is close&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 <section id="readsettingsexample-py">
-<h2>readSettingsExample.py<a class="headerlink" href="#readsettingsexample-py" title="Permalink to this headline"></a></h2>
+<h3>readSettingsExample.py<a class="headerlink" href="#readsettingsexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;readSettingsExample</span>
 
@@ -91,7 +165,7 @@
 <span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
 <span class="sd">        * run.</span>
 <span class="sd">    </span>
-<span class="sd">    | @author: David Guzman at Tausand Electronics </span>
+<span class="sd">    | @author: David Guzman, Tausand Electronics </span>
 <span class="sd">    | dguzman@tausand.com </span>
 <span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -136,10 +210,10 @@
 </pre></div>
 </div>
 </section>
-<section id="writesettings-py">
-<h2>writeSettings.py<a class="headerlink" href="#writesettings-py" title="Permalink to this headline"></a></h2>
+<section id="writesettingsexample-py">
+<h3>writeSettingsExample.py<a class="headerlink" href="#writesettingsexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;writeSettings</span>
+<span class="sd">&quot;&quot;&quot;writeSettingsExample</span>
 
 <span class="sd">    Created on Tue Jul  14 16:42 2025</span>
 
@@ -152,9 +226,9 @@
 <span class="sd">        - Replace &#39;COM5&#39; with the appropriate serial port for your Tempico device.</span>
 <span class="sd">        - Run the script.</span>
 
-<span class="sd">    Author: Joan Amaya, Tausand Electronics</span>
-<span class="sd">    Email: jamaya@tausand.com</span>
-<span class="sd">    Website: https://www.tausand.com</span>
+<span class="sd">    | @author: Joan Amaya, Tausand Electronics </span>
+<span class="sd">    | jamaya@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
@@ -232,31 +306,31 @@
 </div>
 </section>
 <section id="datetimeexample-py">
-<h2>dateTimeExample.py<a class="headerlink" href="#datetimeexample-py" title="Permalink to this headline"></a></h2>
+<h3>dateTimeExample.py<a class="headerlink" href="#datetimeexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">dateTimeExample</span>
+<span class="sd">&quot;&quot;&quot;dateTimeExample</span>
 
-<span class="sd">This script demonstrates how to connect to a Tausand Tempico device and</span>
-<span class="sd">perform several operations related to time management and measurement flow.</span>
+<span class="sd">    This script demonstrates how to connect to a Tausand Tempico device and</span>
+<span class="sd">    perform several operations related to time management and measurement flow.</span>
+<span class="sd">    </span>
+<span class="sd">    Instructions: </span>
+<span class="sd">        * ensure `pyTempico` is installed,</span>
+<span class="sd">        * change &#39;my_port&#39; to your corresponding port,</span>
+<span class="sd">        * run the script.</span>
+<span class="sd">        </span>
+<span class="sd">    You do **not** need a connected signal to run this example.</span>
 
-<span class="sd">Steps:</span>
-<span class="sd">- Open connection to the device.</span>
-<span class="sd">- Reset and configure channels.</span>
-<span class="sd">- Read and synchronize time.</span>
-<span class="sd">- Modify allowed datetime range.</span>
-<span class="sd">- Perform a measurement.</span>
-
-<span class="sd">You do **not** need a connected signal to run this example.</span>
-
-<span class="sd">Instructions:</span>
-<span class="sd">1. Ensure `pyTempico` is installed.</span>
-<span class="sd">2. Replace `&#39;COM5&#39;` with your Tempico port.</span>
-<span class="sd">3. Run the script.</span>
-
-<span class="sd">Author: Joan Amaya, Tausand Electronics</span>
-<span class="sd">    Email: jamaya@tausand.com</span>
-<span class="sd">    Website: https://www.tausand.com</span>
+<span class="sd">    This example:</span>
+<span class="sd">        * opens connection to the device,</span>
+<span class="sd">        * reset and configure channels,</span>
+<span class="sd">        * read and synchronize time,</span>
+<span class="sd">        * modifies allowed datetime range,</span>
+<span class="sd">        * performs a measurement,</span>
+<span class="sd">        * closes connection.</span>
+<span class="sd">    </span>
+<span class="sd">    | @author: Joan Amaya, Tausand Electronics </span>
+<span class="sd">    | jamaya@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
@@ -350,8 +424,12 @@
 </pre></div>
 </div>
 </section>
+</section>
+<section id="measurement-examples">
+<h2>Measurement examples<a class="headerlink" href="#measurement-examples" title="Permalink to this headline"></a></h2>
+<p>Examples on how to measure start-stop times with a Tausand Tempico.</p>
 <section id="singlemeasureexample-py">
-<h2>singleMeasureExample.py<a class="headerlink" href="#singlemeasureexample-py" title="Permalink to this headline"></a></h2>
+<h3>singleMeasureExample.py<a class="headerlink" href="#singlemeasureexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;singleMeasureExample</span>
 
@@ -367,7 +445,7 @@
 <span class="sd">        this example will return an empty data array.</span>
 <span class="sd">        * run.</span>
 <span class="sd">    </span>
-<span class="sd">    | @author: David Guzman at Tausand Electronics </span>
+<span class="sd">    | @author: David Guzman, Tausand Electronics </span>
 <span class="sd">    | dguzman@tausand.com </span>
 <span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -398,7 +476,7 @@
 </div>
 </section>
 <section id="modetwomeasureexample-py">
-<h2>modeTwoMeasureExample.py<a class="headerlink" href="#modetwomeasureexample-py" title="Permalink to this headline"></a></h2>
+<h3>modeTwoMeasureExample.py<a class="headerlink" href="#modetwomeasureexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;modeTwoMeasureExample</span>
 
@@ -415,7 +493,7 @@
 <span class="sd">        this example will return an empty data array.</span>
 <span class="sd">        * run.</span>
 <span class="sd">    </span>
-<span class="sd">    | @author: David Guzman at Tausand Electronics </span>
+<span class="sd">    | @author: David Guzman, Tausand Electronics </span>
 <span class="sd">    | dguzman@tausand.com </span>
 <span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -463,7 +541,7 @@
 </div>
 </section>
 <section id="numberofrunsmeasureexample-py">
-<h2>numberOfRunsMeasureExample.py<a class="headerlink" href="#numberofrunsmeasureexample-py" title="Permalink to this headline"></a></h2>
+<h3>numberOfRunsMeasureExample.py<a class="headerlink" href="#numberofrunsmeasureexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;numberOfRunsMeasureExample</span>
 
@@ -489,9 +567,9 @@
 <span class="sd">        - Run the script. If no signals are present, the measurement will return </span>
 <span class="sd">          an empty array.</span>
 
-<span class="sd">    Author: Joan Amaya, Tausand Electronics</span>
-<span class="sd">    Email: jamaya@tausand.com</span>
-<span class="sd">    Website: https://www.tausand.com</span>
+<span class="sd">    | @author: Joan Amaya, Tausand Electronics </span>
+<span class="sd">    | jamaya@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
@@ -542,7 +620,7 @@
 </div>
 </section>
 <section id="numberofstopsmeasureexample-py">
-<h2>numberOfStopsMeasureExample.py<a class="headerlink" href="#numberofstopsmeasureexample-py" title="Permalink to this headline"></a></h2>
+<h3>numberOfStopsMeasureExample.py<a class="headerlink" href="#numberofstopsmeasureexample-py" title="Permalink to this headline"></a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;numberOfStopsMeasureExample</span>
 
@@ -568,9 +646,9 @@
 <span class="sd">        - Run the script. If no signals are received, the measurement will </span>
 <span class="sd">          return an empty array.</span>
 
-<span class="sd">    Author: Joan Amaya, Tausand Electronics</span>
-<span class="sd">    Email: jamaya@tausand.com</span>
-<span class="sd">    Website: https://www.tausand.com</span>
+<span class="sd">    | @author: Joan Amaya, Tausand Electronics </span>
+<span class="sd">    | jamaya@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
@@ -621,6 +699,106 @@
 </div>
 </section>
 </section>
+<section id="tp1200-examples">
+<h2>TP1200 examples<a class="headerlink" href="#tp1200-examples" title="Permalink to this headline"></a></h2>
+<p>Examples specific for Tausand Tempico TP1200 devices.</p>
+<section id="calibrateexample-py">
+<h3>calibrateExample.py<a class="headerlink" href="#calibrateexample-py" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;calibrateExample</span>
+
+<span class="sd">    Created on Thu Jan 29 11:26 2026</span>
+<span class="sd">    </span>
+<span class="sd">    This script demonstrates how to calibrate a Tausand Tempico TP1200 device.</span>
+<span class="sd">    </span>
+<span class="sd">    In TP1000 the theoretical hardware delay is 0ns. Calibration has no effect.</span>
+<span class="sd">    In TP1200 the theoretical hardware delay is 250ns. Calibration measures the </span>
+<span class="sd">    actual hardware delay, and adjusts the measurement values in consequence.</span>
+<span class="sd">    </span>
+<span class="sd">    Instructions: </span>
+<span class="sd">        * before running this example, pyTempico package must be installed.</span>
+<span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
+<span class="sd">        * run.</span>
+<span class="sd">        </span>
+<span class="sd">    You do **not** need a connected signal to run this example.</span>
+
+<span class="sd">    This example:</span>
+<span class="sd">        * opens connection to the device,</span>
+<span class="sd">        * resets the device (optional step),</span>
+<span class="sd">        * reads current hardware delays,</span>
+<span class="sd">        * calibrates,</span>
+<span class="sd">        * reads updated hardware delays,</span>
+<span class="sd">        * closes connection.</span>
+<span class="sd">    </span>
+<span class="sd">    | @author: David Guzman, Tausand Electronics </span>
+<span class="sd">    | dguzman@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
+
+<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM7&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
+
+<span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;opening connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
+    <span class="n">my_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>             <span class="c1">#open connection with device</span>
+    <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed opening a conection in port &quot;</span><span class="o">+</span><span class="n">my_port</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">1) Reseting device. This clears previous measurements, and changes settings to default values.&#39;</span><span class="p">)</span>
+    <span class="n">my_device</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    
+    <span class="c1">#get the number of channels of the connected device</span>
+    <span class="n">my_number_of_channels</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">number_of_channels</span>
+    
+    <span class="c1">#Read current inner delay in each channel</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">2) Read inner start-stop hardware delay.&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">my_number_of_channels</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span> <span class="c1">#from 1 to 4 inclusive if TP1xx4</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      delay in channel&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">my_device</span><span class="o">.</span><span class="n">getDelay</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ps&#39;</span><span class="p">)</span>
+        
+    <span class="c1">#Get last calibration time</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Last delay calibration via my_device.getLastDelaySync(): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">getLastDelaySync</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Last delay calibration (formatted): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">getLastDelaySync</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+    <span class="c1">#Read current inner delay in each channel</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">3) Request a calibration.&#39;</span><span class="p">)</span>
+    <span class="n">my_device</span><span class="o">.</span><span class="n">calibrateDelay</span><span class="p">()</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">4) Read again inner start-stop hardware delay, after calibration.&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">my_number_of_channels</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span> <span class="c1">#from 1 to 4 inclusive if TP1xx4</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;      delay in channel&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">my_device</span><span class="o">.</span><span class="n">getDelay</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ps&#39;</span><span class="p">)</span>
+    
+    
+    <span class="c1">#Get last calibration time</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Last delay calibration via my_device.getLastDelaySync(): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">getLastDelaySync</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Last delay calibration (formatted): </span><span class="si">{</span><span class="n">my_device</span><span class="o">.</span><span class="n">getLastDelaySync</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    
+    <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">connection with my_device is open&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">connection with my_device is close&#39;</span><span class="p">)</span>
+    
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    
+<span class="k">finally</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+        <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1">#close a connection, if it is still open</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -632,7 +810,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Tausand Electronics.</p>
+    <p>&#169; Copyright 2026, Tausand Electronics.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
