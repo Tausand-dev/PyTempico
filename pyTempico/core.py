@@ -531,8 +531,15 @@ class TempicoChannel():
         Returns:
             integer: Mode. Possible values are,
                 
-            - 1: Short measurement range. Start-stop times from 12ns to 500ns.
-            - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+            In TP1004:
+                
+                - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+                - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+            
+            In TP1204:
+                
+                - 1: Short measurement range. Start-stop times from -200ns to 300ns.
+                - 2: Large measurement range. Start-stop times from -50ns to 4ms.
         """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
@@ -553,9 +560,16 @@ class TempicoChannel():
         """Modifies the measurement mode of the TDC :func:`~pyTempico.core.TempicoChannel`.
         
         By default, mode = 1. Possible values are,
+        
+        In TP1004:
             
-        - 1: Short measurement range. Start-stop times from 12ns to 500ns.
-        - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+            - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+            - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+        
+        In TP1204:
+            
+            - 1: Short measurement range. Start-stop times from -200ns to 300ns.
+            - 2: Large measurement range. Start-stop times from -50ns to 4ms.
                 
         This function requires that a connection is established with the 
         :func:`~pyTempico.core.TempicoDevice` of the :func:`~pyTempico.core.TempicoChannel`.
@@ -842,7 +856,8 @@ class TempicoChannel():
         """Returns the time that stop pulses are ignored after receiving a start
         pulse on the TDC :func:`~pyTempico.core.TempicoChannel`. In microseconds.
         
-        By default, stop mask = 0 (no masking).
+        By default, in TP1004 stop mask = 0us (no masking).
+        By default, in TP1204 stop mask = -0.25us (no masking).
         
         If the connection is established with the :func:`~pyTempico.core.TempicoDevice`, this function 
         request the device for the value. If not, the most recent value is 
@@ -852,7 +867,7 @@ class TempicoChannel():
             (none)
     
         Returns:
-            integer: stop mask time, in microseconds.
+            float: stop mask time, in microseconds.
         """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen():
@@ -863,32 +878,38 @@ class TempicoChannel():
             my_tempico.writeMessage(msg)
             response = my_tempico.readMessage()
             response = response.splitlines()
-            response = int(response[0])
-            if response >= 0:
+            response = float(response[0])
+            
+            min_stop_mask = my_tempico.getStopMaskMinimum()
+
+            if response >= min_stop_mask: #min stopMask for TP1204 is -0.25us, for TP1004 is 0us
                  #update local variable
                  self.stop_mask = response
         return self.stop_mask
+        
     
     def setStopMask(self,stop_mask_in_us):
         """Modifies the time that stop pulses are ignored after receiving a 
         start pulse on the TDC :func:`~pyTempico.core.TempicoChannel`.
         
-        By default, stop mask = 0 (no masking).
+        By default, in TP1004 stop mask = 0us (no masking).
+        By default, in TP1204 stop mask = -0.25us (no masking).
         
         This function requires that a connection is established with the 
         :func:`~pyTempico.core.TempicoDevice` of the :func:`~pyTempico.core.TempicoChannel`.
         
         Args:
-            stop_mask_in_us (int): desired stop mask for the TDC, in microseconds.
-                Valid values are from 0 to 4000.
+            stop_mask_in_us (float): desired stop mask for the TDC, in microseconds.
+                Valid values are from -0.25 to 4000.
         
         """
         my_tempico = self.parent_tempico_device
         if my_tempico.isOpen() == True:
             number = stop_mask_in_us
-            number = int(number) #coherce to an integer number
-            if number < 0:
-                print('Parameter out of range. Must be a non-negative integer.')
+            number = float(number) #coherce to a float number
+            min_stop_mask = my_tempico.getStopMaskMinimum() #for TP1004: 0us, for TP1204: -0.25us.
+            if number < min_stop_mask:
+                print('Parameter out of range. Must be a number greater or equal to '+str(min_stop_mask)+'.')
             else:            
                 msg = 'CONF:CH'+str(self.channel_number)+':STOP:MASK ' + str(number)
                 #print(msg)
@@ -2167,7 +2188,7 @@ class TempicoDevice():
         The response for settings query on a :func:`~pyTempico.core.TempicoDevice` is in the following 
         format::
             
-            CH1:ACYC 1;CH1:ENAB 1;CH1:NST 1;...;CH4:STOP:MASK 0;NRUN 1;THR 1.00
+            CH1:ACYC 1;CH1:ENAB 1;CH1:NST 1;...;CH4:STOP:MASK 0.0000;NRUN 1;THR 1.00
             
         This function requires that a connection is established with the 
         :func:`~pyTempico.core.TempicoDevice`. 
@@ -2234,7 +2255,7 @@ class TempicoDevice():
                             elif config_name == "STOP:EDG":
                                 mych.stop_edge = config_value
                             elif config_name == "STOP:MASK":
-                                mych.stop_mask = int(config_value)
+                                mych.stop_mask = float(config_value)
             #print("Data:",data)
             return data
         except Exception as e: 
@@ -3065,8 +3086,15 @@ class TempicoDevice():
         Returns:
             integer: Mode. Possible values are:
                 
-            - 1: Short measurement range. Start-stop times from 12ns to 500ns.
-            - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+            In TP1004:
+                
+                - 1: Short measurement range. Start-stop times from 12ns to 500ns.
+                - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+            
+            In TP1204:
+                
+                - 1: Short measurement range. Start-stop times from -200ns to 300ns.
+                - 2: Large measurement range. Start-stop times from -50ns to 4ms.
             
             Returns -1 if the channel is invalid.
         """
@@ -3221,7 +3249,8 @@ class TempicoDevice():
     def getStopMask(self,channel):
         """Returns the stop mask time (in microseconds) of the specified :func:`~pyTempico.core.TempicoChannel`.
 
-        By default, stop mask = 0 (no masking).
+        By default, in TP1004 stop mask = 0us (no masking).
+        By default, in TP1204 stop mask = -0.25us (no masking).
 
         The stop mask defines the period after receiving a start pulse during which 
         stop pulses are ignored. This helps eliminate unwanted noise or early pulses.
@@ -3244,13 +3273,31 @@ class TempicoDevice():
                 - 4 or 'D' or 'd'
 
         Returns:
-            integer: Stop mask time in microseconds, or -1 if the channel is invalid.
+            float: Stop mask time in microseconds, or -1 if the channel is invalid.
         """
         channelSelected=self.getTempicoChannel(channel)
         stopMask=-1
         if channelSelected!=-1:
             stopMask=channelSelected.getStopMask()
         return stopMask
+    
+    
+    def getStopMaskMinimum(self):
+        """Retrieves the minimum stop mask value, in microseconds.
+
+        The returned value depends on the device hardware version. For TP12 devices, 
+        the function returns -0.25; otherwise, it returns 0.
+
+        Args:
+            None
+
+        Returns:
+            float: minimum stop mask value based on the hardware version.
+        """
+        minstopmask = 0
+        if "TP12" in self.model_idn:
+            minstopmask= -0.25
+        return minstopmask
     
 
     ### TempicoDevice: SINGLE CHANNEL SETTINGS METHODS, SETTERS    
@@ -3319,8 +3366,15 @@ class TempicoDevice():
 
         By default, mode = 1. Possible values are:
 
+        In TP1004:
+            
             - 1: Short measurement range. Start-stop times from 12ns to 500ns.
             - 2: Large measurement range. Start-stop times from 125ns to 4ms.
+        
+        In TP1204:
+            
+            - 1: Short measurement range. Start-stop times from -200ns to 300ns.
+            - 2: Large measurement range. Start-stop times from -50ns to 4ms.
 
         This function requires that a connection is established with the 
         :func:`~pyTempico.core.TempicoDevice`, and delegates the configuration to the selected 
@@ -3410,7 +3464,8 @@ class TempicoDevice():
     def setStopMask(self,channel,stop_mask_in_us):
         """Modifies the stop mask time of the specified :func:`~pyTempico.core.TempicoChannel`.
 
-        By default, stop mask = 0 (no masking).
+        By default, in TP1004 stop mask = 0us (no masking).
+        By default, in TP1204 stop mask = -0.25us (no masking).
 
         The stop mask defines the period (in microseconds) after receiving a start 
         pulse during which stop pulses are ignored. This can help suppress 
@@ -3432,8 +3487,8 @@ class TempicoDevice():
                 - 3 or 'C' or 'c'
                 - 4 or 'D' or 'd'
 
-            stop_mask_in_us (int): Desired stop mask time in microseconds.
-                Valid values are from 0 to 4000.
+            stop_mask_in_us (float): Desired stop mask time in microseconds.
+                Valid values are from -0.25 to 4000.
         """
         channelSelected=self.getTempicoChannel(channel)
         if channelSelected!=-1:
