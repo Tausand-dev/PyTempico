@@ -17,6 +17,9 @@ docs/build/latex/*
 dist/*
 pyTempico.egg-info/*
 
+#Ignore csv files
+*.csv
+
 #Ignore example files in root directory
 *Example.py
 #but do not ignore them in the examples/ directory
