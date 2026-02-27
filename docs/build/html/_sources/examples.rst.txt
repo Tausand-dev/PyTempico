@@ -53,6 +53,12 @@ numberOfStopsMeasureExample.py
 .. literalinclude:: ../../examples/numberOfStopsMeasureExample.py
 
 
+multipleMeasureSingleChExample.py
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/multipleMeasureSingleChExample.py
+
+
 TP1200 examples
 ---------------
 

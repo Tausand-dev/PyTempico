@@ -948,10 +948,20 @@ the channel number or label (‘A’–‘D’) to access the corresponding
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Mode. Possible values are:</p>
-<ul class="simple">
+<p>In TP1004:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
 <li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
 </ul>
+</div></blockquote>
+<p>In TP1204:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1: Short measurement range. Start-stop times from -200ns to 300ns.</p></li>
+<li><p>2: Large measurement range. Start-stop times from -50ns to 4ms.</p></li>
+</ul>
+</div></blockquote>
 <p>Returns -1 if the channel is invalid.</p>
 </p>
 </dd>
@@ -1080,7 +1090,7 @@ e.g: “TP1004-220500”</p>
 <dd><p>Reads the current settings form a <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>.</p>
 <p>The response for settings query on a <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a> is in the following
 format:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CH1</span><span class="p">:</span><span class="n">ACYC</span> <span class="mi">1</span><span class="p">;</span><span class="n">CH1</span><span class="p">:</span><span class="n">ENAB</span> <span class="mi">1</span><span class="p">;</span><span class="n">CH1</span><span class="p">:</span><span class="n">NST</span> <span class="mi">1</span><span class="p">;</span><span class="o">...</span><span class="p">;</span><span class="n">CH4</span><span class="p">:</span><span class="n">STOP</span><span class="p">:</span><span class="n">MASK</span> <span class="mi">0</span><span class="p">;</span><span class="n">NRUN</span> <span class="mi">1</span><span class="p">;</span><span class="n">THR</span> <span class="mf">1.00</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CH1</span><span class="p">:</span><span class="n">ACYC</span> <span class="mi">1</span><span class="p">;</span><span class="n">CH1</span><span class="p">:</span><span class="n">ENAB</span> <span class="mi">1</span><span class="p">;</span><span class="n">CH1</span><span class="p">:</span><span class="n">NST</span> <span class="mi">1</span><span class="p">;</span><span class="o">...</span><span class="p">;</span><span class="n">CH4</span><span class="p">:</span><span class="n">STOP</span><span class="p">:</span><span class="n">MASK</span> <span class="mf">0.0000</span><span class="p">;</span><span class="n">NRUN</span> <span class="mi">1</span><span class="p">;</span><span class="n">THR</span> <span class="mf">1.00</span>
 </pre></div>
 </div>
 <p>This function requires that a connection is established with the
@@ -1300,7 +1310,8 @@ the channel number or label (‘A’–‘D’) to access the corresponding
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStopMask">
 <span class="sig-name descname"><span class="pre">getStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStopMask" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the stop mask time (in microseconds) of the specified <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
-<p>By default, stop mask = 0 (no masking).</p>
+<p>By default, in TP1004 stop mask = 0us (no masking).
+By default, in TP1204 stop mask = -0.25us (no masking).</p>
 <p>The stop mask defines the period after receiving a start pulse during which
 stop pulses are ignored. This helps eliminate unwanted noise or early pulses.</p>
 <p>If the connection is established with the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>, this function
@@ -1325,7 +1336,26 @@ the channel number or label (‘A’–‘D’) to access the corresponding
 <dd class="field-even"><p>Stop mask time in microseconds, or -1 if the channel is invalid.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>integer</p>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.getStopMaskMinimum">
+<span class="sig-name descname"><span class="pre">getStopMaskMinimum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.getStopMaskMinimum" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the minimum stop mask value, in microseconds.</p>
+<p>The returned value depends on the device hardware version. For TP12 devices,
+the function returns -0.25; otherwise, it returns 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>minimum stop mask value based on the hardware version.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1895,10 +1925,18 @@ validated by re-reading it from the device.</p>
 <span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setMode" title="Permalink to this definition"></a></dt>
 <dd><p>Modifies the measurement mode of the specified <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
 <p>By default, mode = 1. Possible values are:</p>
+<p>In TP1004:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
 <li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
+</ul>
+</div></blockquote>
+<p>In TP1204:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1: Short measurement range. Start-stop times from -200ns to 300ns.</p></li>
+<li><p>2: Large measurement range. Start-stop times from -50ns to 4ms.</p></li>
 </ul>
 </div></blockquote>
 <p>This function requires that a connection is established with the
@@ -2110,7 +2148,8 @@ is provided by the internal pulse generator instead of an external input.</p>
 <dt class="sig sig-object py" id="pyTempico.core.TempicoDevice.setStopMask">
 <span class="sig-name descname"><span class="pre">setStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_mask_in_us</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoDevice.setStopMask" title="Permalink to this definition"></a></dt>
 <dd><p>Modifies the stop mask time of the specified <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
-<p>By default, stop mask = 0 (no masking).</p>
+<p>By default, in TP1004 stop mask = 0us (no masking).
+By default, in TP1204 stop mask = -0.25us (no masking).</p>
 <p>The stop mask defines the period (in microseconds) after receiving a start
 pulse during which stop pulses are ignored. This can help suppress
 unwanted noise or early signals.</p>
@@ -2131,8 +2170,8 @@ corresponding <a class="reference internal" href="#pyTempico.core.TempicoChannel
 <li><p>4 or ‘D’ or ‘d’</p></li>
 </ul>
 </p></li>
-<li><p><strong>stop_mask_in_us</strong> (<em>int</em>) – Desired stop mask time in microseconds.
-Valid values are from 0 to 4000.</p></li>
+<li><p><strong>stop_mask_in_us</strong> (<em>float</em>) – Desired stop mask time in microseconds.
+Valid values are from -0.25 to 4000.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2485,10 +2524,20 @@ returned.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p>Mode. Possible values are,</p>
-<ul class="simple">
+<p>In TP1004:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
 <li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
 </ul>
+</div></blockquote>
+<p>In TP1204:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1: Short measurement range. Start-stop times from -200ns to 300ns.</p></li>
+<li><p>2: Large measurement range. Start-stop times from -50ns to 4ms.</p></li>
+</ul>
+</div></blockquote>
 </p>
 </dd>
 <dt class="field-odd">Return type</dt>
@@ -2645,7 +2694,8 @@ returned.</p>
 <span class="sig-name descname"><span class="pre">getStopMask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.getStopMask" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the time that stop pulses are ignored after receiving a start
 pulse on the TDC <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>. In microseconds.</p>
-<p>By default, stop mask = 0 (no masking).</p>
+<p>By default, in TP1004 stop mask = 0us (no masking).
+By default, in TP1204 stop mask = -0.25us (no masking).</p>
 <p>If the connection is established with the <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a>, this function
 request the device for the value. If not, the most recent value is
 returned.</p>
@@ -2657,7 +2707,7 @@ returned.</p>
 <dd class="field-even"><p>stop mask time, in microseconds.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>integer</p>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2723,10 +2773,20 @@ Valid values are 1|2|4|8|16|32|64|128.</p>
 <span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setMode" title="Permalink to this definition"></a></dt>
 <dd><p>Modifies the measurement mode of the TDC <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
 <p>By default, mode = 1. Possible values are,</p>
-<ul class="simple">
+<p>In TP1004:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>1: Short measurement range. Start-stop times from 12ns to 500ns.</p></li>
 <li><p>2: Large measurement range. Start-stop times from 125ns to 4ms.</p></li>
 </ul>
+</div></blockquote>
+<p>In TP1204:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>1: Short measurement range. Start-stop times from -200ns to 300ns.</p></li>
+<li><p>2: Large measurement range. Start-stop times from -50ns to 4ms.</p></li>
+</ul>
+</div></blockquote>
 <p>This function requires that a connection is established with the
 <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a> of the <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -2862,13 +2922,14 @@ its signal is provided by the internal pulse generator instead of an external so
 <span class="sig-name descname"><span class="pre">setStopMask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop_mask_in_us</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyTempico.core.TempicoChannel.setStopMask" title="Permalink to this definition"></a></dt>
 <dd><p>Modifies the time that stop pulses are ignored after receiving a
 start pulse on the TDC <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
-<p>By default, stop mask = 0 (no masking).</p>
+<p>By default, in TP1004 stop mask = 0us (no masking).
+By default, in TP1204 stop mask = -0.25us (no masking).</p>
 <p>This function requires that a connection is established with the
 <a class="reference internal" href="#pyTempico.core.TempicoDevice" title="pyTempico.core.TempicoDevice"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoDevice()</span></code></a> of the <a class="reference internal" href="#pyTempico.core.TempicoChannel" title="pyTempico.core.TempicoChannel"><code class="xref py py-func docutils literal notranslate"><span class="pre">TempicoChannel()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>stop_mask_in_us</strong> (<em>int</em>) – desired stop mask for the TDC, in microseconds.
-Valid values are from 0 to 4000.</p>
+<dd class="field-odd"><p><strong>stop_mask_in_us</strong> (<em>float</em>) – desired stop mask for the TDC, in microseconds.
+Valid values are from -0.25 to 4000.</p>
 </dd>
 </dl>
 </dd></dl>

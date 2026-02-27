@@ -52,6 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#modetwomeasureexample-py">modeTwoMeasureExample.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#numberofrunsmeasureexample-py">numberOfRunsMeasureExample.py</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#numberofstopsmeasureexample-py">numberOfStopsMeasureExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiplemeasuresinglechexample-py">multipleMeasureSingleChExample.py</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#tp1200-examples">TP1200 examples</a><ul>
@@ -172,7 +173,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
 
-<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM17&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
+<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM7&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
 
 <span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
 
@@ -192,7 +193,7 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;NumberOfRuns:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getNumberOfRuns</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ThresholdVoltage:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getThresholdVoltage</span><span class="p">())</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">reading channel specific settings&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">2.1) reading channel specific settings using direct channel method&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch2 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch3 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">())</span>
@@ -200,6 +201,21 @@
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 Mode:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getMode</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 NumberOfStops:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getNumberOfStops</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 isEnabled:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 StartEdge:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getStartEdge</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 StopEdge:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getStopEdge</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 StopMask:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">getStopMask</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">2.2) reading channel specific settings via device method&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch2 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch3 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch4 AverageCycles:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getAverageCycles</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 Mode:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getMode</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 NumberOfStops:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getNumberOfStops</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 isEnabled:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isEnabled</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 StartEdge:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getStartEdge</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 StopEdge:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getStopEdge</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ch1 StopMask:&#39;</span><span class="p">,</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getStopMask</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">closing connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
 <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>            <span class="c1">#close connection with device</span>
@@ -695,6 +711,166 @@
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multiplemeasuresinglechexample-py">
+<h3>multipleMeasureSingleChExample.py<a class="headerlink" href="#multiplemeasuresinglechexample-py" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">multipleMeasureSingleChExample</span>
+
+<span class="sd">    Created on Mon Feb 16 10:35:56 2026</span>
+<span class="sd">    </span>
+<span class="sd">    Connects to a Tausand Tempico device, starts a sequence of multiple </span>
+<span class="sd">    measurements on a single channel, and reads the results. Results are </span>
+<span class="sd">    written in a csv file.</span>
+<span class="sd">    </span>
+<span class="sd">    Instructions: </span>
+<span class="sd">        * before running this example, pandas and pyTempico packages must be installed.</span>
+<span class="sd">        * change &#39;my_port&#39; to your corresponding port.</span>
+<span class="sd">        * (optional) change parameters &#39;mode&#39;, &#39;number_of_measurements&#39; </span>
+<span class="sd">        and &#39;number_of_runs&#39;.</span>
+<span class="sd">        * connect signals to your Tempico Device. If no signals are measured, </span>
+<span class="sd">        this example will return an empty data array.</span>
+<span class="sd">        * run.</span>
+<span class="sd">    </span>
+<span class="sd">    | @author: David Guzman, Tausand Electronics </span>
+<span class="sd">    | dguzman@tausand.com </span>
+<span class="sd">    | https://www.tausand.com</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="n">my_port</span> <span class="o">=</span> <span class="s1">&#39;COM7&#39;</span> <span class="c1">#change this port to your Tempico device&#39;s port</span>
+<span class="n">my_device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="n">my_port</span><span class="p">)</span>    <span class="c1">#create object</span>
+<span class="n">mode</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#valid modes: 1 or 2. (TOF up to 250ns, or TOF from 125ns up to 4ms)</span>
+<span class="n">number_of_measurements</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">number_of_runs</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1">#valid values: 1 to 1000</span>
+
+    
+<span class="k">def</span><span class="w"> </span><span class="nf">MeasureStartStopSingleCh</span><span class="p">(</span><span class="n">selected_ch</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">selected_ch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">selected_ch</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">selected_ch</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">selected_ch</span> <span class="o">&gt;</span> <span class="n">numch</span><span class="p">):</span>
+            <span class="n">selected_ch</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid input.&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">selected_ch</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid input.&quot;</span><span class="p">)</span>
+              
+    <span class="n">selected_ch_letter</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">selected_ch</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Preparing to measure start-stop TOF in channel &#39;</span><span class="o">+</span><span class="n">selected_ch_letter</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Connect signals into start and stop&#39;</span><span class="o">+</span><span class="n">selected_ch_letter</span><span class="o">+</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Are signals connected (y/n):&quot;</span><span class="p">)</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">user_input</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">user_input</span> <span class="o">==</span> <span class="s1">&#39;Y&#39;</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">numch</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">selected_ch</span><span class="p">:</span>
+                <span class="c1">#enable selected channel</span>
+                <span class="n">my_device</span><span class="o">.</span><span class="n">enableChannel</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1">#disable unselected channels</span>
+                <span class="n">my_device</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                
+        <span class="n">my_device</span><span class="o">.</span><span class="n">setMode</span><span class="p">(</span><span class="n">selected_ch</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+        <span class="n">my_device</span><span class="o">.</span><span class="n">setNumberOfRuns</span><span class="p">(</span><span class="n">number_of_runs</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Measure started. Running &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">number_of_measurements</span><span class="p">),</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; measurements, each of &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">number_of_runs</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; runs.&#39;</span><span class="p">)</span>
+        
+        <span class="c1">#synchronize Tempico&#39;s datetime with PC&#39;s datetime</span>
+        <span class="n">my_device</span><span class="o">.</span><span class="n">setDateTime</span><span class="p">()</span>
+        
+        <span class="c1">#calibrate before starting a measurement</span>
+        <span class="n">my_device</span><span class="o">.</span><span class="n">calibrateDelay</span><span class="p">()</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Progress:&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">number_of_measurements</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1">#repeat number_of_measurements times the measurment</span>
+            <span class="n">percentage</span><span class="o">=</span><span class="mf">100.0</span><span class="o">*</span><span class="n">k</span><span class="o">/</span><span class="n">number_of_measurements</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\r</span><span class="si">{</span><span class="n">percentage</span><span class="si">:</span><span class="s2">4.0f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">this_data</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>   <span class="c1">#starts a measurement, and saves response in &#39;data&#39;</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">this_data</span>  <span class="c1">#appending</span>
+            
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ch&quot;</span><span class="p">,</span> <span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;datetime&quot;</span><span class="p">,</span> <span class="s2">&quot;tof_ps&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Measure completed.&#39;</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Time-Of-Flight statistics:&#39;</span><span class="p">)</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">tof_mean</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tof_ps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">tof_median</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tof_ps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+        <span class="n">tof_std</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tof_ps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">tof_max</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tof_ps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">tof_min</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tof_ps&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; samples:    </span><span class="se">\t</span><span class="si">{</span><span class="n">samples</span><span class="si">:</span><span class="s2">14d</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; mean (ps):  </span><span class="se">\t</span><span class="si">{</span><span class="n">tof_mean</span><span class="si">:</span><span class="s2">17.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; median (ps):</span><span class="se">\t</span><span class="si">{</span><span class="n">tof_median</span><span class="si">:</span><span class="s2">14.0f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; std (ps):   </span><span class="se">\t</span><span class="si">{</span><span class="n">tof_std</span><span class="si">:</span><span class="s1">17.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; max (ps):   </span><span class="se">\t</span><span class="si">{</span><span class="n">tof_max</span><span class="si">:</span><span class="s1">14.0f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; min (ps):   </span><span class="se">\t</span><span class="si">{</span><span class="n">tof_min</span><span class="si">:</span><span class="s1">14.0f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+        <span class="c1">#build csv file name</span>
+        <span class="n">dt_string</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">%H%M&#39;</span><span class="p">)</span>
+        <span class="n">csv_file_name</span><span class="o">=</span><span class="s1">&#39;tempico_tof_ch&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">selected_ch</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">dt_string</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span>
+           
+        <span class="c1">#write header with device details into csv file</span>
+        <span class="n">my_header</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Datetime&#39;</span><span class="p">,</span> <span class="s1">&#39;Tempico model&#39;</span><span class="p">,</span> <span class="s1">&#39;Serial number&#39;</span><span class="p">,</span> <span class="s1">&#39;Firmware&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M&#39;</span><span class="p">),</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getModelIdn</span><span class="p">(),</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getSerialNumber</span><span class="p">(),</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getFirmware</span><span class="p">(),</span> <span class="n">my_device</span><span class="o">.</span><span class="n">getMode</span><span class="p">(</span><span class="n">selected_ch</span><span class="p">)]</span>
+            <span class="p">}</span>
+        <span class="n">header_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">my_header</span><span class="p">)</span>
+        <span class="n">header_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv_file_name</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#no printing column names or row indexes</span>
+        
+        <span class="c1">#write data statistics into csv file</span>
+        <span class="n">my_stats</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;samples&#39;</span><span class="p">,</span><span class="s1">&#39;tof_ps mean&#39;</span><span class="p">,</span><span class="s1">&#39;tof_ps median&#39;</span><span class="p">,</span><span class="s1">&#39;tof_ps standard deviation&#39;</span><span class="p">,</span><span class="s1">&#39;tof_ps maximum&#39;</span><span class="p">,</span><span class="s1">&#39;tof_ps minimum&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;value&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="n">samples</span><span class="p">,</span> <span class="n">tof_mean</span><span class="p">,</span> <span class="n">tof_median</span><span class="p">,</span> <span class="n">tof_std</span><span class="p">,</span> <span class="n">tof_max</span><span class="p">,</span> <span class="n">tof_min</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="n">stats_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">my_stats</span><span class="p">)</span>
+        <span class="n">stats_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv_file_name</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="c1">#no printing column names or row indexes, mode &#39;append&#39;</span>
+        
+        <span class="c1">#write dataset into file</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">csv_file_name</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="c1">#mode &#39;append&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Data saved in &#39;</span><span class="o">+</span><span class="n">csv_file_name</span><span class="p">)</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Measurement cancelled.&#39;</span><span class="p">)</span>
+
+
+
+<span class="c1">###############    MAIN    #################</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;opening connection with device in port&#39;</span><span class="p">,</span><span class="n">my_port</span><span class="p">)</span>
+    <span class="n">my_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>             <span class="c1">#open connection with device</span>
+    <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is open&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;connection with my_device is close&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Failed opening a conection in port &quot;</span><span class="o">+</span><span class="n">my_port</span><span class="p">)</span>
+        
+    <span class="n">numch</span> <span class="o">=</span> <span class="n">my_device</span><span class="o">.</span><span class="n">number_of_channels</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Select a stop channel to measure (1 to &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">numch</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;):&#39;</span><span class="p">)</span>
+    <span class="n">user_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>  
+    
+    <span class="n">MeasureStartStopSingleCh</span><span class="p">(</span><span class="n">user_input</span><span class="p">)</span> <span class="c1">#call measurement routine</span>
+    
+    <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">connection with my_device is open&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">connection with my_device is close&#39;</span><span class="p">)</span>
+    
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    
+<span class="k">finally</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+        <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1">#close a connection, if it is still open</span>
 </pre></div>
 </div>
 </section>

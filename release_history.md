@@ -1,14 +1,19 @@
-# Release Notes 2.0.2 – January 2026
+# Release Notes 2.0.2 – February 2026
 
 ## New Features
 
 - Added examples: 
   - readIdentifiersExample.py, 
-  - calibrateExample.py.
+  - calibrateExample.py,
+  - multipleMeasureSingleChExample.py.
 
 ## Improved Features
 
 - Method getModelIdn() updated, now calling readIdnFromDevice() when model_idn is empty.
+
+## Bug fixed
+
+- Fixed bug in getStopMask() methods, now acepting a float number as input. Required for TP1204.
 
 # Release Notes 2.0.1 – November 2025
 
