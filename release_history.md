@@ -1,3 +1,11 @@
+# Release Notes 2.0.3 – May 2026
+
+## New Features
+
+- Added examples: 
+  - fcsExample.py, 
+  - multipleTauCorrelator.py
+
 # Release Notes 2.0.2 – February 2026
 
 ## New Features
