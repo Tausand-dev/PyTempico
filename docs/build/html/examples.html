@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; pyTempico 2.0.2 documentation</title>
+  <title>Examples &mdash; pyTempico 2.0.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -57,6 +57,11 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#tp1200-examples">TP1200 examples</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#calibrateexample-py">calibrateExample.py</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-examples">Advanced examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fcsexample-py">fcsExample.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multipletaucorrelator-py">multipleTauCorrelator.py</a></li>
 </ul>
 </li>
 </ul>
@@ -970,6 +975,627 @@
 <span class="k">finally</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">my_device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
         <span class="n">my_device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1">#close a connection, if it is still open</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="advanced-examples">
+<h2>Advanced examples<a class="headerlink" href="#advanced-examples" title="Permalink to this headline"></a></h2>
+<p>Examples specific for Tausand Tempico advanced features.</p>
+<section id="fcsexample-py">
+<h3>fcsExample.py<a class="headerlink" href="#fcsexample-py" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;fcsExample</span>
+
+<span class="sd">    Created on Thu May  14 8:23 2026</span>
+
+<span class="sd">    Acquires photon arrival times from a Tausand Tempico TDC device and</span>
+<span class="sd">    computes the normalized autocorrelation function G(tau) in real time</span>
+<span class="sd">    using the multi-tau algorithm. Results are displayed in a live plot</span>
+<span class="sd">    using PySide2 and pyqtgraph.</span>
+
+<span class="sd">    The acquisition loop collects stop-time measurements from the Tempico</span>
+<span class="sd">    device, reconstructs a continuous relative timeline (ignoring inter-run</span>
+<span class="sd">    gaps), bins the photon arrivals into intensity bins of duration ``TAU_0``,</span>
+<span class="sd">    and feeds each bin into a ``MultiTauCorrelator`` instance. The resulting</span>
+<span class="sd">    G(tau) curve is emitted to the GUI after every batch of runs.</span>
+
+<span class="sd">    Instructions:</span>
+<span class="sd">        - Make sure ``pyTempico`` and ``MultipleTauCorrelator`` are installed</span>
+<span class="sd">          or available in the Python path.</span>
+<span class="sd">        - Replace ``MY_PORT`` with the serial port of your Tempico device</span>
+<span class="sd">          (e.g. ``&#39;COM4&#39;`` on Windows or ``&#39;/dev/ttyUSB0&#39;`` on Linux).</span>
+<span class="sd">        - Connect a periodic signal to the **start input** and the photon</span>
+<span class="sd">          detector output to the **stop input** of Channel 1.</span>
+<span class="sd">        - Adjust ``TAU_0``, ``NUMBER_OF_STOPS``, ``NUMBER_OF_RUNS``, and</span>
+<span class="sd">          ``TOTAL_SECONDS`` as needed for your experiment.</span>
+<span class="sd">        - Run the script. The live G(tau) plot will appear immediately and</span>
+<span class="sd">          update every batch of 100 runs until the acquisition finishes or</span>
+<span class="sd">          the window is closed.</span>
+
+<span class="sd">    | @author: Miguelangel García Castilo, Tausand Electronics</span>
+<span class="sd">    | mgarcia@tausand.com</span>
+<span class="sd">    | https://www.tausand.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># Add the parent directory to the Python path so that MultipleTauCorrelator</span>
+<span class="c1"># can be imported even when this script is run from a subdirectory</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;..&#39;</span><span class="p">)))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyTempico</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">multipleTauCorrelator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiTauCorrelator</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide2.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QLabel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide2.QtCore</span><span class="w">    </span><span class="kn">import</span> <span class="n">QThread</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QTimer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyqtgraph</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pg</span>
+
+<span class="c1"># ── Configuration ──────────────────────────────────────────────────────────</span>
+<span class="n">MY_PORT</span>          <span class="o">=</span> <span class="s1">&#39;COM4&#39;</span>       <span class="c1"># Serial port of the Tempico device</span>
+<span class="n">NUMBER_OF_STOPS</span>  <span class="o">=</span> <span class="mi">2</span>            <span class="c1"># Stop events per run (1–5)</span>
+<span class="n">NUMBER_OF_RUNS</span>   <span class="o">=</span> <span class="mi">100</span>          <span class="c1"># Runs per measure() call (1–1000)</span>
+<span class="n">TOTAL_SECONDS</span>    <span class="o">=</span> <span class="mi">120</span>          <span class="c1"># Total acquisition duration in seconds</span>
+<span class="n">TAU_0</span>            <span class="o">=</span> <span class="mi">1_000_000</span>    <span class="c1"># Base bin size in picoseconds (1 µs)</span>
+<span class="n">PLOT_UPDATE_MS</span>   <span class="o">=</span> <span class="mi">500</span>          <span class="c1"># GUI refresh interval in milliseconds</span>
+<span class="c1"># ───────────────────────────────────────────────────────────────────────────</span>
+
+
+<span class="c1"># ── Worker thread: acquisition + correlation ───────────────────────────────</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AcquisitionWorker</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Background thread that handles Tempico communication and multi-tau</span>
+<span class="sd">    correlation. Runs independently of the GUI thread to keep the plot</span>
+<span class="sd">    responsive during acquisition.</span>
+
+<span class="sd">    Signals</span>
+<span class="sd">    -------</span>
+<span class="sd">    data_ready : Signal(object, object)</span>
+<span class="sd">        Emitted after each measure() call with updated (taus_s, g) arrays.</span>
+<span class="sd">    status_update : Signal(str)</span>
+<span class="sd">        Emitted after each measure() call with a human-readable status string.</span>
+<span class="sd">    finished_sig : Signal()</span>
+<span class="sd">        Emitted once when the acquisition loop exits normally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Emits (taus_s, g) arrays after every batch of runs</span>
+    <span class="n">data_ready</span>    <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
+    <span class="c1"># Emits a status string for display in the GUI label</span>
+    <span class="n">status_update</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="c1"># Emitted once when the acquisition loop finishes</span>
+    <span class="n">finished_sig</span>  <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">number_of_stops</span><span class="p">,</span> <span class="n">number_of_runs</span><span class="p">,</span>
+                 <span class="n">total_seconds</span><span class="p">,</span> <span class="n">tau_0_ps</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span>            <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_stops</span> <span class="o">=</span> <span class="n">number_of_stops</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_runs</span>  <span class="o">=</span> <span class="n">number_of_runs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_seconds</span>   <span class="o">=</span> <span class="n">total_seconds</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau_0_ps</span>        <span class="o">=</span> <span class="n">tau_0_ps</span>
+        <span class="c1"># Flag used by stop() to request a clean exit from the run() loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span>        <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Request the acquisition loop to exit on the next iteration.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Main acquisition and correlation loop. Runs in a separate thread.</span>
+
+<span class="sd">        Connects to the Tempico device, configures Channel 1, then enters</span>
+<span class="sd">        a loop that calls measure() repeatedly until the elapsed time exceeds</span>
+<span class="sd">        ``total_seconds`` or ``stop()`` is called. Each batch of rows is</span>
+<span class="sd">        processed into intensity bins and fed into the correlator. The</span>
+<span class="sd">        updated G(tau) curve is emitted after every batch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># --- Device connection and configuration ---</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">pyTempico</span><span class="o">.</span><span class="n">TempicoDevice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">)</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">device</span><span class="o">.</span><span class="n">isOpen</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_update</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ERROR: Could not open port </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_update</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected to </span><span class="si">{</span><span class="n">device</span><span class="o">.</span><span class="n">getIdn</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># Reset clears all previous measurements and restores default settings</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="c1"># Enable only Channel 1; disable the rest to avoid unwanted triggers</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">enableChannel</span><span class="p">()</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">ch2</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">()</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">ch3</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">()</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">ch4</span><span class="o">.</span><span class="n">disableChannel</span><span class="p">()</span>
+        <span class="c1"># Mode 2: large measurement range (125 ns – 4 ms start-stop window)</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setMode</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">ch1</span><span class="o">.</span><span class="n">setNumberOfStops</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_stops</span><span class="p">)</span>
+        <span class="n">device</span><span class="o">.</span><span class="n">setNumberOfRuns</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number_of_runs</span><span class="p">)</span>
+
+        <span class="c1"># Instantiate the multi-tau correlator with the configured bin size</span>
+        <span class="n">correlator</span> <span class="o">=</span> <span class="n">MultiTauCorrelator</span><span class="p">(</span><span class="n">tau_0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tau_0_ps</span><span class="p">,</span>
+                                        <span class="n">num_levels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+        <span class="c1"># cursor_ps: running position on the relative timeline (ps).</span>
+        <span class="c1"># Advances by the last stop time of each run, ignoring inter-run gaps.</span>
+        <span class="n">cursor_ps</span>      <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># next_bin_edge: upper boundary of the current intensity bin (ps).</span>
+        <span class="c1"># When an event crosses this boundary, the bin is closed and a new</span>
+        <span class="c1"># one starts.</span>
+        <span class="n">next_bin_edge</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau_0_ps</span>
+        <span class="c1"># photons_in_bin: photon counter for the current open bin</span>
+        <span class="n">photons_in_bin</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">t_start</span>      <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>   <span class="c1"># Wall-clock time at acquisition start</span>
+        <span class="n">call_count</span>   <span class="o">=</span> <span class="mi">0</span>             <span class="c1"># Number of measure() calls completed</span>
+        <span class="n">total_events</span> <span class="o">=</span> <span class="mi">0</span>             <span class="c1"># Total photon events collected so far</span>
+
+        <span class="c1"># --- Main acquisition loop ---</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="ow">and</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_start</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">:</span>
+            <span class="c1"># Request one batch of (NUMBER_OF_RUNS × NUMBER_OF_STOPS) measurements</span>
+            <span class="c1"># Each row has format: [ch, run, start_s, stop_ps1, ..., stop_psN]</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="c1"># Extract stop times in picoseconds (columns 3 onwards)</span>
+                <span class="n">stops_ps</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+
+                <span class="k">for</span> <span class="n">t_ps</span> <span class="ow">in</span> <span class="n">stops_ps</span><span class="p">:</span>
+                    <span class="c1"># Compute the absolute position of this event on the</span>
+                    <span class="c1"># relative timeline by adding the run&#39;s cursor offset</span>
+                    <span class="n">abs_t</span> <span class="o">=</span> <span class="n">cursor_ps</span> <span class="o">+</span> <span class="n">t_ps</span>
+
+                    <span class="c1"># Close all bins that end before this event arrives.</span>
+                    <span class="c1"># Bins with zero photons (empty bins) are also fed to the</span>
+                    <span class="c1"># correlator — they carry statistical information about</span>
+                    <span class="c1"># periods of silence.</span>
+                    <span class="k">while</span> <span class="n">abs_t</span> <span class="o">&gt;=</span> <span class="n">next_bin_edge</span><span class="p">:</span>
+                        <span class="n">correlator</span><span class="o">.</span><span class="n">process_datum</span><span class="p">(</span><span class="n">photons_in_bin</span><span class="p">)</span>
+                        <span class="n">photons_in_bin</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="n">next_bin_edge</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau_0_ps</span>
+
+                    <span class="c1"># Register this photon in the current open bin</span>
+                    <span class="n">photons_in_bin</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">total_events</span>   <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># Advance the timeline cursor to the last stop of this run.</span>
+                <span class="c1"># The gap between the last stop and the next run&#39;s first stop</span>
+                <span class="c1"># is intentionally ignored (Option B: relative timeline).</span>
+                <span class="n">cursor_ps</span> <span class="o">+=</span> <span class="n">stops_ps</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">call_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t_start</span>
+
+            <span class="c1"># Retrieve the current ACF and emit it to the GUI for plotting</span>
+            <span class="n">taus</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">correlator</span><span class="o">.</span><span class="n">get_correlation_curve</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">taus</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Convert lag times from picoseconds to seconds before emitting</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data_ready</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">taus</span> <span class="o">*</span> <span class="mf">1e-12</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_update</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;calls: </span><span class="si">{</span><span class="n">call_count</span><span class="si">}</span><span class="s2"> | events: </span><span class="si">{</span><span class="n">total_events</span><span class="si">}</span><span class="s2"> | &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;elapsed: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> s&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Flush the last partially filled bin into the correlator</span>
+        <span class="n">correlator</span><span class="o">.</span><span class="n">process_datum</span><span class="p">(</span><span class="n">photons_in_bin</span><span class="p">)</span>
+        <span class="n">taus</span><span class="p">,</span> <span class="n">g</span> <span class="o">=</span> <span class="n">correlator</span><span class="o">.</span><span class="n">get_correlation_curve</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">taus</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_ready</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">taus</span> <span class="o">*</span> <span class="mf">1e-12</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+
+        <span class="n">device</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_update</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;Acquisition finished.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finished_sig</span><span class="o">.</span><span class="n">emit</span><span class="p">()</span>
+
+
+<span class="c1"># ── Main window ────────────────────────────────────────────────────────────</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MainWindow</span><span class="p">(</span><span class="n">QMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main application window. Contains a status label and a pyqtgraph</span>
+<span class="sd">    PlotWidget that displays the live G(tau) autocorrelation curve.</span>
+<span class="sd">    Starts the AcquisitionWorker thread on construction and stops it</span>
+<span class="sd">    cleanly when the window is closed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;FCS — Real-time Autocorrelation&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">550</span><span class="p">)</span>
+
+        <span class="c1"># Central widget and vertical layout</span>
+        <span class="n">central</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">central</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">central</span><span class="p">)</span>
+
+        <span class="c1"># Status label: shows acquisition progress from the worker thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;Starting acquisition...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;font-size: 11px; color: #444;&quot;</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="p">)</span>
+
+        <span class="c1"># --- pyqtgraph plot widget ---</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">PlotWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">setBackground</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>   <span class="s1">&#39;G(τ)&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;τ&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">setTitle</span><span class="p">(</span><span class="s1">&#39;Autocorrelation Function — Tempico FCS&#39;</span><span class="p">)</span>
+        <span class="c1"># Logarithmic x-axis: standard presentation for FCS curves</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">setLogMode</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">showGrid</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">addLegend</span><span class="p">()</span>
+
+        <span class="c1"># Horizontal dashed reference line at G = 1 (uncorrelated baseline)</span>
+        <span class="n">ref_line</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">InfiniteLine</span><span class="p">(</span>
+            <span class="n">pos</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">pen</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">mkPen</span><span class="p">(</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">pg</span><span class="o">.</span><span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">ref_line</span><span class="p">)</span>
+
+        <span class="c1"># Scatter plot curve: updated in real time by update_plot()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="p">[],</span> <span class="p">[],</span>
+            <span class="n">pen</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+            <span class="n">symbolSize</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+            <span class="n">symbolBrush</span><span class="o">=</span><span class="s1">&#39;steelblue&#39;</span><span class="p">,</span>
+            <span class="n">symbolPen</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;G(τ) measured&#39;</span>
+        <span class="p">)</span>
+
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_widget</span><span class="p">)</span>
+
+        <span class="c1"># --- Acquisition worker ---</span>
+        <span class="c1"># Runs in a separate QThread to avoid blocking the GUI event loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span> <span class="o">=</span> <span class="n">AcquisitionWorker</span><span class="p">(</span>
+            <span class="n">port</span>            <span class="o">=</span> <span class="n">MY_PORT</span><span class="p">,</span>
+            <span class="n">number_of_stops</span> <span class="o">=</span> <span class="n">NUMBER_OF_STOPS</span><span class="p">,</span>
+            <span class="n">number_of_runs</span>  <span class="o">=</span> <span class="n">NUMBER_OF_RUNS</span><span class="p">,</span>
+            <span class="n">total_seconds</span>   <span class="o">=</span> <span class="n">TOTAL_SECONDS</span><span class="p">,</span>
+            <span class="n">tau_0_ps</span>        <span class="o">=</span> <span class="n">TAU_0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Connect worker signals to GUI slots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">data_ready</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_plot</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">status_update</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_status</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">finished_sig</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_finished</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">taus_s</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the scatter plot with the latest G(tau) values.&quot;&quot;&quot;</span>
+        <span class="c1"># pyqtgraph requires strictly positive x values when logMode x=True</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">taus_s</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">taus_s</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the status label with the latest acquisition progress.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_finished</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a completion marker to the status label.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">text</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;  ✓ Done.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Stop the worker thread cleanly before closing the window.&quot;&quot;&quot;</span>
+        <span class="c1"># Signal the worker loop to exit, then wait for the thread to finish</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">worker</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+
+
+<span class="c1"># ── Entry point ────────────────────────────────────────────────────────────</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="c1"># Enable antialiasing for smoother scatter plot markers</span>
+    <span class="n">pg</span><span class="o">.</span><span class="n">setConfigOptions</span><span class="p">(</span><span class="n">antialias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">MainWindow</span><span class="p">()</span>
+    <span class="n">window</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">())</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="multipletaucorrelator-py">
+<h3>multipleTauCorrelator.py<a class="headerlink" href="#multipletaucorrelator-py" title="Permalink to this headline"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;MultipleTauCorrelator</span>
+
+<span class="sd">    Created on Thu May  14 8:23 2026</span>
+
+<span class="sd">    Subroutine of fcsExample.py</span>
+
+<span class="sd">    Multi-tau autocorrelation algorithm for Fluorescence Correlation</span>
+<span class="sd">    Spectroscopy (FCS). Computes the normalized autocorrelation function</span>
+<span class="sd">    G(tau) from a stream of intensity values (photon counts per bin) using</span>
+<span class="sd">    the multi-tau scheme, which combines linear spacing at short lag times</span>
+<span class="sd">    with logarithmic spacing at long lag times.</span>
+
+<span class="sd">    Instructions:</span>
+<span class="sd">        - Import this module and instantiate ``MultiTauCorrelator`` with</span>
+<span class="sd">          the desired ``tau_0``, ``num_levels``, and ``m`` parameters.</span>
+<span class="sd">        - Feed intensity bins one at a time using ``process_datum(value)``,</span>
+<span class="sd">          where ``value`` is the photon count in each time bin.</span>
+<span class="sd">        - After feeding all data, call ``get_correlation_curve()`` to</span>
+<span class="sd">          retrieve the arrays of lag times and G(tau) values.</span>
+<span class="sd">        - The lag times are returned in the same units as ``tau_0``.</span>
+<span class="sd">          If ``tau_0`` is given in picoseconds, divide by 1e12 to convert</span>
+<span class="sd">          to seconds.</span>
+
+<span class="sd">    Example usage::</span>
+
+<span class="sd">        correlator = MultiTauCorrelator(tau_0=100e3, num_levels=16, m=16)</span>
+<span class="sd">        for photon_count in intensity_series:</span>
+<span class="sd">            correlator.process_datum(photon_count)</span>
+<span class="sd">        taus, g = correlator.get_correlation_curve()</span>
+
+<span class="sd">    | @author: Miguelangel García Castillo, Tausand Electronics</span>
+<span class="sd">    | mgarcia@tausand.com</span>
+<span class="sd">    | https://www.tausand.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># --- MULTI-TAU CORRELATOR CLASS ---</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiTauCorrelator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Multi-tau autocorrelation algorithm for Fluorescence Correlation Spectroscopy (FCS).</span>
+
+<span class="sd">    Computes the normalized autocorrelation function G(tau) from a stream of</span>
+<span class="sd">    intensity values (photon counts per bin) using the multi-tau scheme.</span>
+<span class="sd">    This scheme uses linearly spaced channels at the base level and</span>
+<span class="sd">    logarithmically spaced channels at higher levels, allowing efficient</span>
+<span class="sd">    computation over many decades of lag time.</span>
+
+<span class="sd">    The normalization used is:</span>
+
+<span class="sd">        G(tau) = &lt;I(t) * I(t + tau)&gt; / &lt;I(t)&gt;^2</span>
+
+<span class="sd">    where I(t) is the photon count in bin t.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tau_0 : float, optional</span>
+<span class="sd">        Base lag time (duration of the smallest bin), in any consistent time</span>
+<span class="sd">        unit (e.g. picoseconds). Default is 1.0.</span>
+<span class="sd">    num_levels : int, optional</span>
+<span class="sd">        Number of levels in the multi-tau hierarchy. Each level k covers lag</span>
+<span class="sd">        times up to ``m * 2^k * tau_0``. Default is 16.</span>
+<span class="sd">    m : int, optional</span>
+<span class="sd">        Number of channels (shift register length) per level. Must be a</span>
+<span class="sd">        positive even integer. The first level uses all m channels with</span>
+<span class="sd">        linear spacing. Higher levels use the upper m//2 channels to avoid</span>
+<span class="sd">        overlap with the previous level. Default is 16.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    shift_registers : list of numpy.ndarray</span>
+<span class="sd">        Circular buffers of length m for each level, holding the m most</span>
+<span class="sd">        recent binned intensity values at that level&#39;s time resolution.</span>
+<span class="sd">    A : list of numpy.ndarray</span>
+<span class="sd">        Accumulated cross-products for each channel at each level.</span>
+<span class="sd">        Used as the numerator of G(tau).</span>
+<span class="sd">    M_del : list of numpy.ndarray</span>
+<span class="sd">        Accumulated sum of delayed (older) intensity values for each channel</span>
+<span class="sd">        at each level. Used as part of the denominator of G(tau).</span>
+<span class="sd">    M_dir : numpy.ndarray</span>
+<span class="sd">        Accumulated sum of direct (current) intensity values for each level.</span>
+<span class="sd">        Used as part of the denominator of G(tau).</span>
+<span class="sd">    n_bins : numpy.ndarray of int</span>
+<span class="sd">        Number of bins processed at each level.</span>
+<span class="sd">    z_buffer : numpy.ndarray</span>
+<span class="sd">        Accumulation buffer used to combine pairs of bins when passing data</span>
+<span class="sd">        from level k to level k+1.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; correlator = MultiTauCorrelator(tau_0=100e3, num_levels=16, m=16)</span>
+<span class="sd">    &gt;&gt;&gt; for photon_count in intensity_series:</span>
+<span class="sd">    ...     correlator.process_datum(photon_count)</span>
+<span class="sd">    &gt;&gt;&gt; taus, g = correlator.get_correlation_curve()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tau_0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">num_levels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+        <span class="c1"># Store the base lag time; all tau values will be multiples of this</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau_0</span> <span class="o">=</span> <span class="n">tau_0</span>
+        <span class="c1"># Total number of levels in the multi-tau hierarchy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_levels</span> <span class="o">=</span> <span class="n">num_levels</span>
+        <span class="c1"># Number of channels (shift register slots) per level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>
+
+        <span class="c1"># One shift register per level: holds the m most recent intensity</span>
+        <span class="c1"># values at that level&#39;s time resolution. Acts as a circular buffer.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shift_registers</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_levels</span><span class="p">)]</span>
+
+        <span class="c1"># A[k][i]: accumulated cross-product between current bin and the bin</span>
+        <span class="c1"># that arrived i+1 steps ago at level k. Numerator of G(tau).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_levels</span><span class="p">)]</span>
+
+        <span class="c1"># M_del[k][i]: accumulated sum of delayed intensity values at channel i,</span>
+        <span class="c1"># level k. Tracks the mean of the older (delayed) signal. Part of denominator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M_del</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_levels</span><span class="p">)]</span>
+
+        <span class="c1"># M_dir[k]: accumulated sum of direct (current) intensity at level k.</span>
+        <span class="c1"># Tracks the mean of the newer (direct) signal. Part of denominator.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M_dir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_levels</span><span class="p">)</span>
+
+        <span class="c1"># n_bins[k]: total number of bins processed at level k.</span>
+        <span class="c1"># Used for normalization and to determine when a level has enough data.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_levels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># z_buffer[k]: temporary accumulator that sums pairs of bins from</span>
+        <span class="c1"># level k-1 before passing them up to level k. Implements the</span>
+        <span class="c1"># factor-of-2 coarsening between levels.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_buffer</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_levels</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">process_datum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Feed a single intensity bin into the correlator.</span>
+
+<span class="sd">        This method triggers the recursive multi-tau update starting at</span>
+<span class="sd">        level 0. Each call corresponds to one time bin of duration ``tau_0``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : float</span>
+<span class="sd">            Photon count (or intensity) for the current bin. Must be</span>
+<span class="sd">            non-negative.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Every two calls to this method at level k cause one new value to be</span>
+<span class="sd">        passed to level k+1 (with the two values summed), implementing the</span>
+<span class="sd">        factor-of-2 coarsening between levels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Entry point: always start the recursive update at level 0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_level</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_run_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">z_k</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform the multi-tau update at level k with input value z_k.</span>
+
+<span class="sd">        Updates the accumulator arrays A, M_del, and M_dir for level k,</span>
+<span class="sd">        advances the shift register, and recursively propagates a coarsened</span>
+<span class="sd">        value to level k+1 every two bins.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        k : int</span>
+<span class="sd">            Current level index (0-based). Level 0 operates at the base</span>
+<span class="sd">            time resolution ``tau_0``; level k operates at resolution</span>
+<span class="sd">            ``2^k * tau_0``.</span>
+<span class="sd">        z_k : float</span>
+<span class="sd">            Intensity value (photon count) for the current bin at level k.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The update equations at each level are:</span>
+
+<span class="sd">            A[k][i]     += z_k * shift_registers[k][i]   for all i</span>
+<span class="sd">            M_del[k][i] += shift_registers[k][i]          for all i</span>
+<span class="sd">            M_dir[k]    += z_k</span>
+
+<span class="sd">        After updating, the shift register is rolled by one position and</span>
+<span class="sd">        z_k is inserted at index 0 (most recent position).</span>
+
+<span class="sd">        Every second call (when n_bins[k] is even), the accumulated</span>
+<span class="sd">        z_buffer[k+1] is passed to _run_level(k+1) and reset to zero.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Cross-product accumulation: multiply current bin z_k by each of the</span>
+        <span class="c1"># m delayed values in the shift register. This is the core FCS</span>
+        <span class="c1"># correlation operation: &lt;I(t) * I(t + tau)&gt; for all m lag channels.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">z_k</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift_registers</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="c1"># Accumulate the delayed values for normalization (denominator term).</span>
+        <span class="c1"># M_del[k][i] will hold the sum of all values that have passed through</span>
+        <span class="c1"># channel i, representing &lt;I(t + tau)&gt; for each lag.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M_del</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift_registers</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="c1"># Accumulate the direct (current) value for normalization.</span>
+        <span class="c1"># M_dir[k] will hold the total sum of all input values at this level,</span>
+        <span class="c1"># representing &lt;I(t)&gt;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M_dir</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">z_k</span>
+
+        <span class="c1"># Count how many bins have been processed at this level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Advance the circular shift register: roll all values one position</span>
+        <span class="c1"># to the right (older), then insert z_k at position 0 (most recent).</span>
+        <span class="c1"># After this, shift_registers[k][i] holds the value from i+1 bins ago.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shift_registers</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_registers</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shift_registers</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_k</span>
+
+        <span class="c1"># Coarsening step: accumulate z_k into the buffer for the next level.</span>
+        <span class="c1"># When two consecutive bins have been accumulated (n_bins[k] is even),</span>
+        <span class="c1"># their sum is passed up to level k+1 as a single coarser bin.</span>
+        <span class="c1"># This implements the factor-of-2 time resolution reduction per level.</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_levels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">z_buffer</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">z_k</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Two bins accumulated: send their sum to the next level</span>
+                <span class="n">new_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_buffer</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c1"># Reset buffer for the next pair</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">z_buffer</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># Recursive call: process the coarsened bin at level k+1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_run_level</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">new_z</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_correlation_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute and return the normalized autocorrelation function G(tau).</span>
+
+<span class="sd">        Iterates over all levels and channels, skipping levels with</span>
+<span class="sd">        insufficient data (fewer than m bins processed) and channels</span>
+<span class="sd">        with zero delayed accumulator (to avoid division by zero).</span>
+
+<span class="sd">        At level 0, all m channels are included (linear spacing).</span>
+<span class="sd">        At levels 1 and above, only the upper m//2 channels are included</span>
+<span class="sd">        (indices m//2 to m-1) to avoid overlap with the previous level,</span>
+<span class="sd">        following the standard multi-tau scheme.</span>
+
+<span class="sd">        The lag time for channel i at level k is:</span>
+
+<span class="sd">            tau = (i + 1) * 2^k * tau_0</span>
+
+<span class="sd">        The normalized correlation value is:</span>
+
+<span class="sd">            G(tau) = (A[k][i] * n_bins[k]) / (M_dir[k] * M_del[k][i])</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        taus : numpy.ndarray</span>
+<span class="sd">            Array of lag times in the same units as ``tau_0``.</span>
+<span class="sd">        g_vals : numpy.ndarray</span>
+<span class="sd">            Array of normalized autocorrelation values G(tau) corresponding</span>
+<span class="sd">            to each lag time in ``taus``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If fewer than ``m`` bins have been processed at a given level,</span>
+<span class="sd">        that level is skipped and contributes no points to the output.</span>
+<span class="sd">        This typically affects the highest levels early in an acquisition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">taus</span><span class="p">,</span> <span class="n">g_vals</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_levels</span><span class="p">):</span>
+            <span class="c1"># Skip levels that have not yet accumulated enough bins to fill</span>
+            <span class="c1"># all m channels of the shift register. Without this guard,</span>
+            <span class="c1"># the early channels would be computed from incomplete data.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># At level 0 use all m channels (linear spacing from tau_0 to m*tau_0).</span>
+            <span class="c1"># At levels k &gt;= 1 skip the first m//2 channels because those lag</span>
+            <span class="c1"># times are already covered by the previous level at finer resolution,</span>
+            <span class="c1"># avoiding duplicate points in the output curve.</span>
+            <span class="n">start_idx</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">8</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">):</span>
+                <span class="n">m_del</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">M_del</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+
+                <span class="c1"># Skip channels where no delayed data has been accumulated yet,</span>
+                <span class="c1"># which would cause a division by zero in the normalization.</span>
+                <span class="k">if</span> <span class="n">m_del</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Normalized autocorrelation for channel i at level k:</span>
+                <span class="c1">#   G(tau) = &lt;I(t)*I(t+tau)&gt; / (&lt;I(t)&gt; * &lt;I(t+tau)&gt;)</span>
+                <span class="c1"># In accumulated form:</span>
+                <span class="c1">#   numerator   = A[k][i] (cross-product sum)</span>
+                <span class="c1">#   denominator = M_dir[k] / n_bins[k]  *  M_del[k][i] / n_bins[k]</span>
+                <span class="c1"># Rearranging to avoid two divisions:</span>
+                <span class="c1">#   G = (A[k][i] * n_bins[k]) / (M_dir[k] * M_del[k][i])</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_bins</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M_dir</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_del</span><span class="p">)</span>
+
+                <span class="c1"># Lag time for channel i at level k:</span>
+                <span class="c1"># channel i corresponds to a delay of (i+1) bins at this level,</span>
+                <span class="c1"># and each bin at level k has duration 2^k * tau_0.</span>
+                <span class="n">tau</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau_0</span>
+
+                <span class="n">taus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span>
+                <span class="n">g_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">taus</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g_vals</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

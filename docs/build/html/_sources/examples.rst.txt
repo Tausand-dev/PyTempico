@@ -59,6 +59,9 @@ multipleMeasureSingleChExample.py
 .. literalinclude:: ../../examples/multipleMeasureSingleChExample.py
 
 
+
+
+
 TP1200 examples
 ---------------
 
@@ -68,3 +71,19 @@ calibrateExample.py
 ^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../../examples/calibrateExample.py
+
+Advanced examples
+-----------------
+
+Examples specific for Tausand Tempico advanced features.
+
+fcsExample.py
+^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/fcsExample.py
+
+
+multipleTauCorrelator.py
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/multipleTauCorrelator.py
