@@ -68,3 +68,8 @@ calibrateExample.py
 ^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../../examples/calibrateExample.py
+
+calibrateOffsetExample.py
+^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/calibrateOffsetExample.py
