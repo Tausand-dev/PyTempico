@@ -1,3 +1,11 @@
+# Release Notes 2.0.4 – June 2026
+
+## New Features
+
+- Added examples: 
+  - g2Example.py, 
+  - g2Algorithm.py
+
 # Release Notes 2.0.3 – May 2026
 
 ## New Features

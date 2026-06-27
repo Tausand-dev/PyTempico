@@ -125,6 +125,16 @@ class MultiTauCorrelator:
         # factor-of-2 coarsening between levels.
         self.z_buffer = np.zeros(num_levels)
 
+    def reset(self):
+        """Reset all accumulators to zero (clears the correlation history)."""
+        for k in range(self.num_levels):
+            self.shift_registers[k][:] = 0.0
+            self.A[k][:]               = 0.0
+            self.M_del[k][:]           = 0.0
+        self.M_dir[:]    = 0.0
+        self.n_bins[:]   = 0
+        self.z_buffer[:] = 0.0
+
     def process_datum(self, value):
         """
         Feed a single intensity bin into the correlator.
@@ -264,7 +274,7 @@ class MultiTauCorrelator:
             # At levels k >= 1 skip the first m//2 channels because those lag
             # times are already covered by the previous level at finer resolution,
             # avoiding duplicate points in the output curve.
-            start_idx = 0 if k == 0 else 8
+            start_idx = 0 if k == 0 else self.m // 2
 
             for i in range(start_idx, self.m):
                 m_del = self.M_del[k][i]

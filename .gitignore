@@ -12,6 +12,7 @@ docs/build/latex/*
 
 # Virtual environments
 .venv/*
+.venvFCS/*
 
 # Distribution files, generated after command: python -m build
 dist/*
@@ -24,3 +25,13 @@ pyTempico.egg-info/*
 *Example.py
 #but do not ignore them in the examples/ directory
 !examples/*Example.py
+
+# Local test files and reports
+examples/Informe2*
+examples/Informe3_lineal*
+examples/Informe4_Start-stop*
+examples/Prueba7*
+examples/compareautocorrelation.py*
+examples/Generador_estocastico.py*
+examples/noiseGenerator.py*
+examples/stochasticDataGenerator.py*

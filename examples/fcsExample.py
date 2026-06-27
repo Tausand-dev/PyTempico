@@ -46,7 +46,7 @@ from PySide2.QtCore    import QThread, Signal, QTimer
 import pyqtgraph as pg
 
 # ── Configuration ──────────────────────────────────────────────────────────
-MY_PORT          = 'COM4'       # Serial port of the Tempico device
+MY_PORT          = 'COM5'       # Serial port of the Tempico device
 NUMBER_OF_STOPS  = 2            # Stop events per run (1–5)
 NUMBER_OF_RUNS   = 100          # Runs per measure() call (1–1000)
 TOTAL_SECONDS    = 120          # Total acquisition duration in seconds
