@@ -35,3 +35,12 @@ examples/compareautocorrelation.py*
 examples/Generador_estocastico.py*
 examples/noiseGenerator.py*
 examples/stochasticDataGenerator.py*
+
+# Local VS Code configurations
+.vscode/
+
+# Local test scripts
+fcs_multitau_tp1004.py
+
+# G2 result images
+g2_*.png
