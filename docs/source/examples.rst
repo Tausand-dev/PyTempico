@@ -73,3 +73,32 @@ calibrateOffsetExample.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../../examples/calibrateOffsetExample.py
+
+
+Advanced examples
+-----------------
+
+
+Examples specific for Tausand Tempico advanced features.
+
+fcsExample.py
+^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/fcsExample.py
+
+
+multipleTauCorrelator.py
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/multipleTauCorrelator.py
+
+g2Example.py
+^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/g2Example.py
+
+
+g2Algorithm.py
+^^^^^^^^^^^^^^
+
+.. literalinclude:: ../../examples/g2Algorithm.py
